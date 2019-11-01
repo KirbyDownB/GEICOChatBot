@@ -1,0 +1,24 @@
+.user__container {
+  display: flex;
+}
+
+.user__img {
+}
+
+.user__name {
+  color: #9A9A9A;
+  font-weight: 700;
+  margin-top: 16px;
+}
+
+.user__text-wrapper {
+  padding-top: 2.2%;
+}
+
+.user__text {
+  color: #545454;
+}
+
+.user__name, .user__text {
+  font-family: "Roboto", sans-serif;
+}

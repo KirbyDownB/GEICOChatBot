@@ -1,0 +1,24 @@
+.bot__container {
+  display: flex;
+}
+
+.bot__img {
+}
+
+.bot__name {
+  color: #9A9A9A;
+  font-weight: 700;
+  margin-top: 16px;
+}
+
+.bot__text-wrapper {
+  padding-top: 2.2%;
+}
+
+.bot__text {
+  color: #545454;
+}
+
+.bot__name, .bot__text {
+  font-family: "Roboto", sans-serif;
+}

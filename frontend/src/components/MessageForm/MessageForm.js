@@ -6,7 +6,7 @@ const { Item } = Form;
 
 class MessageForm extends Component {
   state = {
-    message: ""
+    text: ""
   }
 
   handleChange = e => {
@@ -16,7 +16,12 @@ class MessageForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const message = e.target.message.value;
+    const message = {
+      type: "user",
+      text: e.target.text.value,
+      id: 2
+    };
+
     this.props.sendMessage(message);
   }
 
@@ -26,8 +31,8 @@ class MessageForm extends Component {
         <Form layout="inline" onSubmit={this.handleSubmit}>
           <Item>
             <Input
-              value={this.state.message}
-              name="message"
+              value={this.state.text}
+              name="text"
               className="messageForm__message"
               onChange={this.handleChange}
               placeholder="Enter your message..."
