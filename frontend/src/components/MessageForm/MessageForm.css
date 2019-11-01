@@ -1,6 +1,6 @@
 .messageForm__container {
-  position: fixed;
-  bottom: 0;
+  text-align: center;
+  padding-top: 20px;
 }
 
 .messageForm__message {

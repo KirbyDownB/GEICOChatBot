@@ -18,30 +18,35 @@ class MessageForm extends Component {
 
     const message = e.target.message.value;
     this.props.sendMessage(message);
+    this.setState({
+      message: ""
+    });
   }
 
   render() {
     return (
       <div className="messageForm__container">
-        <Form layout="inline" onSubmit={this.handleSubmit}>
-          <Item>
-            <Input
-              value={this.state.message}
-              name="message"
-              className="messageForm__message"
-              onChange={this.handleChange}
-              placeholder="Enter your message..."
-            />
-          </Item>
-          <Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-            >
-              Submit
-            </Button>
-          </Item>
-        </Form>
+        <div>
+          <Form layout="inline" onSubmit={this.handleSubmit}>
+            <Item>
+              <Input
+                value={this.state.message}
+                name="message"
+                className="messageForm__message"
+                onChange={this.handleChange}
+                placeholder="Enter your message..."
+              />
+            </Item>
+            <Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+              >
+                Submit
+              </Button>
+            </Item>
+          </Form>
+        </div>
       </div>
     )
   }

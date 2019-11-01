@@ -6,3 +6,19 @@
   background-color: lightblue;
   height: 100vh;
 }
+
+.right {
+  padding: 0;
+}
+
+.app__top-div {
+  width: 100%;
+  height: 90%;
+  padding: 4%;
+}
+
+.app__bottom-div {
+  border-top: 1px solid #C2C2C2;
+  width: 100%;
+  height: 10%;
+}

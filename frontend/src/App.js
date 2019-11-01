@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import './App.css';
 
 import MessageForm from './components/MessageForm/MessageForm';
+import MessageBoxBot from './components/MessageBox/MessageBoxBot';
+import MessageBoxUser from './components/MessageBox/MessageBoxUser';
 
 class App extends Component {
   state = {
-    messages: []
+    messages: [],
+    temp: ""
   }
 
   sendMessage = message => {
-    // TODO: Send message
+    this.setState({
+      temp: message
+    })
   }
 
   render() {
@@ -21,7 +26,13 @@ class App extends Component {
               hi
             </div>
             <div className="col-8 right">
-              <MessageForm sendMessage={this.sendMessage} />
+              <div className="app__top-div">
+                <MessageBoxBot />
+                <MessageBoxUser temp={this.state.temp}/>
+              </div>
+              <div className="app__bottom-div">
+                <MessageForm sendMessage={this.sendMessage} />
+              </div>
             </div>
           </div>
         </div>

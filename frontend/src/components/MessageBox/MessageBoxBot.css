@@ -1,0 +1,19 @@
+.messageBox__container {
+  display: flex;
+}
+
+.messageBox__img {
+}
+
+.messageBox__date {
+  color: #9A9A9A;
+  font-weight: 500;
+}
+
+.messageBox__text-wrapper {
+  padding-top: 2.2%;
+}
+
+.messageBox__text {
+  color: #545454;
+}
