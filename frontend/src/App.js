@@ -22,8 +22,7 @@ class App extends Component {
   }
 
   sendMessage = message => {
-    console.log(message)
-    this.setState({ messages: [...this.state.messages, message] })
+    this.setState({ messages: [...this.state.messages, message] });
   }
 
   render() {
