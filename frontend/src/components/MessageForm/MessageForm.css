@@ -1,0 +1,8 @@
+.messageForm__container {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.messageForm__message {
+  width: 55vw;
+}
