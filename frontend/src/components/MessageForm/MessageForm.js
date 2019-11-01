@@ -24,8 +24,9 @@ class MessageForm extends Component {
 
     this.props.sendMessage(message);
     this.setState({
-      message: ""
+      text: ""
     });
+
   }
 
   render() {
