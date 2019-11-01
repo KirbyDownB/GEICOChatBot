@@ -1,0 +1,8 @@
+.messageForm__container {
+  position: fixed;
+  bottom: 0;
+}
+
+.messageForm__message {
+  width: 55vw;
+}
