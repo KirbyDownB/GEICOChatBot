@@ -8,6 +8,10 @@ class App extends Component {
     messages: []
   }
 
+  sendMessage = message => {
+    // TODO: Send message
+  }
+
   render() {
     return (
       <div className="App">
@@ -17,7 +21,7 @@ class App extends Component {
               hi
             </div>
             <div className="col-8 right">
-              <MessageForm />
+              <MessageForm sendMessage={this.sendMessage} />
             </div>
           </div>
         </div>
