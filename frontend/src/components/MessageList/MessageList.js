@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import autoscroll from "autoscroll-react";
+import {Animated} from "react-animated-css";
 import "./MessageList.css";
 import Bot from '../MessageBox/Bot';
 import User from '../MessageBox/User';
@@ -16,6 +16,7 @@ class MessageList extends Component {
         <div className="messageList__container" ref={(node) => (this.node = node)}>
           {this.props.messages.map(message => {
             return (
+            <Animated animationIn="bounceInLeft" animationInDuration={ 500 } isVisible={true}>
               <div>
                 {message.type === "bot" ? (
                   <Bot {...message} />
@@ -23,6 +24,7 @@ class MessageList extends Component {
                   <User {...message} />
                 )}
               </div>
+            </Animated>
             )
           })}
         </div>
@@ -31,4 +33,4 @@ class MessageList extends Component {
   }
 }
 
-export default autoscroll(MessageList, { isScrolledDownThreshold: 100 });
+export default MessageList;
