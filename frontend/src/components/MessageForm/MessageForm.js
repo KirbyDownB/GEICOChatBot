@@ -19,13 +19,15 @@ class MessageForm extends Component {
     const message = {
       type: "user",
       text: e.target.text.value,
+      topic: "normal",
       id: 2
     };
 
     this.props.sendMessage(message);
     this.setState({
-      message: ""
+      text: ""
     });
+
   }
 
   render() {

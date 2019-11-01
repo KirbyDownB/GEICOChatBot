@@ -1,5 +1,13 @@
+.messageList_wrapper {
+  display: table-cell;
+  vertical-align: bottom;
+  height: 90vh;
+  width: 75vw;
+}
+
+
 .messageList__container {
-  position: absolute;
-  bottom: 12%;
-  height: auto;
+  max-height: 90vh;
+  overflow: auto;
+  width: 100%;
 }
