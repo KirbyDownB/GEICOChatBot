@@ -21,3 +21,18 @@
   border-top: 1px solid #C2C2C2;
   width: 100%;
 }
+
+.app__chatGroup--inactive {
+  text-align: center;
+  margin-top: 35%;
+}
+
+.app__chatGroup {
+  width: 80%;
+}
+
+.app_chatGroup--caption {
+  font-family: "Roboto", sans-serif;
+  font-size: 100%;
+}
+

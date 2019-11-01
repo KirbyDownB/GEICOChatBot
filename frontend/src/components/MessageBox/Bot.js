@@ -10,7 +10,7 @@ class Bot extends Component {
         <img className="bot__img" src={logo} alt="bot"></img>
         <div className="bot__text-wrapper">
           <div className="bot__name">Baughty</div>
-          <div className="bot__text">Hi there! What's your name?</div>
+          <div className="bot__text">{this.props.text}</div>
         </div>
       </div>
     )
