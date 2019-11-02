@@ -125,7 +125,7 @@ def main():
             if re.match(r'.*(recommend|suggest).*(songs|music)\.*', text.lower()):
                 username = request.json.get("username")
 
-                last_question = {"text":"Ok {}. Tell us about yourself. Would you say that you have an athletic, sedentary, or moderate lifestyle?".format(username), "question":"music_lifestyle", "topic":"music","type":"bot","options":['athletic','sedentary','moderate']}
+                last_question = {"text":"Ok {}. Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?".format(username), "question":"music_lifestyle", "topic":"questions","type":"bot","options":['Athletic','Sedentary','Moderate']}
                 return last_question
 
             if last_question == "music_lifestyle":
@@ -133,7 +133,7 @@ def main():
                 username = request.json.get("username")
                 collection.find_one_and_update({"username": username}, {"$set": {"lifestyle": text}})
 
-                last_question = {"text":"Great! One more question. Would you say that your hobbies are more indoor or outdoor?","question":"music_hobbies", "topic":"music","type":"bot","options":['indoor','outdoor']}
+                last_question = {"text":"Great! One more question. Would you say that your hobbies are more Indoor or Outdoor?","question":"music_hobbies", "topic":"questions","type":"bot","options":['Indoor','Outdoor']}
                 return last_question
 
             if last_question == "music_hobbies":
@@ -146,14 +146,14 @@ def main():
                 #data.get("lifestyle") returns the lifestyle input
                 #data.get("hobbies") returns the hobbies input
                 #have conditions for if the user puts in junk
-                if data.get("lifestyle") == "athletic" and data.get("hobbies") == "outdoor":
+                if data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Outdoor":
                     list = ["EDM", "Dubstep", "Trap"]
                     randomNum = random.randint(0, len(list)-1)
                     genre = list[randomNum]
                     link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
                     resp = requests.get(link).json()
-                    print(resp["tracks"]["track"][0]["name"])
-                return {"text":"OK! Here are some songs based on your answers.", "question":"general", "topic":"music","type":"bot"}
+                    store = resp["tracks"]["track"][0]
+                return {"text":"OK! Here are some songs based on your answers.", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Song": store["name"], "Artist": store["artist"]["name"], "Duration": store["duration"], "Stream": store["url"], "Image": store["image"][2]["#text"]}}
 
 
             if last_question == "day":
