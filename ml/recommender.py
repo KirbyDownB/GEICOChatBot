@@ -179,7 +179,7 @@ class RecommenderHelper():
                 i_movieId = int(movieId)
                 if movieId and imdbId:
                     self.imdb2mid[int(imdbId)] = i_movieId
-                    self.mid2imdb[i_movieId] = int(imdbId)
+                    self.mid2imdb[i_movieId] = imdbId
                 if movieId and tmdbId:
                     self.tmbd2mid[int(tmdbId)] = i_movieId
 

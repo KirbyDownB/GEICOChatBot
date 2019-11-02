@@ -127,6 +127,7 @@ def recommend():
         if imdb_id not in r.imdb2mid:
             continue
         ret.append(r.imdb2mid[imdb_id])
+    print('Got movies: ', [movie2name[x] for x in ret])
 
     #--- Timing block
     elapsed = time.time() - start_time
@@ -155,7 +156,7 @@ def recommend():
     start_time = time.time()
     #--- End timing block
     
-    model.fit_partial(interactions, item_features=item_features, num_threads=16)
+    model.fit(interactions, item_features=item_features, num_threads=16)
 
     #--- Timing block
     elapsed = time.time() - start_time
