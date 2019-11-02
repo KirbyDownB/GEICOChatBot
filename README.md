@@ -38,3 +38,10 @@ The user is first greeted with a prompt to put in their user name. This is to ke
 The chatterbot library is used to handle input. If the bot realizes the user is asking for a movie recommendation, it sends calls to the recommendation algorithm. If it realizes the user is asking for a song recommendation, we conditionally recommend a song to the user. If the bot realizes that the user is asking for a joke, it uses a joke api and returns a random joke. If the user is asking for none of these three things, the user submission is handled by the chatterbot greeting and conversation corpus. 
 
 To run the chatbot, run `pip install -r requirements.txt` and then run `python3 chatbot.py`
+
+## Recommendation Endpoint
+The recommendation endpoint is also Flask-based. It uses the [MovieLens](https://grouplens.org/datasets/movielens/), specifically, the `ml-latest` version. A README describing what the dataset contains can be found [here](http://files.grouplens.org/datasets/movielens/ml-latest-README.html). The dataset provides anonymized user ratings of movies.
+
+We used the dataset to perform collaborative filtering on the inputs. We initially chose to use a stream factorization machine provided by the [FluRS](https://github.com/takuti/flurs) library, but we found that it was unable to accurately recommend movies. Because of this, we switched to the [LightFM](https://github.com/lyst/lightfm) library. We chose to structure the problem as an implicit feedback problem, rather than as an explicit one. This means that we considered only positive recommendations and treated each rating as a binary value. We read that this is better for the top-K recommendation problem.
+
+However, we still encountered difficulty with accurately recommending movies due to the heavy imbalance in the dataset. We found that the algorithm tends to recommend older movies with high confidence, even without any ratings that support that choice. However, we were able to mitigate this issue by calculating the recommendation for users without any ratings and using that to offset the results for users with ratings.
