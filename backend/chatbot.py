@@ -105,7 +105,7 @@ def main():
         if username is '' and last_question is None:
             #No response expected
             print("Entry message")
-            last_question = {"text":"My name is I-TEA BOT! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you.", "type":"bot", "question":"intro","topic":"normal"}
+            last_question = {"text":"My name is Baut! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you.", "type":"bot", "question":"intro","topic":"normal"}
             count += 1
             return last_question
 
@@ -341,10 +341,10 @@ def main():
 
                 response_data = resp.json()["ids"]
                 listings = []
-                print(response_data)
+                print("response_data", response_data)
                 for ids in response_data:
                     postLink = "http://www.omdbapi.com/?apikey=" + config.omdb_api + "&i="
-                    postLink += "tt" + str(ids).zfill(7)
+                    postLink += "tt" + str(ids)
                     temp = requests.get(postLink).json()
                     print("temp:", temp)
                     if temp["Response"]=="True":

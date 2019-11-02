@@ -16,6 +16,7 @@ mathparse==0.1.2
 murmurhash==1.0.2
 nltk==3.4.5
 numpy==1.17.3
+ParallelDots==3.2.13
 Pint==0.9
 pipenv==2018.11.26
 plac==0.9.6
