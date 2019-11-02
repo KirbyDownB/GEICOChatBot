@@ -82,11 +82,14 @@ def main():
     # global emotion
     username = ''
     last_question = None
+    text = ''
 
 
 
 
     if request.method == 'POST':
+        m = ['movie']
+        s = ['song']
         if request.json is not None:
             print("line 61", request.json)
         # username = request.json.get("username")
@@ -115,6 +118,7 @@ def main():
             count = 1
             last_question = {"text":"My name is GEICO BOT! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you", "type":"bot", "question":"intro","topic":"normal"}
             return last_question
+        
 
         if count > 0 and last_question is not None:
 
@@ -137,10 +141,18 @@ def main():
 
 
                 #start the movie flow
-                last_question = {"text":"Hi {}! Now we can begin! Try things like \"recommend me some movies\" or \"tell me a joke\".".format(username), "question":"general", "topic":"normal", "type":"bot"}
+                last_question = {"text":"Hi {}! Now we can begin! Try things like \"recommend me some movies\" , \"recommend music\", or \"tell me a joke\".".format(username), "question":"general", "topic":"normal", "type":"bot"}
                 return last_question
 
-            if re.match(r'.*(recommend|suggest).*movies\.*', text.lower()):
+            if last_question == "restart":
+
+                username = request.json.get("username")
+
+                last_question = {"text":"Hey, sorry about that {}. Even though I'm not human, I still make mistakes. If you want to get movie recommendations type \'recommend movies \'. If you want song recommendations you can say '\recommend music\'. We can just talk too.","type":"bot","topic":"normal","question":"general"}
+                return last_question
+
+
+            if re.match(r'.*(recommend|suggest).*movie(s?)\.*', text.lower()):
 
                 username = request.json.get("username")
 
@@ -148,12 +160,11 @@ def main():
                     recommend you.".format(username), "type":"bot","question":"day","topic":"normal"}
                 return last_question
 
-            if re.match(r'.*(recommend|suggest).*(songs|music)\.*', text.lower()):
+            if re.match(r'.*(recommend|suggest).*(song(s?)|music)\.*', text.lower()):
                 username = request.json.get("username")
 
                 last_question = {"text":"Ok {}. Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?".format(username), "question":"music_lifestyle", "topic":"questions","type":"bot","options":['Athletic','Sedentary','Moderate']}
                 return last_question
-
             if last_question == "music_lifestyle":
                 text = request.json.get("text")
                 username = request.json.get("username")
@@ -283,8 +294,19 @@ def main():
                 collection.find_one_and_update({"username": username},
                                  {"$set": {"how_was_your_day": how_was_your_day, "emotion":emotion}})
 
+                sentence = ''
 
-                last_question = {"text":"What are some of your favorite movies? Separate each one with a \
+                if emotion == "Happy":
+                    sentence = random.sample(["That's good to hear", "Nice to see you in good spirits.", "I'm glad your chipper"],1)
+                if emotion == "Sad" or emotion == "Angry":
+                    sentence = random.sample(["I'm sorry your day is going so poorly.","I hope tomorrow is better.","Sad reacts only."],1)
+                if emotion == "Excited":
+                    sentence = random.sample(["Your day sounded AMAZING!!!","I wish my day was as exciting.","Sounds like today was a rollercoaster!"],1)
+                if emotion == "Fear":
+                    sentence = random.sample(["I hope your days are calmer in the future.","We have nothing to fear but fear itself.","Never fear, the rules are here!"],1)
+                if emotion == "Bored":
+                    sentence = random.sample(["Another day, another dollar I suppose.", "Back to the old grind.", "Same tbh."], 1)
+                last_question = {"text":sentence + "What are some of your favorite movies? Separate each one with a \
                     comma.", "type":"bot", "question":"favorite_movies", "topic":"normal"}
 
                 return last_question
@@ -297,7 +319,7 @@ def main():
                 #insert into mongo
 
                 #then, prepend the string with a key phrase and send it to the bot. The corresponding logic adapter should pick it up and send it to Will
-
+                username = request.json.get("username")
                 text = request.json.get("text")
                 text = text.split(', ')
                 movieList = []
@@ -314,6 +336,8 @@ def main():
                     return {"text": "I'm sorry I did not find any movies with those names."}
 
                 resp = requests.post("http://167.172.203.238:5500/recommend", json={"ids": movieList})
+                collection.find_one_and_update({"username": username},
+                                 {"$set": {"movies_liked": movieList}})
                 response_data = resp.json()["ids"]
                 for ids in response_data:
                     postLink = "http://www.omdbapi.com/?apikey=" + config.omdb_api + "&i="
@@ -328,7 +352,7 @@ def main():
                 return {"text":bot_output.text, "type":"bot", "topic":"normal","question":"chatbot"}
 
     bot_output = chatbot.get_response("tell me a joke")
-    return {"text":"Uh Oh! Something went wrong. Here's a joke. \n" + bot_output.text, "type":"bot","topic":"normal", "question":"chatbot"}
+    return {"text":"Uh Oh! Something went wrong. Let's restart.", "type":"bot","topic":"normal", "question":"restart"}
 
 @app.route('/api/user_data', methods=['GET','POST'])
 def user_data():

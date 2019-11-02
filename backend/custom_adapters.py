@@ -12,12 +12,12 @@ class JokeAdapter(LogicAdapter):
         super().__init__(chatbot, **kwargs)
 
     def can_process(self, statement):
-        # words = ['tell','joke']
-        return re.match(r'.*(tell|give|say).*joke.*', statement.text.lower())
-        # if all(x in statement.text.split() for x in words):
-        #     return True
-        # else:
-        #     return False
+        words = ['joke']
+        # return re.match(r'.*(tell|give|say).*joke.*', statement.text.lower())
+        if all(x in statement.text.split() for x in words):
+            return True
+        else:
+            return False
 
     def process(self, input_statement, additional_response_selection_parameters):
         
