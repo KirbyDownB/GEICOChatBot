@@ -323,21 +323,17 @@ def main():
                 user = request.json.get("username")
                 text = text.split(', ')
                 movieList = []
-                
+
                 for movie in text:
                     link = "http://www.omdbapi.com/?apikey=" + config.omdb_api+"&s=" + movie
                     resp = requests.get(link).json()
 
                     if resp["Response"]=="True":
-                        date = resp['Search'][0]['Released']
-                        date = date[7:]
-                        if int(date) >= 1950:
-                            print(date, "past 1950")
-                            movieList.append(resp['Search'][0]["imdbID"])
+                        movieList.append(resp['Search'][0]["imdbID"])
                     else:
                         print("failed")
                 if len(movieList) == 0:
-                    return {"type": "bot", "text": "I'm sorry I did not find any movies with those names."}
+                    return {"type": "bot", "topic":"general", "text": "I'm sorry I did not find any movies with those names."}
 
                 resp = requests.post("http://localhost:5500/recommend", json={"ids": movieList, "user": username})
                 collection.find_one_and_update({"username": username},
@@ -354,6 +350,9 @@ def main():
                     if temp["Response"]=="True":
                         listings.append(temp)
                 print("listings:", listings)
+                if len(response_data) == 0:
+                    return {"type": "bot", "topic":"general", "text": "I'm sorry I did not find any movies with those names."}
+
                 return {"type": "bot", "topic": "movie", "text": "Here are some movies I found: " + listings[0]["Title"] + ", " + listings[1]["Title"] + ", " + listings[2]["Title"] + ", and more if you click on me", "movieInfo": listings, "question":"chatbot"}
 
             else:
