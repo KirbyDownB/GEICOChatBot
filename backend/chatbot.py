@@ -344,7 +344,7 @@ def main():
 
                 for ids in response_data:
                     postLink = "http://www.omdbapi.com/?apikey=" + config.omdb_api + "&i="
-                    postLink += "tt0" + str(ids)
+                    postLink += "tt" + str(ids)
                     temp = requests.get(postLink).json()
                     if temp["Response"]=="True":
                         listings.append(temp)
