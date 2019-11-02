@@ -137,6 +137,13 @@ def main():
                 text = request.json.get("text")
                 username = request.json.get("username")
                 collection.find_one_and_update({"username": username}, {"$set": {"hobbies": text}})
+                data = collection.find_one({"username":username})
+
+                #data.get("lifestyle") returns the lifestyle input
+                #data.get("hobbies") returns the hobbies input
+                #have conditions for if the user puts in junk
+
+
                 return {"text":"OK! Here are some songs based on your answers.", "question":"general", "topic":"music","type":"bot"}
 
 
