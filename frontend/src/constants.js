@@ -1,4 +1,4 @@
-export const BASE_URL = "http://508d42e1.ngrok.io";
+export const BASE_URL = "https://baut-api.wls.ai";
 
 export const fakeMessages = [
   {

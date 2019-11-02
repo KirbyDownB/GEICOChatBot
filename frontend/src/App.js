@@ -164,7 +164,7 @@ class App extends Component {
                 <div className="app_chatGroup--caption">Click on a message with a <span className="bold">red</span> or <span className="bold">gold</span> chatbot icon to show more details about it!</div>
               </div>}
               {this.state.activeMessage && <div className="app__chatGroup--active">
-                <Panel activeMessage={this.state.activeMessage} activeIndex={this.state.activeIndex} />
+                <Panel handleNextClick={this.handleNextClick} handlePreviousClick={this.handlePreviousClick} activeMessage={this.state.activeMessage} activeIndex={this.state.activeIndex} />
               </div>}
             </div>
             <div className="col-8 right">
