@@ -9,6 +9,7 @@ import re
 import paralleldots
 import operator
 import config
+import json
 
 # paralleldots.set_api_key(key.emotion_key)
 paralleldots.set_api_key(config.emotion_key)
@@ -105,26 +106,30 @@ def main():
                 movieList = []
 
                 for movie in text:
-                    link = "http://www.omdbapi.com/?apikey="
-                    link += config.omdb_api+"&s=" + movie
+                    link = "http://www.omdbapi.com/?apikey=" + config.omdb_api+"&s=" + movie
                     resp = requests.get(link).json()
 
                     if resp["Response"]=="True":
                         movieList.append(resp['Search'][0]["imdbID"])
                     else:
                         print("failed")
-                if len(moveList) == 0:
+                if len(movieList) == 0:
                     return {"text": "I'm sorry I did not find any movies with those names."}
+                # movieList = json.dumps()
+                resp = requests.post("http://167.172.203.238:5500/recommend", json={"ids": movieList})
+                response_data = resp.json()["ids"]
 
+                convertedList = []
+                for ids in response_data:
+                    postLink = "http://img.omdbapi.com/?apikey=&" + config.omdb_api + "&i="
+                    postLink += "tt0" + str(ids)
+                    temp = requests.get(link).json()
 
+                    if temp["Response"]=="True":
+                        convertedList.append(temp['Search'])
 
-                # text = "Movies:" + text
-
-                # bot_output = chatbot.get_response(text)
-                # if bot_output == "junk":
-                #     return {"text":"Hmmm, those don't sound like any movies I've heard of. Can you give me any more movies you like?"}
-                # return {"text":bot_output}
-                return {"text": "yuhh"}
+                #return of movie recommendations
+                return {"type": "bot", "topic": "movie", "text": convertedList[0][0]}
 
 
             else:
