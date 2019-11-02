@@ -18,6 +18,10 @@
   color: #545454;
 }
 
-.bot__name, .bot__text {
+.bot__name, .bot__text, .bot__option {
   font-family: "Asap", sans-serif;
+}
+
+.bot__option {
+  font-weight: bold;
 }
