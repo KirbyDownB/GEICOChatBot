@@ -66,15 +66,15 @@ Leading questions
 3. What are some of your favorite movies? Seperate each one with a comma.
 {"text":"What are some of your favorite movies? Seperate each one with a comma.", "type":"leading", "question":"favorite_movies", "topic":"normal"}
 '''
-count = 0
 last_question = None
 username = ''
 how_was_your_day = ''
 favorite_movies = []
 emotion = ''
+
 @app.route('/api/chatbot',methods=['GET','POST'])
 def main():
-    global count
+    global reset_dict
     # global last_question
     # global username
     # global how_was_your_day
@@ -106,22 +106,19 @@ def main():
             #No response expected
             print("Entry message")
             last_question = {"text":"My name is Baut! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you.", "type":"bot", "question":"intro","topic":"normal"}
-            count += 1
             return last_question
 
-        if request.json.get('username') == "reset" or request.json.get('username') == "restart" or request.json.get('text') == "reset" or request.json.get('text') == "restart":
+        username = request.json.get('username')
+        if username == "reset" or username == "restart" or request.json.get('text') == "reset" or request.json.get('text') == "restart":
             print("RESTART")
-            # count = 1
-            username = request.json.get("username")
-
             last_question = {"text":"Ok {}, how has your day been? This will give us some idea about what movies to \
                     recommend you.".format(username), "type":"bot","question":"day","topic":"normal"}
             return last_question
 
 
-        if count > 0 and last_question is not None:
+        if last_question is not None:
 
-            print("Entereed movie flow")
+            print("Entered movie flow")
             #text = request.json.get('text')
             username = request.json.get('username')
             text = request.json.get('text')
