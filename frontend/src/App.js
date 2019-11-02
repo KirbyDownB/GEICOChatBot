@@ -10,6 +10,8 @@ const logo = require('./assets/logo.svg');
 const chatGroup = require('./assets/chatGroup.svg');
 const ERROR_MESSAGE = "Something went wrong on our end!";
 
+const showError = () => message.error(ERROR_MESSAGE);
+
 class App extends Component {
   state = {
     messages: [],
@@ -29,9 +31,8 @@ class App extends Component {
         this.setState({ messages: [...this.state.messages, data], questionTopic: data.question });
       })
       .catch(error => {
-        console.log("I got an error in componentDidMount");
-        console.error(error);
-        message.error(ERROR_MESSAGE);
+        console.log("I got an error in componentDidMount", error);
+        showError()
       })
   }
 
@@ -63,13 +64,9 @@ class App extends Component {
         });
       })
       .catch(error => {
-        console.log("I got an error after sending name");
-        console.error(error);
-        message.error(ERROR_MESSAGE);
-        this.setState({
-          isBotLoading: false,
-        });
-      })
+        showError();
+        this.setState({ isBotLoading: false });
+      });
   }
 
   sendMessage = message => {
@@ -79,7 +76,6 @@ class App extends Component {
     });
 
     if (this.state.name) {
-      console.log("Sending with last question", this.state.questionTopic);
       fetch(`${BASE_URL}/api/chatbot`, {
         method: "POST",
         headers: {
@@ -101,13 +97,9 @@ class App extends Component {
           });
         })
         .catch(error => {
-          console.log("I got an error after sending message");
-          console.error(error);
-          message.error(ERROR_MESSAGE);
-          this.setState({
-            isBotLoading: false,
-          });
-        })
+          showError();
+          this.setState({ isBotLoading: false, });
+        });
     }
   }
 
@@ -144,11 +136,9 @@ class App extends Component {
       })
       .catch(error => {
         console.error(error);
-        message.error(ERROR_MESSAGE);
-        this.setState({
-          isBotLoading: false,
-        });
-      })
+        showError();
+        this.setState({ isBotLoading: false });
+      });
   }
 
   render() {
