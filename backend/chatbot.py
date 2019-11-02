@@ -358,7 +358,7 @@ def main():
                 return {"text":bot_output.text, "type":"bot", "topic":"normal","question":"chatbot"}
 
     bot_output = chatbot.get_response("tell me a joke")
-    return {"text":"Uh Oh! Something went wrong. Let's restart.", "type":"bot","topic":"normal", "question":"restart"}
+    return {"text":"Movie? Movie? Did someone say movie? Tell me your favorite movies! Separate each one with a comma.", "type":"bot","topic":"normal", "question":"favorite_movies"}
 
 @app.route('/api/user_data', methods=['GET','POST'])
 def user_data():
