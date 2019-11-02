@@ -48,12 +48,13 @@ emotion = ''
 @app.route('/api/chatbot',methods=['GET','POST'])
 def main():
     global count
-    global last_question
+    # global last_question
     # global username
     # global how_was_your_day
     # global favorite_movies
     # global emotion
     username = ''
+    last_question = None
 
 
 
@@ -66,7 +67,16 @@ def main():
         if request.json is None:
             username = ''
             text = ''
+<<<<<<< HEAD
 
+=======
+            last_question = None
+        elif request.json is not None:
+            username = request.json.get('username')
+            text = request.json.get('text')
+            last_question = request.json.get("question")
+
+>>>>>>> 8b2c8a89229d6af72f87e17b788c3878b7208060
         if username is '' and last_question is None:
             #No response expected
             last_question = {"text":"My name is GEICO BOT! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you", "type":"bot", "question":"intro","topic":"normal"}
@@ -83,8 +93,12 @@ def main():
             #text = request.json.get('text')
             username = request.json.get('username')
             text = request.json.get('text')
+            last_question = request.json.get("question")
+
+            print("TEXXXXT")
+            print(text)
             # print(re.match(r'.*(recommend|suggest).*movies\.*', text.lower()))
-            if last_question.get("question") == "intro":
+            if last_question == "intro":
                 username = request.json.get("username")
                 text = request.json.get("text")
                 #store the username in the database
@@ -106,7 +120,7 @@ def main():
                 return last_question
 
 
-            if last_question.get("question") == "day":
+            if last_question == "day":
                 #run emotional analysis on the string.
                 username = request.json.get("username")
                 how_was_your_day = request.json.get('text')
@@ -129,7 +143,7 @@ def main():
                 return last_question
 
 
-            if last_question.get("question") == "favorite_movies":
+            if last_question == "favorite_movies":
 
                 #first, create the user object
                 # post = {"username":username, "how_was_your_day":how_was_your_day, "emotion":emotion, "favorite_movies":favorite_movies}
