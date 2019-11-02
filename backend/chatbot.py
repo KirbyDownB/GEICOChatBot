@@ -320,13 +320,17 @@ def main():
                 user = request.json.get("username")
                 text = text.split(', ')
                 movieList = []
-
+                
                 for movie in text:
                     link = "http://www.omdbapi.com/?apikey=" + config.omdb_api+"&s=" + movie
                     resp = requests.get(link).json()
 
                     if resp["Response"]=="True":
-                        movieList.append(resp['Search'][0]["imdbID"])
+                        date = resp['Search'][0]['Released']
+                        date = date[7:]
+                        if int(date) >= 1950:
+                            print(date, "past 1950")
+                            movieList.append(resp['Search'][0]["imdbID"])
                     else:
                         print("failed")
                 if len(movieList) == 0:
@@ -356,6 +360,8 @@ def main():
                 elif bot_output.text == "I heard something about songs!":
                     last_question = {"text":"Did you say somethings about music or songs? Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?", "question":"music_lifestyle", "topic":"questions","type":"bot","options":['Athletic','Sedentary','Moderate']}
                     return last_question
+                elif bot_output.text[:3] == "JOKE":
+                    return {"text":bot_output.text[3:], "type":"bot", "topic":"normal", "question":"chatbot"}
                 else:
                     num = random.randrange(20)
                     if num % 5 == 0:
