@@ -3,30 +3,19 @@ import './App.css';
 import MessageForm from './components/MessageForm/MessageForm';
 import MessageList from './components/MessageList/MessageList';
 import Panel from './components/Panel/Panel';
-import { BASE_URL } from './constants';
+import { message } from 'antd';
+import { BASE_URL, fakeMessages } from './constants';
 
 const chatGroup = require('./assets/chatGroup.svg');
 
-const initialMessages = [
-  {
-    type: "bot",
-    topic: "normal",
-    text: "Hey there! My name is Bot! I recommend movies, music, and some other stuff as well! Try things like \"recommend me some movies\", or \"tell me a joke\"."
-  },
-  {
-    type: "bot",
-    topic: "normal",
-    text: "To start things off, what's your name?"
-  }
-];
-
 class App extends Component {
   state = {
-    messages: [],
+    messages: fakeMessages,
     activeMessage: null,
+    lastMessage: null,
     name: "",
-    errorMessage: "",
-    isBotLoading: false
+    isBotLoading: false,
+    questionTopic: ""
   }
 
   componentDidMount = () => {
@@ -35,9 +24,10 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(data => {
-        this.setState({ messages: [...this.state.messages, data] });
+        this.setState({ messages: [...this.state.messages, data], questionTopic: data.question });
       })
       .catch(error => {
+        message.error("Something went wrong on our end!");
         console.error(error);
       })
   }
@@ -46,7 +36,6 @@ class App extends Component {
     const name = message.text;
     this.setState({
       messages: [...this.state.messages, message],
-      name,
       isBotLoading: true
     });
 
@@ -56,23 +45,25 @@ class App extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        "text": name
+        "username": name,
+        "question": this.state.questionTopic
       })
     })
       .then(response => response.json())
-      .then(({type, topic, text}) => {
-        const botMessage = { type, topic, text };
+      .then(data => {
+        const botMessage = data;
         this.setState({
           isBotLoading: false,
-          errorMessage: "",
-          messages: [...this.state.messages, botMessage]
+          name,
+          messages: [...this.state.messages, botMessage],
+          questionTopic: data.question
         });
       })
       .catch(error => {
         console.error(error);
+        message.error("Something went wrong on our end!");
         this.setState({
           isBotLoading: false,
-          errorMessage: "Something went wrong!"
         });
       })
   }
@@ -84,6 +75,7 @@ class App extends Component {
     });
 
     if (this.state.name) {
+      console.log("Sending with last question", this.state.questionTopic);
       fetch(`${BASE_URL}/api/chatbot`, {
         method: "POST",
         headers: {
@@ -91,29 +83,32 @@ class App extends Component {
         },
         body: JSON.stringify({
           "text": message.text,
-          "name": this.state.name
+          "username": this.state.name,
+          "question": this.state.questionTopic
         })
       })
         .then(response => response.json())
-        .then(({ type, topic, text }) => {
-          const botMessage = { type, topic, text };
+        .then(data => {
+          console.log("Got data", data)
+          const botMessage = data;
           this.setState({
             isBotLoading: false,
-            errorMessage: "",
-            messages: [...this.state.messages, botMessage]
+            messages: [...this.state.messages, botMessage],
+            questionTopic: data.question
           });
         })
         .catch(error => {
           console.error(error);
+          message.error("Something went wrong on our end!");
           this.setState({
             isBotLoading: false,
-            errorMessage: "Something went wrong!"
           });
         })
     }
   }
 
   setActiveMessage = message => {
+    console.log("setting active message", message)
     this.setState({ activeMessage: message });
   }
 

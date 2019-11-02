@@ -58,5 +58,20 @@ export const fakeMessages = [
       Website: 'N/A',
       Response: 'True'
     }
-  }
+  },
+  {
+    id: 1,
+    type: "bot",
+    topic: "music",
+    text: "Here's a really cool song I recommend",
+    musicInfo: {
+      Artist: "Khalid",
+      Song: "Young Dumb & Broke",
+      Year: "2017",
+      Album: "American Teen",
+      AlbumArt: "https://is4-ssl.mzstatic.com/image/thumb/Music122/v4/22/b1/df/22b1dfb2-1637-f3fd-79ce-9464340f7b95/886446326146.jpg/313x0w.jpg",
+      Genre: "R&B/Soul",
+      Record: "RCA Records, a division of Sony Music Entertainment"
+    }
+  },
 ];
