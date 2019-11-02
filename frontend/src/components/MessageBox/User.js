@@ -9,13 +9,16 @@ class User extends Component {
   }
 
   formatAMPM = (date) => {
-    var hours = date.getHours();
-    var minutes = date.getMinutes();
-    var ampm = hours >= 12 ? 'PM' : 'AM';
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let ampm = hours >= 12 ? 'PM' : 'AM';
+
     hours = hours % 12;
-    hours = hours ? hours : 12; // the hour '0' should be '12'
+    hours = hours ? hours : 12;
     minutes = minutes < 10 ? '0'+minutes : minutes;
-    var strTime = hours + ':' + minutes + ' ' + ampm;
+
+    const strTime = hours + ':' + minutes + ' ' + ampm;
+
     return strTime;
   }
 
@@ -31,7 +34,7 @@ class User extends Component {
       <div className="user__container">
         <img className="user__img" src={logo} alt="user"></img>
         <div className="user__text-wrapper">
-          <div className="user__name">User {this.state.timeStamp}</div>
+          <div className="user__name">{this.props.name} {this.state.timeStamp}</div>
           <div className="user__text">{this.props.text}</div>
         </div>
       </div>

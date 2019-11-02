@@ -4,6 +4,8 @@ import "./MessageList.css";
 import Bot from '../MessageBox/Bot';
 import User from '../MessageBox/User';
 
+const spinner = require('../../assets/spinner.svg');
+
 class MessageList extends Component {
   handleMessageClick = (e, message) => {
     e.preventDefault();
@@ -30,12 +32,15 @@ class MessageList extends Component {
                 {message.type === "bot" ? (
                   <Bot {...message} />
                 ) : (
-                  <User {...message} />
+                  <User {...message} name={this.props.name} />
                 )}
               </div>
             </Animated>
             )
           })}
+          {this.props.isBotLoading && <div className="messageList__loading">
+            <img className="messageList__spinner" src={spinner} alt=""/>
+          </div>}
         </div>
       </div>
     )

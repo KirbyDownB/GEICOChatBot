@@ -16,16 +16,26 @@ class MessageForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
+    const text = e.target.text.value;
+
+    if (!text) {
+      return;
+    }
+
     const message = {
       type: "user",
-      text: e.target.text.value,
+      text,
       topic: "normal",
       id: 2
     };
 
-    this.props.sendMessage(message);
-    this.setState({ text: "" });
+    if (this.props.name) {
+      this.props.sendMessage(message);
+    } else {
+      this.props.sendName(message);
+    }
 
+    this.setState({ text: "" });
   }
 
   render() {
@@ -43,10 +53,11 @@ class MessageForm extends Component {
           </Item>
           <Item>
             <Button
+              className="messageForm__submit"
               type="primary"
               htmlType="submit"
             >
-              Submit
+              SUBMIT
             </Button>
           </Item>
         </Form>

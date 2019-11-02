@@ -10,4 +10,17 @@
   max-height: 90vh;
   overflow: auto;
   width: 100%;
+  margin-bottom: -20px;
+}
+
+.messageList__box {
+  margin-right: 8%;
+}
+
+.messageList__loading {
+  text-align: center;
+}
+
+.messageList__spinner {
+  width: 10%;
 }

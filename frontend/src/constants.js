@@ -1,3 +1,5 @@
+export const BASE_URL = "http://4771d28d.ngrok.io";
+
 export const fakeMessages = [
   {
     id: 1,
