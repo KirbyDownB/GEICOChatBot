@@ -68,9 +68,6 @@ def main():
             print("Init empty")
             username = ''
             text = ''
-<<<<<<< HEAD
-
-=======
             last_question = None
         if request.json is not None:
             print("Init full")
@@ -78,7 +75,6 @@ def main():
             text = request.json.get('text')
             last_question = request.json.get("question")
 
->>>>>>> 8b2c8a89229d6af72f87e17b788c3878b7208060
         if username is '' and last_question is None:
             #No response expected
             print("Entry message")
