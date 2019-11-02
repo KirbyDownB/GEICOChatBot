@@ -86,7 +86,7 @@ def pred(mdl, user_id, k=10):
     return top_items
 
 app = Flask(__name__)
-r = RecommenderHelper()
+r = RecommenderHelper(data_home='data/ml-latest')
 r.load_links()
 
 @app.route('/')
@@ -96,13 +96,14 @@ def index():
 # Stores the next usable user
 last_user = new_users[0]
 username2id = {}
+seen_dict = {}
 
 @app.route('/recommend', methods=['POST'])
 def recommend():
     global last_user
     global username2id
     global interactions
-    global dddd
+    global seen_dict
 
     start_time = time.time()
     data = request.get_json()
@@ -116,6 +117,7 @@ def recommend():
         print(f'Registering new user {username}')
         user_id = last_user
         username2id[username] = last_user
+        seen_dict[username] = set()
         last_user += 1
     else:
         user_id = username2id[username]
@@ -136,12 +138,16 @@ def recommend():
     adj_ids = [item_mapping[x] for x in ret]
     # tmp = interactions.tolil()
     for adj_id in adj_ids:
+        if adj_id in seen_dict[username]:
+            print('Movie already added')
+            continue
         # dddd.append((user_id, adj_id))
         # tmp[user_id, adj_id] = 1
     # interactions = tmp.tocoo()
         np.append(interactions.row, user_id)
         np.append(interactions.col, adj_id)
         np.append(interactions.data, 1)
+        seen_dict[username].add(adj_id)
     # (interactions, _) = dataset.build_interactions(rating_list)'
         #--- Timing block
     elapsed = time.time() - start_time
