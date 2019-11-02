@@ -25,7 +25,33 @@ CORS(app)
 chatbot = ChatBot(
     "GEICOChatBot",
     storage_adapter="chatterbot.storage.MongoDatabaseAdapter",
-    logic_adapters=['chatterbot.logic.BestMatch',{'import_path': 'custom_adapters.JokeAdapter'}],
+    logic_adapters=['chatterbot.logic.BestMatch',{'import_path': 'custom_adapters.JokeAdapter'},
+        {
+            'import_path': 'chatterbot.logic.SpecificResponseAdapter',
+            'input_text': 'Who made you?',
+            'output_text': 'My creators are John, Eric, Aditya, and Will. I was created at the University of California, Riverside in Bourns A171.'
+        },
+        {
+            'import_path': 'chatterbot.logic.SpecificResponseAdapter',
+            'input_text': 'When is your birthday?',
+            'output_text': 'I was born on November 1st, 2019'
+        },
+        {
+            'import_path': 'chatterbot.logic.SpecificResponseAdapter',
+            'input_text': 'What is the answer to life, the universe, and everything?',
+            'output_text': '42'
+        },
+        {
+            'import_path': 'chatterbot.logic.SpecificResponseAdapter',
+            'input_text': '?',
+            'output_text': 'I could ask the same of you as well. I don\'t think either of us could give a good answer'
+        },
+        {
+            'import_path': 'chatterbot.logic.SpecificResponseAdapter',
+            'input_text': 'Who\'s that pokemon?',
+            'output_text': 'It\'s me'
+        }
+        ],
     database_uri='mongodb+srv://adiach1:1234@cluster0-jgwg7.mongodb.net/test?retryWrites=true&w=majority',
     read_only=True
 
@@ -131,7 +157,7 @@ def main():
             if last_question == "music_lifestyle":
                 text = request.json.get("text")
                 username = request.json.get("username")
-                if text is not "Athletic" and text is not "Sedentary" and text is not "Moderate":
+                if not(text == "Athletic" or text == "Sedentary" or text == "Moderate"):
                     last_question = {"text":"Ok {}. Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?".format(username), "question":"music_lifestyle", "topic":"questions","type":"bot","options":['Athletic','Sedentary','Moderate']}
                     return last_question
                     
@@ -145,7 +171,7 @@ def main():
 
                 username = request.json.get("username")
 
-                if text is not "Indoor" and text is not "Outdoor":
+                if not(text == "Indoor" or text == "Outdoor"):
                     last_question = {"text":"Let's try that again {}. Would you say that your hobbies are more Indoor or Outdoor?","question":"music_hobbies", "topic":"questions","type":"bot","options":['Indoor','Outdoor']}
                     return last_question
 
