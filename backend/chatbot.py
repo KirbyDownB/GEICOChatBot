@@ -25,7 +25,7 @@ CORS(app)
 chatbot = ChatBot(
     "GEICOChatBot",
     storage_adapter="chatterbot.storage.MongoDatabaseAdapter",
-    logic_adapters=['chatterbot.logic.BestMatch',{'import_path': 'custom_adapters.JokeAdapter'},
+    logic_adapters=['chatterbot.logic.BestMatch',{'import_path': 'custom_adapters.JokeAdapter'},{'import_path':'custom_adapters.MovieMusicAdapter'},
         {
             'import_path': 'chatterbot.logic.SpecificResponseAdapter',
             'input_text': 'Who made you?',
@@ -84,12 +84,8 @@ def main():
     last_question = None
     text = ''
 
-
-
-
     if request.method == 'POST':
-        m = ['movie']
-        s = ['song']
+
         if request.json is not None:
             print("line 61", request.json)
         # username = request.json.get("username")
@@ -109,16 +105,19 @@ def main():
         if username is '' and last_question is None:
             #No response expected
             print("Entry message")
-            last_question = {"text":"My name is GEICO BOT! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you", "type":"bot", "question":"intro","topic":"normal"}
+            last_question = {"text":"My name is I-TEA BOT! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you.", "type":"bot", "question":"intro","topic":"normal"}
             count += 1
             return last_question
 
         if request.json.get('username') == "reset" or request.json.get('username') == "restart" or request.json.get('text') == "reset" or request.json.get('text') == "restart":
             print("RESTART")
-            count = 1
-            last_question = {"text":"My name is GEICO BOT! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you", "type":"bot", "question":"intro","topic":"normal"}
+            # count = 1
+            username = request.json.get("username")
+
+            last_question = {"text":"Ok {}, how has your day been? This will give us some idea about what movies to \
+                    recommend you.".format(username), "type":"bot","question":"day","topic":"normal"}
             return last_question
-        
+
 
         if count > 0 and last_question is not None:
 
@@ -205,7 +204,7 @@ def main():
                     newResp = requests.get(newLink).json()
                     songInfo = newResp["track"]
                     songName = songInfo["name"]
-                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
+                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
 
                 elif data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Indoor":
                     list = ["Rap", "Hip-Hop", "House"]
@@ -219,7 +218,7 @@ def main():
                     newResp = requests.get(newLink).json()
                     songInfo = newResp["track"]
                     songName = songInfo["name"]
-                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
+                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
 
                 elif data.get("lifestyle") == "Moderate" and data.get("hobbies") == "Outdoor":
                     list = ["Pop", "Musicals", "Rock"]
@@ -233,7 +232,7 @@ def main():
                     newResp = requests.get(newLink).json()
                     songInfo = newResp["track"]
                     songName = songInfo["name"]
-                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
+                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
 
                 elif data.get("lifestyle") == "Moderate" and data.get("hobbies") == "Indoor":
                     list = ["Jazz", "Blues", "Swing"]
@@ -247,7 +246,7 @@ def main():
                     newResp = requests.get(newLink).json()
                     songInfo = newResp["track"]
                     songName = songInfo["name"]
-                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
+                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
 
                 elif data.get("lifestyle") == "Sedentary" and data.get("hobbies") == "Outdoor":
                     list = ["Country", "BlueGrass", "Folk"]
@@ -261,7 +260,7 @@ def main():
                     newResp = requests.get(newLink).json()
                     songInfo = newResp["track"]
                     songName = songInfo["name"]
-                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
+                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
 
                 elif data.get("lifestyle") == "Sedentary" and data.get("hobbies") == "Indoor":
                     list = ["EDM", "Dubstep", "Trap"]
@@ -275,7 +274,7 @@ def main():
                     newResp = requests.get(newLink).json()
                     songInfo = newResp["track"]
                     songName = songInfo["name"]
-                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
+                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
 
 
             if last_question == "day":
@@ -297,15 +296,15 @@ def main():
                 sentence = ''
 
                 if emotion == "Happy":
-                    sentence = random.sample(["That's good to hear", "Nice to see you in good spirits.", "I'm glad your chipper"],1)
+                    sentence = random.sample(["That's good to hear. ", "Nice to see you in good spirits. ", "I'm glad your chipper. "],1)
                 if emotion == "Sad" or emotion == "Angry":
-                    sentence = random.sample(["I'm sorry your day is going so poorly.","I hope tomorrow is better.","Sad reacts only."],1)
+                    sentence = random.sample(["I'm sorry your day is going so poorly. ","I hope tomorrow is better. ","Sad reacts only. "],1)
                 if emotion == "Excited":
-                    sentence = random.sample(["Your day sounded AMAZING!!!","I wish my day was as exciting.","Sounds like today was a rollercoaster!"],1)
+                    sentence = random.sample(["Your day sounded AMAZING!!! ","I wish my day was as exciting. ","Sounds like today was a rollercoaster! "],1)
                 if emotion == "Fear":
-                    sentence = random.sample(["I hope your days are calmer in the future.","We have nothing to fear but fear itself.","Never fear, the rules are here!"],1)
+                    sentence = random.sample(["I hope your days are calmer in the future. ","We have nothing to fear but fear itself. ","Never fear, the rules are here! "],1)
                 if emotion == "Bored":
-                    sentence = random.sample(["Another day, another dollar I suppose.", "Back to the old grind.", "Same tbh."], 1)
+                    sentence = random.sample(["Another day, another dollar I suppose. ", "Back to the old grind. ", "Same tbh. "], 1)
                 last_question = {"text":sentence + "What are some of your favorite movies? Separate each one with a \
                     comma.", "type":"bot", "question":"favorite_movies", "topic":"normal"}
 
@@ -341,37 +340,27 @@ def main():
                                  {"$set": {"movies_liked": movieList}})
 
                 response_data = resp.json()["ids"]
+                listings = []
+
                 for ids in response_data:
                     postLink = "http://www.omdbapi.com/?apikey=" + config.omdb_api + "&i="
-                    postLink += "tt0" + str(ids)
+                    postLink += "tt" + str(ids)
                     temp = requests.get(postLink).json()
                     if temp["Response"]=="True":
-                        return {"type": "bot", "topic": "movie", "text": "The movie I recommend the most is: "+temp["Title"], "movieInfo": temp, "question":"chatbot"}
-                #return of movie recommendations
+                        listings.append(temp)
+                return {"type": "bot", "topic": "movie", "text": "Here are some movies I found: " + listings[0]["Title"] + ", " + listings[1]["Title"] + ", " + listings[2]["Title"] + ", and more if you click on me", "movieInfo": listings, "question":"chatbot"}
 
             else:
                 bot_output = chatbot.get_response(text)
+                if bot_output.text == "Movie? Movie? I heard Movie! Tell me your favorite movies! Separate each one with a comma.":
+                    return {"text":bot_output.text, "type":"bot", "question":"favorite_movies", "topic":"normal"}
+                elif bot_output.text == "I heard something about songs!":
+                    last_question = {"text":"Did you say somethings about music or songs? Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?", "question":"music_lifestyle", "topic":"questions","type":"bot","options":['Athletic','Sedentary','Moderate']}
+                    return last_question
                 return {"text":bot_output.text, "type":"bot", "topic":"normal","question":"chatbot"}
 
     bot_output = chatbot.get_response("tell me a joke")
-    return {"text":"Uh Oh! Something went wrong. Let's restart.", "type":"bot","topic":"normal", "question":"restart"}
-
-@app.route('/api/user_data', methods=['GET','POST'])
-def user_data():
-
-    if request.method == 'POST':
-
-        return {"Hi":"John", "type":"bot"}
-
-
-    return {"Hi":"John", "type":"bot"}
-
-
-
-
-
-
-
+    return {"text":"Movie? Movie? Did someone say movie? Tell me your favorite movies! Separate each one with a comma.", "type":"bot","topic":"normal", "question":"favorite_movies"}
 
 
 if __name__ == "__main__":

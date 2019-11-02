@@ -40,22 +40,44 @@ class JokeAdapter(LogicAdapter):
         return response_statement
 
 
-class MovieAdapter(LogicAdapter):
+class MovieMusicAdapter(LogicAdapter):
 
     def __init__(self, chatbot, **kwargs):
         super().__init__(chatbot, **kwargs)
 
     def can_process(self, statement):
-        if statement.text.startswith('Movies:'):
+        m = ['movie','movies','songs','song','music']
+        print(m)
+        print(statement.text)
+        if statement.text == "movie" or statement.text == "movies":
             return True
         else:
             return False
 
     def process(self, input_statement, additional_response_selection_parameters):
-        #remove the first 7 characters on the string
-        movies = input_statement[7:]
-        movies = movies.split(',')
-
-        #call will
-
         
+        response_statment = Statement(text="Movie? Movie? I heard Movie! Tell me your favorite movies! Separate each one with a comma.") 
+        response_statment.confidence = 1
+        return response_statment
+
+        # elif all(x in statement.text.split() for x in m) or all(x in statement.text.split() for x in m) or all(x in statement.text.split() for x in m)
+
+class MusicAdapter(LogicAdapter):
+
+    def __init__(self, chatbot, **kwargs):
+        super().__init__(chatbot, **kwargs)
+
+    def can_process(self, statement):
+        m = ['movie','movies','songs','song','music']
+        print(m)
+        print(statement.text)
+        if statement.text == "movie" or statement.text == "movies":
+            return True
+        else:
+            return False
+
+    def process(self, input_statement, additional_response_selection_parameters):
+        
+        response_statment = Statement(text="Movie? Movie? I heard Movie! Tell me your favorite movies! Separate each one with a comma.") 
+        response_statment.confidence = 1
+        return response_statment
