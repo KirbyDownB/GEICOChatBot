@@ -329,7 +329,7 @@ def main():
                     link = "http://www.omdbapi.com/?apikey=" + config.omdb_api+"&s=" + movie
                     resp = requests.get(link).json()
 
-                    if resp["Response"]=="True":
+                    if resp["Response"] == "True":
                         movieList.append(resp['Search'][0]["imdbID"])
                     else:
                         print("failed")
