@@ -1,4 +1,4 @@
-export const BASE_URL = "http://4771d28d.ngrok.io";
+export const BASE_URL = "http://508d42e1.ngrok.io";
 
 export const fakeMessages = [
   {
@@ -73,5 +73,12 @@ export const fakeMessages = [
       Genre: "R&B/Soul",
       Record: "RCA Records, a division of Sony Music Entertainment"
     }
+  },
+  {
+    id: 1,
+    type: "bot",
+    topic: "questions",
+    text: "Give me an answer",
+    options: ["Athletic", "Sedentary"]
   },
 ];

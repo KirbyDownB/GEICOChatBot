@@ -10,7 +10,6 @@
   width: 25vw;
   padding: 4%;
   left: 0;
-  height: 100vh;
 }
 
 .right {
@@ -45,4 +44,15 @@
 .anticon {
   vertical-align: 0px;
   top: 0px
+}
+
+.app__logo--container {
+  text-align: center;
+  margin-top: -30px;
+  margin-left: -20px;
+};
+
+
+.app__logo {
+  width: 10%;
 }
