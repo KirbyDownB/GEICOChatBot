@@ -53,7 +53,14 @@ def main():
     global how_was_your_day
     global favorite_movies
     global emotion
+
     if request.method == 'POST':
+        # username = request.json.get("username")
+        # text = request.json.get("text")
+        if request.json is None:
+            username = ''
+            text = ''
+        
         if username is '' and last_question is None:
             #No response expected
             last_question = {"text":"My name is GEICO BOT! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you", "type":"bot", "question":"intro","topic":"normal"}
@@ -77,11 +84,15 @@ def main():
             if last_question.get("question") == "intro":
                 username = request.json.get("username")
                 text = request.json.get("text")
+                print("USERname")
+                print(username)
+                print("TEXTTTTT")
+                print(text)
                 #store the username in the database
 
                 if collection.find({"username":username}).count() == 0:
                     collection.insert_one({"username":username})
-
+                
 
                 #start the movie flow
                 last_question = {"text":"Hi {}! Now we can begin! Try things like \"recommend me some movies\" or \"tell me a joke\".".format(username), "topic":"normal", "type":"bot"}
@@ -99,15 +110,19 @@ def main():
             if last_question.get("question") == "day":
                 #run emotional analysis on the string.
                 username = request.json.get("username")
-                how_was_your_day = request.form.get('text')
+                how_was_your_day = request.json.get('text')
                 emotion = "Happy" #placeholder
                 response = paralleldots.emotion(how_was_your_day)
+
+                print(username)
+                print(how_was_your_day)
+                print(response)
 
                 if response.get("emotion") is not None:
                     emotion = max(response.get("emotion").items(), key=operator.itemgetter(1))[0]
 
                 print(emotion)
-                collection.find_one_and_update({"username": username},
+                collection.find_one_and_update({"username": username}, 
                                  {"$set": {"how_was_your_day": how_was_your_day, "emotion":emotion}})
 
 
@@ -116,6 +131,7 @@ def main():
 
                 return last_question
 
+ 
             if last_question.get("question") == "favorite_movies":
 
                 #first, create the user object
@@ -148,7 +164,6 @@ def main():
                     if temp["Response"]=="True":
                         return {"type": "bot", "topic": "movie", "text": "The movie I recommend the most is: "+temp["Title"], "movieInfo": temp}
                 #return of movie recommendations
-
 
             else:
                 return {"text": "yuh"}
