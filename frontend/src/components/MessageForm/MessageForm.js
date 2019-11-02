@@ -16,9 +16,10 @@ class MessageForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    const text = e.target.text.value;
+    const text = e.target.text.value.trim();
 
     if (!text) {
+      this.setState({ text: "" });
       return;
     }
 
