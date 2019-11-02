@@ -230,3 +230,4 @@ dmypy.json
 .pyre/
 
 ml/data
+*.pickle

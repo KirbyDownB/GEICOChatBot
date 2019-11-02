@@ -160,3 +160,26 @@ class RecommenderHelper():
     def get_movie(self, movie_id):
         return Item(self.item_ids[movie_id], self.movies[movie_id])
 
+    def load_links(self):
+        self.imdb2mid = {}
+        self.mid2imdb = {}
+        self.tmbd2mid = {}
+        with open(path.join(self.data_home, 'links.csv'), 'r') as f:
+            is_first = True
+            for line in f:
+                if is_first:
+                    is_first = False
+                    continue
+                if not line.strip():
+                    continue
+                pieces = line.strip().split(',')
+                # if any([len(x) == 0 for x in pieces]):
+                #     print(pieces)
+                movieId, imdbId, tmdbId = pieces
+                i_movieId = int(movieId)
+                if movieId and imdbId:
+                    self.imdb2mid[int(imdbId)] = i_movieId
+                    self.mid2imdb[i_movieId] = int(imdbId)
+                if movieId and tmdbId:
+                    self.tmbd2mid[int(tmdbId)] = i_movieId
+
