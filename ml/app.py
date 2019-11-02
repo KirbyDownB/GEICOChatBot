@@ -136,7 +136,7 @@ def recommend():
     #--- End timing block
 
     # Adjust to dataset ID
-    adj_ids = [item_mapping[x] for x in ret]
+    adj_ids = [item_mapping[x] for x in ret if x in item_mapping]
     # tmp = interactions.tolil()
     for adj_id in adj_ids:
         if adj_id in seen_dict[username]:
