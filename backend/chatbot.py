@@ -359,6 +359,8 @@ def main():
                 elif bot_output.text == "I heard something about songs!":
                     last_question = {"text":"Did you say somethings about music or songs? Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?", "question":"music_lifestyle", "topic":"questions","type":"bot","options":['Athletic','Sedentary','Moderate']}
                     return last_question
+                elif bot_output.text[:3] == "JOKE":
+                    return {"text":bot_output.text[3:], "type":"bot", "topic":"normal", "question":"chatbot"}
                 else:
                     num = random.randrange(20)
                     if num % 5 == 0:
