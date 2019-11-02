@@ -6,7 +6,12 @@ import requests
 from flask_cors import CORS
 import pickle
 import re
-
+import paralleldots
+import operator
+import keys
+from keys import emotion_key
+# paralleldots.set_api_key(key.emotion_key)
+paralleldots.set_api_key(emotion_key)
 
 app = Flask(__name__)
 CORS(app)
@@ -53,36 +58,43 @@ def main():
         print(count)
         if count == 0 and last_question is None:
             #No response expected
-            last_question = {"text":"My name is GEICO BOT. I recommend movies, music, and do some other stuff as well. Try things like \"recommend me some movies\" or \"tell me a joke\".", "type":"leading", "question":"intro","topic":"normal"}
+            last_question = {"text":"My name is GEICO BOT! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you", "type":"bot", "question":"intro","topic":"normal"}
             count += 1
             return last_question
         
         elif count > 0 and last_question is not None:
 
+            #text = request.json.get('text')
             text = request.json.get('text')
             print("TEXXXXT")
             print(text)
-            print(re.match(r'.*(recommend|suggest).*movies\.*', text.lower()))
-            if re.match(r'.*(recommend|suggest).*movies\.*', text.lower()):
+            # print(re.match(r'.*(recommend|suggest).*movies\.*', text.lower()))
+            if last_question.get("question") == "intro":
+                username = request.json.get("text")
                 #start the movie flow
-                last_question = {"text":"Ok then, I need a username from you", "type":"leading","question":"username", "topic":"movies(normal)"}
+                last_question = {"text":"Hi {}! Now we can begin! Try things like \"recommend me some movies\" or \"tell me a joke\".".format(username), "topic":"normal", "type":"bot"}
                 return last_question
 
-            if last_question.get("question") == "username":
+            if re.match(r'.*(recommend|suggest).*movies\.*', text.lower()):
+                
 
-                username = request.json.get("text")
-
-                last_question = {"text":"How has your day been? This will give us some idea about what movies to \
-                    recommend you.", "type":"leading","question":"day","topic":"normal"}
+                last_question = {"text":"Ok {}, how has your day been? This will give us some idea about what movies to \
+                    recommend you.".format(username), "type":"bot","question":"day","topic":"normal"}
                 return last_question
             if last_question.get("question") == "day":
                 #run emotional analysis on the string. 
 
                 how_was_your_day = request.form.get('text')
                 emotion = "Happy" #placeholder 
-                # find_max(request.post(link,params={"text":"Hewwo","api_key":api_key}).get("emotion")), where find max finds the key with the highest value
-                last_question = {"text":"What are some of your favorite movies? Seperate each one with a \
-                    comma.", "type":"leading", "question":"favorite_movies", "topic":"normal"}
+                # find_max(requests.post("https://apis.paralleldots.com/v4/emotion",params={"text":how_was_your_day,"api_key":"Ssc7kaGUcIf46xcEc8CPknQZQSAwJAgAQJTSqXnDsoM"}).get("emotion")), where find max finds the key with the highest value
+                response = paralleldots.emotion(how_was_your_day)
+                
+                if response.get("emotion") is not None:
+                    emotion = max(response.items(), key=operator.itemgetter(1))[0]
+
+                print(emotion)
+                last_question = {"text":"What are some of your favorite movies? Separate each one with a \
+                    comma.", "type":"bot", "question":"favorite_movies", "topic":"normal"}
 
                 return last_question
 
@@ -106,7 +118,7 @@ def main():
 
             else:
                 bot_output = chatbot.get_response(text)
-                return {"text":bot_output}
+                return {"text":bot_output.text, "type":"bot", "topic":"normal"}
 
     return {"Hi":"Eric"}
 
