@@ -1,5 +1,7 @@
 .movie__container {
   margin: 0 auto;
+  max-width: 775px;
+  text-align: left;
 }
 
 .movie__poster--container {
@@ -7,7 +9,7 @@
 }
 
 .movie__poster {
-  width: 35%;
+  width: 40%;
   box-shadow: 0px 4px 25px rgba(92, 102, 131, 0.4);
   margin-top: 8%;
   border-radius: 10px;

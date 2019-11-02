@@ -61,7 +61,7 @@ class Bot extends Component {
       if (this.props.options.length === 3) {
         messageMarginTop = "-40px";
       } else {
-        messageMarginTop = "-12px"
+        messageMarginTop = "-10px"
       }
       messageMarginBottom = "35px";
     }
@@ -70,7 +70,7 @@ class Bot extends Component {
       <div className="bot__container" style={{ cursor: cursorType, marginBottom: messageMarginBottom }}>
         <img className="bot__img" src={logo} alt="bot" style={{ marginTop: messageMarginTop }}></img>
         <div className="bot__text-wrapper">
-        <div className="bot__name">Baught {this.state.timeStamp}</div>
+        <div className="bot__name">Baut {this.state.timeStamp}</div>
           <div className="bot__text">{this.props.text}</div>
           {this.props.options && <Group onChange={this.handleChooseAnswer} disabled={this.state.isAnswerSelected}>
             {this.props.options.map(option => {

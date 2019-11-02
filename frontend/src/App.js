@@ -8,7 +8,7 @@ import { BASE_URL, fakeMessages } from './constants';
 
 const logo = require('./assets/logo.svg');
 const chatGroup = require('./assets/chatGroup.svg');
-const ERROR_MESSAGE = "Something went wrong on our end!";
+const ERROR_MESSAGE = "Something went wrong!";
 
 const showError = () => message.error(ERROR_MESSAGE);
 
@@ -19,7 +19,8 @@ class App extends Component {
     lastMessage: null,
     name: "",
     isBotLoading: false,
-    questionTopic: ""
+    questionTopic: "",
+    activeIndex: 0
   }
 
   componentDidMount = () => {
@@ -105,7 +106,7 @@ class App extends Component {
 
   setActiveMessage = message => {
     console.log("setting active message", message)
-    this.setState({ activeMessage: message });
+    this.setState({ activeMessage: message, activeIndex: 0 });
   }
 
   submitRadioAnswer = answer => {
@@ -141,6 +142,14 @@ class App extends Component {
       });
   }
 
+  handleNextClick = () => {
+    this.setState({ activeIndex: this.state.activeIndex + 1 });
+  }
+
+  handlePreviousClick = () => {
+    this.setState({ activeIndex: this.state.activeIndex - 1 });
+  }
+
   render() {
     return (
       <div className="App">
@@ -155,7 +164,7 @@ class App extends Component {
                 <div className="app_chatGroup--caption">Click on a message with a <span className="bold">red</span> or <span className="bold">gold</span> chatbot icon to show more details about it!</div>
               </div>}
               {this.state.activeMessage && <div className="app__chatGroup--active">
-                <Panel activeMessage={this.state.activeMessage} />
+                <Panel activeMessage={this.state.activeMessage} activeIndex={this.state.activeIndex} />
               </div>}
             </div>
             <div className="col-8 right">
