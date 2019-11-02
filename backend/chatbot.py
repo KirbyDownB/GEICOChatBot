@@ -131,6 +131,10 @@ def main():
             if last_question == "music_lifestyle":
                 text = request.json.get("text")
                 username = request.json.get("username")
+                if text is not "Athletic" and text is not "Sedentary" and text is not "Moderate":
+                    last_question = {"text":"Ok {}. Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?".format(username), "question":"music_lifestyle", "topic":"questions","type":"bot","options":['Athletic','Sedentary','Moderate']}
+                    return last_question
+                    
                 collection.find_one_and_update({"username": username}, {"$set": {"lifestyle": text}})
 
                 last_question = {"text":"Great! One more question. Would you say that your hobbies are more Indoor or Outdoor?","question":"music_hobbies", "topic":"questions","type":"bot","options":['Indoor','Outdoor']}
@@ -140,6 +144,12 @@ def main():
                 text = request.json.get("text")
 
                 username = request.json.get("username")
+
+                if text is not "Indoor" and text is not "Outdoor":
+                    last_question = {"text":"Let's try that again {}. Would you say that your hobbies are more Indoor or Outdoor?","question":"music_hobbies", "topic":"questions","type":"bot","options":['Indoor','Outdoor']}
+                    return last_question
+
+
                 collection.find_one_and_update({"username": username}, {"$set": {"hobbies": text}})
                 data = collection.find_one({"username":username})
 
