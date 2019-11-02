@@ -355,6 +355,9 @@ def main():
                 bot_output = chatbot.get_response(text)
                 if bot_output.text == "Movie? Movie? I heard Movie! Tell me your favorite movies! Separate each one with a comma.":
                     return {"text":bot_output.text, "type":"bot", "question":"favorite_movies", "topic":"normal"}
+                elif bot_output.text == "I heard something about songs!":
+                    last_question = {"text":"Did you say somethings about music or songs? Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?", "question":"music_lifestyle", "topic":"questions","type":"bot","options":['Athletic','Sedentary','Moderate']}
+                    return last_question
                 return {"text":bot_output.text, "type":"bot", "topic":"normal","question":"chatbot"}
 
     bot_output = chatbot.get_response("tell me a joke")
