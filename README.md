@@ -23,6 +23,9 @@ npm start
 
 The React app will compile and a browser should automatically open to `localhost:3000`, where you can proceed with the chatbot interface.
 
+### Note
+The backend url is stored in a variable called `const BASE_URL` located in `frontend/src/constants.js`. When running the backend locally, just replace the value of the variable with the `localhost` url.
+
 ## Backend
 The backend is written in Flask, a Python microframework that makes creating endpoints quick and easy. Within this Flask app we have an endpoint call `api/chatbot`. This endpoint handles all of the dialog flow from the user to the bot. 
 
