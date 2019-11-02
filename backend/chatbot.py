@@ -72,7 +72,7 @@ how_was_your_day = ''
 favorite_movies = []
 emotion = ''
 
-def formating(list):
+def formatting(list):
     data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Outdoor"
     randomNum = random.randint(0, len(list)-1)
     genre = list[randomNum]
