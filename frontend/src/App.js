@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import './App.css';
 import MessageForm from './components/MessageForm/MessageForm';
+import { Animated } from "react-animated-css";
 import MessageList from './components/MessageList/MessageList';
 import Panel from './components/Panel/Panel';
 import { message } from 'antd';
+import './App.css';
 import { BASE_URL, fakeMessages } from './constants';
 
 const logo = require('./assets/logo.svg');
@@ -150,6 +151,7 @@ class App extends Component {
               <div className="app__logo--container">
                 <img src={logo} alt=""/>
               </div>
+              <Animated animationIn="fadeIn" isVisible={true}>
               {!this.state.activeMessage && <div className="app__chatGroup--inactive">
                 <img className="app__chatGroup" src={chatGroup} alt=""/>
                 <div className="app_chatGroup--caption">Click on a message with a <span className="bold">red</span> or <span className="bold">gold</span> chatbot icon to show more details about it!</div>
@@ -157,6 +159,7 @@ class App extends Component {
               {this.state.activeMessage && <div className="app__chatGroup--active">
                 <Panel activeMessage={this.state.activeMessage} />
               </div>}
+              </Animated>
             </div>
             <div className="col-8 right">
               <div className="app__top-div">

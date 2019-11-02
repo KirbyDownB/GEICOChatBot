@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Animated} from "react-animated-css";
+import { Animated } from "react-animated-css";
 import "./MessageList.css";
 import Bot from '../MessageBox/Bot';
 import User from '../MessageBox/User';
