@@ -72,6 +72,21 @@ username = ''
 how_was_your_day = ''
 favorite_movies = []
 emotion = ''
+
+def formating(list):
+    data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Outdoor"
+    randomNum = random.randint(0, len(list)-1)
+    genre = list[randomNum]
+    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
+    resp = requests.get(link).json()
+    store = resp["tracks"]["track"][0]
+    mbid = store["mbid"]
+    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
+    newResp = requests.get(newLink).json()
+    songInfo = newResp["track"]
+    songName = songInfo["name"]
+    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
+
 @app.route('/api/chatbot',methods=['GET','POST'])
 def main():
     global count
@@ -194,87 +209,32 @@ def main():
                 #have conditions for if the user puts in junk
                 if data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Outdoor":
                     list = ["EDM", "Dubstep", "Trap"]
-                    randomNum = random.randint(0, len(list)-1)
-                    genre = list[randomNum]
-                    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
-                    resp = requests.get(link).json()
-                    store = resp["tracks"]["track"][0]
-                    mbid = store["mbid"]
-                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
-                    newResp = requests.get(newLink).json()
-                    songInfo = newResp["track"]
-                    songName = songInfo["name"]
-                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
+                    formatting(list)
 
                 elif data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Indoor":
                     list = ["Rap", "Hip-Hop", "House"]
-                    randomNum = random.randint(0, len(list)-1)
-                    genre = list[randomNum]
-                    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
-                    resp = requests.get(link).json()
-                    store = resp["tracks"]["track"][0]
-                    mbid = store["mbid"]
-                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
-                    newResp = requests.get(newLink).json()
-                    songInfo = newResp["track"]
-                    songName = songInfo["name"]
-                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
+                    formatting(list)
+
 
                 elif data.get("lifestyle") == "Moderate" and data.get("hobbies") == "Outdoor":
                     list = ["Pop", "Musicals", "Rock"]
-                    randomNum = random.randint(0, len(list)-1)
-                    genre = list[randomNum]
-                    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
-                    resp = requests.get(link).json()
-                    store = resp["tracks"]["track"][0]
-                    mbid = store["mbid"]
-                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
-                    newResp = requests.get(newLink).json()
-                    songInfo = newResp["track"]
-                    songName = songInfo["name"]
-                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
+                    formatting(list)
+
 
                 elif data.get("lifestyle") == "Moderate" and data.get("hobbies") == "Indoor":
                     list = ["Jazz", "Blues", "Swing"]
-                    randomNum = random.randint(0, len(list)-1)
-                    genre = list[randomNum]
-                    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
-                    resp = requests.get(link).json()
-                    store = resp["tracks"]["track"][0]
-                    mbid = store["mbid"]
-                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
-                    newResp = requests.get(newLink).json()
-                    songInfo = newResp["track"]
-                    songName = songInfo["name"]
-                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
+                    formatting(list)
+
 
                 elif data.get("lifestyle") == "Sedentary" and data.get("hobbies") == "Outdoor":
                     list = ["Country", "BlueGrass", "Folk"]
-                    randomNum = random.randint(0, len(list)-1)
-                    genre = list[randomNum]
-                    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
-                    resp = requests.get(link).json()
-                    store = resp["tracks"]["track"][0]
-                    mbid = store["mbid"]
-                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
-                    newResp = requests.get(newLink).json()
-                    songInfo = newResp["track"]
-                    songName = songInfo["name"]
-                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
+                    formatting(list)
+
 
                 elif data.get("lifestyle") == "Sedentary" and data.get("hobbies") == "Indoor":
                     list = ["EDM", "Dubstep", "Trap"]
-                    randomNum = random.randint(0, len(list)-1)
-                    genre = list[randomNum]
-                    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
-                    resp = requests.get(link).json()
-                    store = resp["tracks"]["track"][0]
-                    mbid = store["mbid"]
-                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
-                    newResp = requests.get(newLink).json()
-                    songInfo = newResp["track"]
-                    songName = songInfo["name"]
-                    return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
+                    formatting(list)
+
 
 
             if last_question == "day":
@@ -335,7 +295,7 @@ def main():
                 if len(movieList) == 0:
                     return {"type": "bot", "topic":"general", "text": "I'm sorry I did not find any movies with those names."}
 
-                resp = requests.post("http://localhost:5500/recommend", json={"ids": movieList, "user": username})
+                resp = requests.post("http://localhost:5000/recommend", json={"ids": movieList, "user": username})
                 collection.find_one_and_update({"username": username},
                                  {"$set": {"movies_liked": movieList}})
 
