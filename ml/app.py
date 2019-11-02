@@ -1,6 +1,71 @@
 from flask import Flask, escape, request, jsonify
 from recommender import RecommenderHelper
+from itertools import chain
+from lightfm import LightFM
+from lightfm.data import Dataset
+from os import path
 import random
+import re
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import time
+
+
+NUM_DUMMY = 100 # Number of "dummy" users
+GENRES = ['Action', 'Adventure', 'Animation', "Children", 'Comedy', 'Crime', 'Documentary', 'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 'Thriller', 'War', 'Western', 'IMAX', '(no genres listed)']
+DATA_DIR = 'data/ml-latest'
+
+ratings = pd.read_csv(path.join(DATA_DIR, 'ratings.csv'))
+movies = pd.read_csv(path.join(DATA_DIR, 'movies.csv'))
+good_ratings = ratings[ratings['rating'] == 5]
+years = []
+for name in movies['title']:
+    z = re.match(r'.+\(([0-9]{4})\)', name)
+    if z:
+        years.append(z.group(1))
+    else:
+        years.append('unknown')
+movies['year'] = years
+print(movies.head())
+
+print(f'# Ratings: {len(ratings)}')
+print(f'# Users: {len(set(ratings["userId"]))}')
+last_user = sorted(list(set(ratings['userId'])))[-1]
+new_users = list(range(last_user + 1, last_user + NUM_DUMMY + 1))
+# new_user = last_user + 1
+# print('Added new user: %s' % new_user)
+
+dataset = Dataset()
+dataset.fit(chain(ratings['userId'], new_users), movies['movieId'], item_features=(GENRES + list(movies['year']) + list(set(movies['movieId']))))
+
+_, _, item_mapping, _ = dataset.mapping()
+rev_item_mapping = {y:x for (x,y) in item_mapping.items()}
+
+print(good_ratings.head())
+rating_iter = zip(good_ratings['userId'], good_ratings['movieId'])
+rating_list = list(rating_iter)
+interactions, weights = dataset.build_interactions(rating_list)
+
+mov_features = ((row[0], row[2].split('|') + [row[3], row[0]]) for rid, row in movies.iterrows())
+# print(mov_features[0])
+item_features = dataset.build_item_features(mov_features)
+
+model = LightFM(loss='warp', no_components=28, item_alpha=0.0001, learning_rate=0.05)
+model.fit(interactions, item_features=item_features, num_threads=16)
+n_users, n_items = dataset.interactions_shape()
+
+movie2name = {}
+for rid, row in movies.iterrows():
+    movie2name[row[0]] = row[1]
+
+def pred(mdl, user_id, k=10):
+    # TODO(willshiao): change arange to unique items for the user
+    base_mat = mdl.predict(0, np.arange(n_items), num_threads=16)
+    base_mat = (base_mat + np.min(base_mat))
+    scores = model.predict(user_id, np.arange(n_items), num_threads=16) - base_mat
+    top_items = [r.mid2imdb[rev_item_mapping[x]] for x in np.argsort(-scores)[:k]]
+    return top_items
 
 app = Flask(__name__)
 r = RecommenderHelper()
@@ -10,17 +75,75 @@ r.load_links()
 def index():
     return f'Hello!'
 
+# Stores the next usable user
+last_user = new_users[0]
+username2id = {}
+
 @app.route('/recommend', methods=['POST'])
 def recommend():
+    global last_user
+    global username2id
+    global interactions
+    global rating_list
+
+    start_time = time.time()
     data = request.get_json()
     if 'ids' not in data:
         return jsonify({ 'success': False, 'message': 'ids field required' })
+    if 'user' not in data:
+        return jsonify({ 'success': False, 'message': 'user field not found' })
+    username = data['user']
     imdb_ids = [int(x[2:]) for x in data['ids']]
+    if username not in username2id:
+        print(f'Registering new user {username}')
+        user_id = last_user
+        username2id[username] = last_user
+        last_user += 1
+    else:
+        user_id = username2id[username]
+
     ret = []
     for imdb_id in imdb_ids:
         if imdb_id not in r.imdb2mid:
             continue
         ret.append(r.imdb2mid[imdb_id])
-    # Simulate recommendation for now
-    return jsonify({ 'success': True, 'ids': random.sample(r.imdb2mid.keys(), 10) })
-    # mids = [r.imdb2mid[x] for x in imdb_ids]
+
+    #--- Timing block
+    elapsed = time.time() - start_time
+    print(f'Took {elapsed}s to register user')
+    start_time = time.time()
+    #--- End timing block
+
+    # Adjust to dataset ID
+    adj_ids = [item_mapping[x] for x in ret]
+    # tmp = interactions.tolil()
+    for adj_id in adj_ids:
+        # rating_list.append((user_id, adj_id))
+        # tmp[user_id, adj_id] = 1
+    # interactions = tmp.tocoo()
+        np.append(interactions.row, user_id)
+        np.append(interactions.col, adj_id)
+        np.append(interactions.data, 1)
+    # (interactions, _) = dataset.build_interactions(rating_list)'
+        #--- Timing block
+    elapsed = time.time() - start_time
+    print(f'Took {elapsed}s to modify matrix')
+    start_time = time.time()
+    #--- End timing block
+    
+    model.fit_partial(interactions, item_features=item_features, num_threads=16)
+
+    #--- Timing block
+    elapsed = time.time() - start_time
+    print(f'Took {elapsed}s to perform partial_fit')
+    start_time = time.time()
+    #--- End timing block
+
+    output = pred(model, user_id)
+    #--- Timing block
+    elapsed = time.time() - start_time
+    print(f'Took {elapsed}s to perform prediction')
+    start_time = time.time()
+    #--- End timing block
+    print(output)
+    return jsonify({ 'success': True, 'ids': [int(x) for x in output[:10]] })
