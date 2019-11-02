@@ -305,9 +305,9 @@ def main():
                     sentence = random.sample(["I hope your days are calmer in the future. ","We have nothing to fear but fear itself. ","Never fear, the rules are here! "],1)
                 if emotion == "Bored":
                     sentence = random.sample(["Another day, another dollar I suppose. ", "Back to the old grind. ", "Same tbh. "], 1)
-                last_question = {"text":sentence + "What are some of your favorite movies? Separate each one with a \
-                    comma.", "type":"bot", "question":"favorite_movies", "topic":"normal"}
 
+                last_question = {"text":sentence[0] + "What are some of your favorite movies? Separate each one with a \
+                    comma.", "type":"bot", "question":"favorite_movies", "topic":"normal"}
                 return last_question
 
 
@@ -335,19 +335,21 @@ def main():
                 if len(movieList) == 0:
                     return {"type": "bot", "text": "I'm sorry I did not find any movies with those names."}
 
-                resp = requests.post("http://167.172.203.238:5500/recommend", json={"ids": movieList})
+                resp = requests.post("http://167.172.203.238:5500/recommend", json={"ids": movieList, "user": username})
                 collection.find_one_and_update({"username": username},
                                  {"$set": {"movies_liked": movieList}})
 
                 response_data = resp.json()["ids"]
                 listings = []
-
+                print(response_data)
                 for ids in response_data:
                     postLink = "http://www.omdbapi.com/?apikey=" + config.omdb_api + "&i="
-                    postLink += "tt" + str(ids)
+                    postLink += "tt" + str(ids).zfill(7)
                     temp = requests.get(postLink).json()
+                    print("temp:", temp)
                     if temp["Response"]=="True":
                         listings.append(temp)
+                print("listings:", listings)
                 return {"type": "bot", "topic": "movie", "text": "Here are some movies I found: " + listings[0]["Title"] + ", " + listings[1]["Title"] + ", " + listings[2]["Title"] + ", and more if you click on me", "movieInfo": listings, "question":"chatbot"}
 
             else:
