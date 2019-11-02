@@ -114,8 +114,11 @@ def main():
 
         if request.json.get('username') == "reset" or request.json.get('username') == "restart" or request.json.get('text') == "reset" or request.json.get('text') == "restart":
             print("RESTART")
-            count = 1
-            last_question = {"text":"My name is GEICO BOT! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you", "type":"bot", "question":"intro","topic":"normal"}
+            # count = 1
+            username = request.json.get("username")
+
+            last_question = {"text":"Ok {}, how has your day been? This will give us some idea about what movies to \
+                    recommend you.".format(username), "type":"bot","question":"day","topic":"normal"}
             return last_question
         
 
