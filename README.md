@@ -30,4 +30,4 @@ The user is first greeted with a prompt to put in their user name. This is to ke
 
 The chatterbot library is used to handle input. If the bot realizes the user is asking for a movie recommendation, it sends calls to the recommendation algorithm. If it realizes the user is asking for a song recommendation, we conditionally recommend a song to the user. If the bot realizes that the user is asking for a joke, it uses a joke api and returns a random joke. If the user is asking for none of these three things, the user submission is handled by the chatterbot greeting and conversation corpus. 
 
-To run the chatbot, run `pip install -r requirements.txt" and then run `python3 chatbot.py`
+To run the chatbot, run `pip install -r requirements.txt"` and then run `python3 chatbot.py`
