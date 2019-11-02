@@ -60,6 +60,11 @@ def main():
             count += 1
             return last_question
 
+        if request.json.get('username') == "reset" or request.json.get('username') == "restart" or request.json.get('text') == "reset" or request.json.get('text') == "restart":
+            count = 1
+            last_question = {"text":"My name is GEICO BOT! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you", "type":"bot", "question":"intro","topic":"normal"}
+            return last_question
+
         elif count > 0 and last_question is not None:
 
             #text = request.json.get('text')
@@ -93,7 +98,7 @@ def main():
 
             if last_question.get("question") == "day":
                 #run emotional analysis on the string.
-                username = request.get.json("username")
+                username = request.json.get("username")
                 how_was_your_day = request.form.get('text')
                 emotion = "Happy" #placeholder
                 response = paralleldots.emotion(how_was_your_day)
@@ -133,26 +138,20 @@ def main():
                         print("failed")
                 if len(movieList) == 0:
                     return {"text": "I'm sorry I did not find any movies with those names."}
-                # movieList = json.dumps()
+
                 resp = requests.post("http://167.172.203.238:5500/recommend", json={"ids": movieList})
                 response_data = resp.json()["ids"]
-
-                convertedList = []
                 for ids in response_data:
-                    postLink = "http://img.omdbapi.com/?apikey=&" + config.omdb_api + "&i="
+                    postLink = "http://www.omdbapi.com/?apikey=" + config.omdb_api + "&i="
                     postLink += "tt0" + str(ids)
-                    temp = requests.get(link).json()
-
+                    temp = requests.get(postLink).json()
                     if temp["Response"]=="True":
-                        convertedList.append(temp['Search'])
-
+                        return {"type": "bot", "topic": "movie", "text": "The movie I recommend the most is: "+temp["Title"], "movieInfo": temp}
                 #return of movie recommendations
-                return {"type": "bot", "topic": "movie", "text": convertedList[0][0]}
 
 
             else:
-                bot_output = chatbot.get_response(text)
-                return {"text":bot_output.text, "type":"bot", "topic":"normal"}
+                return {"text": "yuh"}
 
     return {"Hi":"Eric"}
 
