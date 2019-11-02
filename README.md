@@ -1,6 +1,10 @@
 # Baut
 Baut is a chatbot that helps recommend you songs and movies based on your relative feelings and personal lifestyle.
 
+<p align="center">
+  <img width="200"src="./frontend/src/assets/logo.svg">
+</p>
+
 ## Frontend
 The frontend is written in React, and is split up into several components. The main components that make up the user interface are `Panel`, `MessageForm`, and `MessageList`.
 
