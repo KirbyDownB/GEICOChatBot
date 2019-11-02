@@ -335,7 +335,7 @@ def main():
                 if len(movieList) == 0:
                     return {"type": "bot", "text": "I'm sorry I did not find any movies with those names."}
 
-                resp = requests.post("http://167.172.203.238:5500/recommend", json={"ids": movieList, "user": username})
+                resp = requests.post("http://localhost:5500/recommend", json={"ids": movieList, "user": username})
                 collection.find_one_and_update({"username": username},
                                  {"$set": {"movies_liked": movieList}})
 
