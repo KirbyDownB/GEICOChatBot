@@ -64,12 +64,13 @@ def main():
             print("line 61", request.json)
         # username = request.json.get("username")
         # text = request.json.get("text")
-        if request.json is None:
+        print(bool(request.json))
+        if bool(request.json) is False:
             print("Init empty")
             username = ''
             text = ''
             last_question = None
-        if request.json is not None:
+        if bool(request.json) is not False:
             print("Init full")
             username = request.json.get('username')
             text = request.json.get('text')
@@ -123,14 +124,14 @@ def main():
             if re.match(r'.*(recommend|suggest).*(songs|music)\.*', text.lower()):
                 username = request.json.get("username")
 
-                last_question = {"text":"Ok {}. Tell us about yourself. Would you say that you have an athletic, sedentary, or moderate lifestyle?".format(username), "question":"music_lifestyle", "topic":"music","type":"bot"}
+                last_question = {"text":"Ok {}. Tell us about yourself. Would you say that you have an athletic, sedentary, or moderate lifestyle?".format(username), "question":"music_lifestyle", "topic":"music","type":"bot","options":['athletic','sedentary','moderate']}
                 return last_question
             if last_question == "music_lifestyle":
                 text = request.json.get("text")
                 username = request.json.get("username")
                 collection.find_one_and_update({"username": username}, {"$set": {"lifestyle": text}})
 
-                last_question = {"text":"Great! One more question. Would you say that your hobbies are more indoor or outdoor?","question":"music_hobbies", "topic":"music","type":"bot"}
+                last_question = {"text":"Great! One more question. Would you say that your hobbies are more indoor or outdoor?","question":"music_hobbies", "topic":"music","type":"bot","options":['indoor','outdoor']}
                 return last_question
             if last_question == "music_hobbies":
 
@@ -207,7 +208,8 @@ def main():
                 bot_output = chatbot.get_response(text)
                 return {"text":bot_output.text, "type":"bot", "topic":"normal","question":"chatbot"}
 
-    return {"Hi":"Eric"}
+    bot_output = chatbot.get_response("tell me a joke")
+    return {"text":"Uh Oh! Something went wrong. Heres a joke. \n" + bot_output.text, "type":"bot","topic":"normal", "question":"chatbot"}
 
 @app.route('/api/user_data', methods=['GET','POST'])
 def user_data():
