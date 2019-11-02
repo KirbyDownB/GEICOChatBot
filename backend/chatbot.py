@@ -25,7 +25,7 @@ CORS(app)
 chatbot = ChatBot(
     "GEICOChatBot",
     storage_adapter="chatterbot.storage.MongoDatabaseAdapter",
-    logic_adapters=['chatterbot.logic.BestMatch',{'import_path': 'custom_adapters.JokeAdapter'},
+    logic_adapters=['chatterbot.logic.BestMatch',{'import_path': 'custom_adapters.JokeAdapter'},{'import_path':'custom_adapters.MovieMusicAdapter'},
         {
             'import_path': 'chatterbot.logic.SpecificResponseAdapter',
             'input_text': 'Who made you?',
@@ -88,8 +88,7 @@ def main():
 
 
     if request.method == 'POST':
-        m = ['movie']
-        s = ['song']
+
         if request.json is not None:
             print("line 61", request.json)
         # username = request.json.get("username")
@@ -297,15 +296,15 @@ def main():
                 sentence = ''
 
                 if emotion == "Happy":
-                    sentence = random.sample(["That's good to hear", "Nice to see you in good spirits.", "I'm glad your chipper"],1)
+                    sentence = random.sample(["That's good to hear. ", "Nice to see you in good spirits. ", "I'm glad your chipper. "],1)
                 if emotion == "Sad" or emotion == "Angry":
-                    sentence = random.sample(["I'm sorry your day is going so poorly.","I hope tomorrow is better.","Sad reacts only."],1)
+                    sentence = random.sample(["I'm sorry your day is going so poorly. ","I hope tomorrow is better. ","Sad reacts only. "],1)
                 if emotion == "Excited":
-                    sentence = random.sample(["Your day sounded AMAZING!!!","I wish my day was as exciting.","Sounds like today was a rollercoaster!"],1)
+                    sentence = random.sample(["Your day sounded AMAZING!!! ","I wish my day was as exciting. ","Sounds like today was a rollercoaster! "],1)
                 if emotion == "Fear":
-                    sentence = random.sample(["I hope your days are calmer in the future.","We have nothing to fear but fear itself.","Never fear, the rules are here!"],1)
+                    sentence = random.sample(["I hope your days are calmer in the future. ","We have nothing to fear but fear itself. ","Never fear, the rules are here! "],1)
                 if emotion == "Bored":
-                    sentence = random.sample(["Another day, another dollar I suppose.", "Back to the old grind.", "Same tbh."], 1)
+                    sentence = random.sample(["Another day, another dollar I suppose. ", "Back to the old grind. ", "Same tbh. "], 1)
                 last_question = {"text":sentence + "What are some of your favorite movies? Separate each one with a \
                     comma.", "type":"bot", "question":"favorite_movies", "topic":"normal"}
 
@@ -351,6 +350,8 @@ def main():
 
             else:
                 bot_output = chatbot.get_response(text)
+                if bot_output.text == "Movie? Movie? I heard Movie! Tell me your favorite movies! Separate each one with a comma.":
+                    return {"text":bot_output.text, "type":"bot", "question":"favorite_movies", "topic":"normal"}
                 return {"text":bot_output.text, "type":"bot", "topic":"normal","question":"chatbot"}
 
     bot_output = chatbot.get_response("tell me a joke")
