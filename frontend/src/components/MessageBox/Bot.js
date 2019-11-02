@@ -30,14 +30,18 @@ class Bot extends Component {
 
   render(){
     let logo = botLogo;
+    let cursorType = "default";
+
     if (this.props.topic === "movie") {
       logo = movieBotLogo;
+      cursorType = "pointer";
     } else if (this.props.topic === "music") {
       logo = musicBotLogo;
+      cursorType = "pointer";
     }
 
     return(
-      <div className="bot__container">
+      <div className="bot__container" style={{ cursor: cursorType }}>
         <img className="bot__img" src={logo} alt="bot"></img>
         <div className="bot__text-wrapper">
         <div className="bot__name">Baughty {this.state.timeStamp}</div>
