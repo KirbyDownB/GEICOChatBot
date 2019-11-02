@@ -6,11 +6,13 @@ import Panel from './components/Panel/Panel';
 import { message } from 'antd';
 import { BASE_URL, fakeMessages } from './constants';
 
+const logo = require('./assets/logo.svg');
 const chatGroup = require('./assets/chatGroup.svg');
+const ERROR_MESSAGE = "Something went wrong on our end!";
 
 class App extends Component {
   state = {
-    messages: fakeMessages,
+    messages: [],
     activeMessage: null,
     lastMessage: null,
     name: "",
@@ -27,8 +29,9 @@ class App extends Component {
         this.setState({ messages: [...this.state.messages, data], questionTopic: data.question });
       })
       .catch(error => {
-        message.error("Something went wrong on our end!");
+        console.log("I got an error in componentDidMount");
         console.error(error);
+        message.error(ERROR_MESSAGE);
       })
   }
 
@@ -60,8 +63,9 @@ class App extends Component {
         });
       })
       .catch(error => {
+        console.log("I got an error after sending name");
         console.error(error);
-        message.error("Something went wrong on our end!");
+        message.error(ERROR_MESSAGE);
         this.setState({
           isBotLoading: false,
         });
@@ -89,7 +93,6 @@ class App extends Component {
       })
         .then(response => response.json())
         .then(data => {
-          console.log("Got data", data)
           const botMessage = data;
           this.setState({
             isBotLoading: false,
@@ -98,8 +101,9 @@ class App extends Component {
           });
         })
         .catch(error => {
+          console.log("I got an error after sending message");
           console.error(error);
-          message.error("Something went wrong on our end!");
+          message.error(ERROR_MESSAGE);
           this.setState({
             isBotLoading: false,
           });
@@ -112,12 +116,50 @@ class App extends Component {
     this.setState({ activeMessage: message });
   }
 
+  submitRadioAnswer = answer => {
+    this.setState({ isBotLoading: true });
+
+    console.log("Submitting radio answer", answer)
+
+    fetch(`${BASE_URL}/api/chatbot`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        "text": answer,
+        "username": this.state.name,
+        "question": this.state.questionTopic
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Got data after submitting radio answer", data)
+        const botMessage = data;
+        this.setState({
+          isBotLoading: false,
+          messages: [...this.state.messages, botMessage],
+          questionTopic: data.question
+        });
+      })
+      .catch(error => {
+        console.error(error);
+        message.error(ERROR_MESSAGE);
+        this.setState({
+          isBotLoading: false,
+        });
+      })
+  }
+
   render() {
     return (
       <div className="App">
         <div className="container-fluid">
           <div className="row">
             <div className="col-4 left">
+              <div className="app__logo--container">
+                <img src={logo} alt=""/>
+              </div>
               {!this.state.activeMessage && <div className="app__chatGroup--inactive">
                 <img className="app__chatGroup" src={chatGroup} alt=""/>
                 <div className="app_chatGroup--caption">Click on a message with a <span className="bold">red</span> or <span className="bold">gold</span> chatbot icon to show more details about it!</div>
@@ -128,7 +170,7 @@ class App extends Component {
             </div>
             <div className="col-8 right">
               <div className="app__top-div">
-                <MessageList isBotLoading={this.state.isBotLoading} messages={this.state.messages} setActiveMessage={this.setActiveMessage} name={this.state.name} />
+                <MessageList submitRadioAnswer={this.submitRadioAnswer} isBotLoading={this.state.isBotLoading} messages={this.state.messages} setActiveMessage={this.setActiveMessage} name={this.state.name} />
               </div>
               <div className="app__bottom-div">
                 <MessageForm sendMessage={this.sendMessage} sendName={this.sendName} name={this.state.name} />
