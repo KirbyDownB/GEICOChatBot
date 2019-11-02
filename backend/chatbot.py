@@ -57,20 +57,28 @@ def main():
     last_question = None
 
 
+
+
     if request.method == 'POST':
+        if request.json is not None:
+            print("line 61", request.json)
         # username = request.json.get("username")
         # text = request.json.get("text")
         if request.json is None:
             print("Init empty")
             username = ''
             text = ''
+<<<<<<< HEAD
+
+=======
             last_question = None
         if request.json is not None:
             print("Init full")
             username = request.json.get('username')
             text = request.json.get('text')
             last_question = request.json.get("question")
-        
+
+>>>>>>> 8b2c8a89229d6af72f87e17b788c3878b7208060
         if username is '' and last_question is None:
             #No response expected
             print("Entry message")
@@ -98,15 +106,11 @@ def main():
             if last_question == "intro":
                 username = request.json.get("username")
                 text = request.json.get("text")
-                print("USERname")
-                print(username)
-                print("TEXTTTTT")
-                print(text)
                 #store the username in the database
 
                 if collection.find({"username":username}).count() == 0:
                     collection.insert_one({"username":username})
-                
+
 
                 #start the movie flow
                 last_question = {"text":"Hi {}! Now we can begin! Try things like \"recommend me some movies\" or \"tell me a joke\".".format(username), "question":"general", "topic":"normal", "type":"bot"}
@@ -147,15 +151,13 @@ def main():
                 emotion = "Happy" #placeholder
                 response = paralleldots.emotion(how_was_your_day)
 
-                print(username)
-                print(how_was_your_day)
                 print(response)
 
                 if response.get("emotion") is not None:
                     emotion = max(response.get("emotion").items(), key=operator.itemgetter(1))[0]
 
                 print(emotion)
-                collection.find_one_and_update({"username": username}, 
+                collection.find_one_and_update({"username": username},
                                  {"$set": {"how_was_your_day": how_was_your_day, "emotion":emotion}})
 
 
@@ -164,7 +166,7 @@ def main():
 
                 return last_question
 
- 
+
             if last_question == "favorite_movies":
 
                 #first, create the user object
