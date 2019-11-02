@@ -1,8 +1,17 @@
 .messageForm__container {
   text-align: center;
-  padding-top: 20px;
+  margin-top: 20px;
 }
 
 .messageForm__message {
   width: 55vw;
+  font-family: "Asap", sans-serif;
+  border: none;
+  background-color: #F4F4F4;
+}
+
+.messageForm__submit {
+  font-family: "Asap", sans-serif;
+  font-weight: 900;
+  letter-spacing: 4px;
 }

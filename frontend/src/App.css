@@ -25,9 +25,7 @@
 }
 
 .app__bottom-div {
-  border-top: 1px solid #C2C2C2;
   width: 100%;
-
 }
 
 .app__chatGroup--inactive {
@@ -40,7 +38,7 @@
 }
 
 .app_chatGroup--caption {
-  font-family: "Roboto", sans-serif;
+  font-family: "Asap", sans-serif;
   font-size: 100%;
 }
 

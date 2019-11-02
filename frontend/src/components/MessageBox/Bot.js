@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './Bot.css';
 
-const logo = require('../../assets/chatBotLogo.svg');
+const botLogo = require('../../assets/chatBotLogo.svg');
+const movieBotLogo = require('../../assets/movieBotLogo.svg');
+const musicBotLogo = require('../../assets/musicBotLogo.svg');
 
 class Bot extends Component {
   state = {
@@ -27,7 +29,13 @@ class Bot extends Component {
   }
 
   render(){
-    let date = new Date()
+    let logo = botLogo;
+    if (this.props.topic === "movie") {
+      logo = movieBotLogo;
+    } else if (this.props.topic === "music") {
+      logo = musicBotLogo;
+    }
+
     return(
       <div className="bot__container">
         <img className="bot__img" src={logo} alt="bot"></img>
