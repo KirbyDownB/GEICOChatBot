@@ -127,7 +127,7 @@ def recommend():
         if imdb_id not in r.imdb2mid:
             continue
         ret.append(r.imdb2mid[imdb_id])
-    print('Got movies: ', [movie2name[x] for x in ret])
+    print('Got movies: ', [movie2name[x] for x in ret if x in movie2name])
 
     #--- Timing block
     elapsed = time.time() - start_time
