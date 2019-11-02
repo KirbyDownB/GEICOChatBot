@@ -360,9 +360,9 @@ def main():
                     last_question = {"text":"Did you say somethings about music or songs? Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?", "question":"music_lifestyle", "topic":"questions","type":"bot","options":['Athletic','Sedentary','Moderate']}
                     return last_question
                 else:
-                     num = random.randrange(20)
-                     if num % 5 == 0:
-                         return {"text":"Enough with the shananigans. Type in \"recommend movies\" or \"recommend songs\" to get started.","type":"bot","topic":"normal","question":"general"}
+                    num = random.randrange(20)
+                    if num % 5 == 0:
+                        return {"text":"Enough with the shananigans. Type in \"recommend movies\" or \"recommend songs\" to get started.","type":"bot","topic":"normal","question":"general"}
                     return {"text":bot_output.text, "type":"bot", "topic":"normal","question":"chatbot"}
 
     bot_output = chatbot.get_response("tell me a joke")
