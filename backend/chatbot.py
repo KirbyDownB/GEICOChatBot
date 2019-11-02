@@ -325,12 +325,8 @@ def main():
                     link = "http://www.omdbapi.com/?apikey=" + config.omdb_api+"&s=" + movie
                     resp = requests.get(link).json()
 
-                    if resp["Response"]=="True":
-                        date = resp['Search'][0]['Released']
-                        date = date[7:]
-                        if int(date) >= 1950:
-                            print(date, "past 1950")
-                            movieList.append(resp['Search'][0]["imdbID"])
+                    if resp["Response"] == "True":
+                        movieList.append(resp['Search'][0]["imdbID"])
                     else:
                         print("failed")
                 if len(movieList) == 0:
