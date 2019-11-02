@@ -10,9 +10,9 @@ class Panel extends Component {
     return (
       <div className="panel__container">
         {topic === "movie" ? (
-          <Movie {...this.props.activeMessage.movieInfo} />
+          <Movie movieInfo={this.props.activeMessage.movieInfo} />
         ) : (
-          <Music {...this.props.activeMessage.musicInfo} />
+          <Music musicInfo={this.props.activeMessage.musicInfo} />
         )}
       </div>
     )

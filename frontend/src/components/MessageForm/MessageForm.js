@@ -44,6 +44,7 @@ class MessageForm extends Component {
         <Form layout="inline" onSubmit={this.handleSubmit}>
           <Item>
             <Input
+              autoComplete="off"
               value={this.state.text}
               name="text"
               className="messageForm__message"
