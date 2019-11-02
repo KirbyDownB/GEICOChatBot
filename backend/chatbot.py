@@ -66,13 +66,13 @@ Leading questions
 3. What are some of your favorite movies? Seperate each one with a comma.
 {"text":"What are some of your favorite movies? Seperate each one with a comma.", "type":"leading", "question":"favorite_movies", "topic":"normal"}
 '''
-count = 0
 last_question = None
 username = ''
 how_was_your_day = ''
 favorite_movies = []
 emotion = ''
 
+<<<<<<< HEAD
 def formating(list):
     data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Outdoor"
     randomNum = random.randint(0, len(list)-1)
@@ -87,9 +87,11 @@ def formating(list):
     songName = songInfo["name"]
     return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
 
+=======
+>>>>>>> 617cedf745b2f94ef11b49d3a0a65a07f670895e
 @app.route('/api/chatbot',methods=['GET','POST'])
 def main():
-    global count
+    global reset_dict
     # global last_question
     # global username
     # global how_was_your_day
@@ -121,22 +123,19 @@ def main():
             #No response expected
             print("Entry message")
             last_question = {"text":"My name is Baut! I recommend movies, music, and do some other stuff as well. First things first, I need a username from you.", "type":"bot", "question":"intro","topic":"normal"}
-            count += 1
             return last_question
 
-        if request.json.get('username') == "reset" or request.json.get('username') == "restart" or request.json.get('text') == "reset" or request.json.get('text') == "restart":
+        username = request.json.get('username')
+        if username == "reset" or username == "restart" or request.json.get('text') == "reset" or request.json.get('text') == "restart":
             print("RESTART")
-            # count = 1
-            username = request.json.get("username")
-
             last_question = {"text":"Ok {}, how has your day been? This will give us some idea about what movies to \
                     recommend you.".format(username), "type":"bot","question":"day","topic":"normal"}
             return last_question
 
 
-        if count > 0 and last_question is not None:
+        if last_question is not None:
 
-            print("Entereed movie flow")
+            print("Entered movie flow")
             #text = request.json.get('text')
             username = request.json.get('username')
             text = request.json.get('text')
@@ -288,7 +287,11 @@ def main():
                     link = "http://www.omdbapi.com/?apikey=" + config.omdb_api+"&s=" + movie
                     resp = requests.get(link).json()
 
+<<<<<<< HEAD
                     if resp["Response"]=="True":
+=======
+                    if resp["Response"] == "True":
+>>>>>>> 617cedf745b2f94ef11b49d3a0a65a07f670895e
                         movieList.append(resp['Search'][0]["imdbID"])
                     else:
                         print("failed")
@@ -322,6 +325,8 @@ def main():
                 elif bot_output.text == "I heard something about songs!":
                     last_question = {"text":"Did you say somethings about music or songs? Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?", "question":"music_lifestyle", "topic":"questions","type":"bot","options":['Athletic','Sedentary','Moderate']}
                     return last_question
+                elif bot_output.text[:3] == "JOKE":
+                    return {"text":bot_output.text[3:], "type":"bot", "topic":"normal", "question":"chatbot"}
                 else:
                     num = random.randrange(20)
                     if num % 5 == 0:

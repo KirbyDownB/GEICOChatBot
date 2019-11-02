@@ -127,7 +127,7 @@ def recommend():
         if imdb_id not in r.imdb2mid:
             continue
         ret.append(r.imdb2mid[imdb_id])
-    print('Got movies: ', [movie2name[x] for x in ret])
+    print('Got movies: ', [movie2name[x] for x in ret if x in movie2name])
 
     #--- Timing block
     elapsed = time.time() - start_time
@@ -136,7 +136,7 @@ def recommend():
     #--- End timing block
 
     # Adjust to dataset ID
-    adj_ids = [item_mapping[x] for x in ret]
+    adj_ids = [item_mapping[x] for x in ret if x in item_mapping]
     # tmp = interactions.tolil()
     for adj_id in adj_ids:
         if adj_id in seen_dict[username]:
