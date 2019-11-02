@@ -153,7 +153,82 @@ def main():
                     link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
                     resp = requests.get(link).json()
                     store = resp["tracks"]["track"][0]
-                return {"text":"OK! Here are some songs based on your answers.", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Song": store["name"], "Artist": store["artist"]["name"], "Duration": store["duration"], "Stream": store["url"], "Image": store["image"][2]["#text"]}}
+                    mbid = store["mbid"]
+                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
+                    newResp = requests.get(newLink).json()
+                    songInfo = newResp["track"]
+                    songName = songInfo["name"]
+                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
+
+                elif data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Indoor":
+                    list = ["Rap", "Hip-Hop", "House"]
+                    randomNum = random.randint(0, len(list)-1)
+                    genre = list[randomNum]
+                    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
+                    resp = requests.get(link).json()
+                    store = resp["tracks"]["track"][0]
+                    mbid = store["mbid"]
+                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
+                    newResp = requests.get(newLink).json()
+                    songInfo = newResp["track"]
+                    songName = songInfo["name"]
+                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
+
+                elif data.get("lifestyle") == "Moderate" and data.get("hobbies") == "Outdoor":
+                    list = ["Pop", "Musicals", "Rock"]
+                    randomNum = random.randint(0, len(list)-1)
+                    genre = list[randomNum]
+                    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
+                    resp = requests.get(link).json()
+                    store = resp["tracks"]["track"][0]
+                    mbid = store["mbid"]
+                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
+                    newResp = requests.get(newLink).json()
+                    songInfo = newResp["track"]
+                    songName = songInfo["name"]
+                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
+
+                elif data.get("lifestyle") == "Moderate" and data.get("hobbies") == "Indoor":
+                    list = ["Jazz", "Blues", "Swing"]
+                    randomNum = random.randint(0, len(list)-1)
+                    genre = list[randomNum]
+                    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
+                    resp = requests.get(link).json()
+                    store = resp["tracks"]["track"][0]
+                    mbid = store["mbid"]
+                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
+                    newResp = requests.get(newLink).json()
+                    songInfo = newResp["track"]
+                    songName = songInfo["name"]
+                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
+
+                elif data.get("lifestyle") == "Sedentary" and data.get("hobbies") == "Outdoor":
+                    list = ["Country", "BlueGrass", "Folk"]
+                    randomNum = random.randint(0, len(list)-1)
+                    genre = list[randomNum]
+                    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
+                    resp = requests.get(link).json()
+                    store = resp["tracks"]["track"][0]
+                    mbid = store["mbid"]
+                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
+                    newResp = requests.get(newLink).json()
+                    songInfo = newResp["track"]
+                    songName = songInfo["name"]
+                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
+
+                elif data.get("lifestyle") == "Sedentary" and data.get("hobbies") == "Indoor":
+                    list = ["EDM", "Dubstep", "Trap"]
+                    randomNum = random.randint(0, len(list)-1)
+                    genre = list[randomNum]
+                    link = "http://ws.audioscrobbler.com/2.0/?format=json&method=tag.gettoptracks&tag=" + genre + "&api_key=" + config.last_key + "&format=json"
+                    resp = requests.get(link).json()
+                    store = resp["tracks"]["track"][0]
+                    mbid = store["mbid"]
+                    newLink = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=" + config.last_key + "&mbid=" + mbid + "&format=json"
+                    newResp = requests.get(newLink).json()
+                    songInfo = newResp["track"]
+                    songName = songInfo["name"]
+                    return {"text":"How does" + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": {"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}}
 
 
             if last_question == "day":
@@ -217,7 +292,7 @@ def main():
                 return {"text":bot_output.text, "type":"bot", "topic":"normal","question":"chatbot"}
 
     bot_output = chatbot.get_response("tell me a joke")
-    return {"text":"Uh Oh! Something went wrong. Heres a joke. \n" + bot_output.text, "type":"bot","topic":"normal", "question":"chatbot"}
+    return {"text":"Uh Oh! Something went wrong. Here's a joke. \n" + bot_output.text, "type":"bot","topic":"normal", "question":"chatbot"}
 
 @app.route('/api/user_data', methods=['GET','POST'])
 def user_data():
