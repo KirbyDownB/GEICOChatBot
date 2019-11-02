@@ -72,7 +72,6 @@ how_was_your_day = ''
 favorite_movies = []
 emotion = ''
 
-<<<<<<< HEAD
 def formating(list):
     data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Outdoor"
     randomNum = random.randint(0, len(list)-1)
@@ -87,8 +86,6 @@ def formating(list):
     songName = songInfo["name"]
     return {"text":"How does the song " + songName + " tickle your ears? ", "question":"general", "topic":"music","type":"bot", "musicInfo": [{"Genre": genre, "Song": songInfo["name"], "Artist": songInfo["artist"]["name"], "Album": songInfo["album"]["title"], "Duration": store["duration"], "Stream": songInfo["url"], "AlbumArt": songInfo["album"]["image"][2]["#text"], "TopTags": songInfo["toptags"]["tag"], "Published": songInfo["wiki"]["published"], "Summary": songInfo["wiki"]["summary"]}]}
 
-=======
->>>>>>> 617cedf745b2f94ef11b49d3a0a65a07f670895e
 @app.route('/api/chatbot',methods=['GET','POST'])
 def main():
     global reset_dict
@@ -287,11 +284,7 @@ def main():
                     link = "http://www.omdbapi.com/?apikey=" + config.omdb_api+"&s=" + movie
                     resp = requests.get(link).json()
 
-<<<<<<< HEAD
                     if resp["Response"]=="True":
-=======
-                    if resp["Response"] == "True":
->>>>>>> 617cedf745b2f94ef11b49d3a0a65a07f670895e
                         movieList.append(resp['Search'][0]["imdbID"])
                     else:
                         print("failed")
