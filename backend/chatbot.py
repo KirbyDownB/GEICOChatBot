@@ -49,10 +49,12 @@ emotion = ''
 def main():
     global count
     global last_question
-    global username
-    global how_was_your_day
-    global favorite_movies
-    global emotion
+    # global username
+    # global how_was_your_day
+    # global favorite_movies
+    # global emotion
+    username = ''
+
 
     if request.method == 'POST':
         # username = request.json.get("username")
@@ -95,7 +97,7 @@ def main():
                 
 
                 #start the movie flow
-                last_question = {"text":"Hi {}! Now we can begin! Try things like \"recommend me some movies\" or \"tell me a joke\".".format(username), "topic":"normal", "type":"bot"}
+                last_question = {"text":"Hi {}! Now we can begin! Try things like \"recommend me some movies\" or \"tell me a joke\".".format(username), "question":"general", "topic":"normal", "type":"bot"}
                 return last_question
 
             if re.match(r'.*(recommend|suggest).*movies\.*', text.lower()):
@@ -166,7 +168,8 @@ def main():
                 #return of movie recommendations
 
             else:
-                return {"text": "yuh"}
+                bot_output = chatbot.get_response(text)
+                return {"text":bot_output.text, "type":"bot", "topic":"normal"}
 
     return {"Hi":"Eric"}
 
