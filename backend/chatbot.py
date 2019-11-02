@@ -28,7 +28,6 @@ chatbot = ChatBot(
 )
 
 '''
-
 Leading questions
 1. Hey! My name is (GEICO BOT). Please type in your username
 {"text":"My name is GEICO BOT. Please type in your username", "type":"leading, "question":"username", "topic":"normal"}
@@ -36,8 +35,6 @@ Leading questions
 {"text":"How has your day been? This will give us some idea about what movies/songs to recommend you.", "type":"leading","question":"day"}
 3. What are some of your favorite movies? Seperate each one with a comma.
 {"text":"What are some of your favorite movies? Seperate each one with a comma.", "type":"leading", "question":"favorite_movies", "topic":"normal"}
-
-
 '''
 count = 0
 last_question = None
@@ -84,11 +81,10 @@ def main():
 
                 how_was_your_day = request.form.get('text')
                 emotion = "Happy" #placeholder
-                # find_max(requests.post("https://apis.paralleldots.com/v4/emotion",params={"text":how_was_your_day,"api_key":"Ssc7kaGUcIf46xcEc8CPknQZQSAwJAgAQJTSqXnDsoM"}).get("emotion")), where find max finds the key with the highest value
                 response = paralleldots.emotion(how_was_your_day)
 
                 if response.get("emotion") is not None:
-                    emotion = max(response.items(), key=operator.itemgetter(1))[0]
+                    emotion = max(response.get("emotion").items(), key=operator.itemgetter(1))[0]
 
                 print(emotion)
                 last_question = {"text":"What are some of your favorite movies? Separate each one with a \

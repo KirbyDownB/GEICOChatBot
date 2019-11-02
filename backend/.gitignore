@@ -1,8 +1,5 @@
 __pycache__/
 __pycache__/*
-<<<<<<< Updated upstream
 keys.py
 settings.cfg
-=======
 config.py
->>>>>>> Stashed changes
