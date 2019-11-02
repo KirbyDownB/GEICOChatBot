@@ -72,7 +72,7 @@ how_was_your_day = ''
 favorite_movies = []
 emotion = ''
 
-def formatting(list):
+def formatting(list, data):
     data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Outdoor"
     randomNum = random.randint(0, len(list)-1)
     genre = list[randomNum]
@@ -205,31 +205,31 @@ def main():
                 #have conditions for if the user puts in junk
                 if data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Outdoor":
                     list = ["EDM", "Dubstep", "Trap"]
-                    formatting(list)
+                    formatting(list, data)
 
                 elif data.get("lifestyle") == "Athletic" and data.get("hobbies") == "Indoor":
                     list = ["Rap", "Hip-Hop", "House"]
-                    formatting(list)
+                    formatting(list, data)
 
 
                 elif data.get("lifestyle") == "Moderate" and data.get("hobbies") == "Outdoor":
                     list = ["Pop", "Musicals", "Rock"]
-                    formatting(list)
+                    formatting(list, data)
 
 
                 elif data.get("lifestyle") == "Moderate" and data.get("hobbies") == "Indoor":
                     list = ["Jazz", "Blues", "Swing"]
-                    formatting(list)
+                    formatting(list, data)
 
 
                 elif data.get("lifestyle") == "Sedentary" and data.get("hobbies") == "Outdoor":
                     list = ["Country", "BlueGrass", "Folk"]
-                    formatting(list)
+                    formatting(list, data)
 
 
                 elif data.get("lifestyle") == "Sedentary" and data.get("hobbies") == "Indoor":
                     list = ["EDM", "Dubstep", "Trap"]
-                    formatting(list)
+                    formatting(list, data)
 
 
 
