@@ -160,7 +160,7 @@ def main():
                 if not(text == "Athletic" or text == "Sedentary" or text == "Moderate"):
                     last_question = {"text":"Ok {}. Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?".format(username), "question":"music_lifestyle", "topic":"questions","type":"bot","options":['Athletic','Sedentary','Moderate']}
                     return last_question
-                    
+
                 collection.find_one_and_update({"username": username}, {"$set": {"lifestyle": text}})
 
                 last_question = {"text":"Great! One more question. Would you say that your hobbies are more Indoor or Outdoor?","question":"music_hobbies", "topic":"questions","type":"bot","options":['Indoor','Outdoor']}
@@ -299,6 +299,7 @@ def main():
                 #then, prepend the string with a key phrase and send it to the bot. The corresponding logic adapter should pick it up and send it to Will
 
                 text = request.json.get("text")
+                user = request.json.get("username")
                 text = text.split(', ')
                 movieList = []
 
@@ -311,9 +312,9 @@ def main():
                     else:
                         print("failed")
                 if len(movieList) == 0:
-                    return {"text": "I'm sorry I did not find any movies with those names."}
+                    return {"type": "bot", "text": "I'm sorry I did not find any movies with those names."}
 
-                resp = requests.post("http://167.172.203.238:5500/recommend", json={"ids": movieList})
+                resp = requests.post("http://167.172.203.238:5500/recommend", json={"ids": movieList, "user": user})
                 response_data = resp.json()["ids"]
                 for ids in response_data:
                     postLink = "http://www.omdbapi.com/?apikey=" + config.omdb_api + "&i="
