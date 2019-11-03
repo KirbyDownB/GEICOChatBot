@@ -14,6 +14,10 @@ The `MessageForm` component simply takes in the user's input and sends it to the
 
 The `MessageList` component holds all the `message` objects in an Array. It also chooses which type of message to render to the user, such as a normal chatbot message, movie chatbot message, music chatbot message, and user message. Clicking on either a movie or music chatbot message will make the `Panel` component render additional information pertaining to the clicked message, as mentioned before.
 
+<p align="center">
+  <img width="100%"src="./frontend/src/assets/screenshot.png">
+</p>
+
  In order to start the frontend, simply navigate to the `frontend` directory and execute the following.
 
 ```
