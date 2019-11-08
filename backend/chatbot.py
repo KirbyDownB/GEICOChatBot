@@ -111,7 +111,7 @@ def chatbot_msg():
         return fetch_response('day', username)
 
     if re.match(r'.*(recommend|suggest).*(song(s?)|music)\.*', text.lower()):
-        return fetch_response('music')
+        return fetch_response('music_prompt')
 
     if last_question == "day":
         # run emotional analysis on the string.
