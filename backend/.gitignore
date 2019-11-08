@@ -1,5 +1,9 @@
 __pycache__/
 __pycache__/*
+dataset_cache_OpenAIGPTTokenizer
+personalities.txt
+geico/
+geico/*
 keys.py
 settings.cfg
 config.py

@@ -24,6 +24,9 @@
                 #Back for more movie recommendations are you? Do you have any new movies you like or do you just want more like the ones I've recommended to you previously?
             #else, the rest of this code is fine
 
+
+             
+
  elif count == 1:
             # Username expected
 
@@ -60,3 +63,76 @@
             bot_output = chatbot.get_response(text)
 
             return {"text":bot_output, "type":"bot"}
+           if last_question.get("question") == "favorite_movies":
+
+                #first, create the user object
+                # post = {"username":username, "how_was_your_day":how_was_your_day, "emotion":emotion, "favorite_movies":favorite_movies}
+                #insert into mongo
+
+                #then, prepend the string with a key phrase and send it to the bot. The corresponding logic adapter should pick it up and send it to Will
+
+                text = request.json.get("text")
+                text = text.split(', ')
+                movieList = []
+
+                for movie in text:
+                    link = "http://www.omdbapi.com/?apikey="
+                    link += config.omdb_api+"&s=" + movie
+                    resp = requests.get(link).json()
+
+                    if resp["Response"]=="True":
+                        movieList.append(resp['Search'][0]["imdbID"])
+                    else:
+                        print("failed")
+                if len(movieList) == 0:
+                    return {"text": "I'm sorry I did not find any movies with those names."}
+
+
+
+                # text = "Movies:" + text
+
+                # bot_output = chatbot.get_response(text)
+                # if bot_output == "junk":
+                #     return {"text":"Hmmm, those don't sound like any movies I've heard of. Can you give me any more movies you like?"}
+                # return {"text":bot_output}
+                return {"text": "yuhh"}
+        if request.json.get('username') == "reset" or request.json.get('username') == "restart" or request.json.get('text') == "reset" or request.json.get('text') == "restart":
+            print("RESTART")
+            # count = 1
+            username = request.json.get("username")
+
+            last_question = {"text":"Ok {}, how has your day been? This will give us some idea about what movies to \
+                    recommend you.".format(username), "type":"bot","question":"day","topic":"normal"}
+            return last_question
+
+
+        # if count > 0 and last_question is not None:
+
+        #     print("Entereed movie flow")
+        #     #text = request.json.get('text')
+        #     username = request.json.get('username')
+        #     text = request.json.get('text')
+        #     last_question = request.json.get("question")
+
+        #     print("TEXXXXT")
+        #     print(text)
+        #     # print(re.match(r'.*(recommend|suggest).*movies\.*', text.lower()))
+        #     if last_question == "intro":
+        #         username = request.json.get("username")
+        #         text = request.json.get("text")
+        #         #store the username in the database
+
+        #         if collection.find({"username":username}).count() == 0:
+        #             collection.insert_one({"username":username})
+
+
+        #         #start the movie flow
+        #         last_question = {"text":"Hi {}! Now we can begin! Try things like \"recommend me some movies\" , \"recommend music\", or \"tell me a joke\".".format(username), "question":"general", "topic":"normal", "type":"bot"}
+        #         return last_question
+
+            if last_question == "restart":
+
+                username = request.json.get("username")
+
+                last_question = {"text":"Hey, sorry about that {}. Even though I'm not human, I still make mistakes. If you want to get movie recommendations type \'recommend movies \'. If you want song recommendations you can say '\recommend music\'. We can just talk too.","type":"bot","topic":"normal","question":"general"}
+                return last_question

@@ -34,7 +34,7 @@ class JokeAdapter(LogicAdapter):
             joke = "Im out of jokes"
         # For this example, we will just return the input as output
 
-        response_statement = Statement(text=joke)
+        response_statement = Statement(text="JOKE"+joke)
         response_statement.confidence = confidence
 
         return response_statement
@@ -71,13 +71,13 @@ class MusicAdapter(LogicAdapter):
         m = ['movie','movies','songs','song','music']
         print(m)
         print(statement.text)
-        if statement.text == "movie" or statement.text == "movies":
+        if statement.text == "song" or statement.text == "songs" or statement.text=="music":
             return True
         else:
             return False
 
     def process(self, input_statement, additional_response_selection_parameters):
         
-        response_statment = Statement(text="Movie? Movie? I heard Movie! Tell me your favorite movies! Separate each one with a comma.") 
+        response_statment = Statement(text="I heard something about songs!") 
         response_statment.confidence = 1
         return response_statment
