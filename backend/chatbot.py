@@ -466,49 +466,49 @@ def save_movie():
 
     return {"Message":"You did not send a post chief"}
 
-# @app.route('/api/get_saved_movies',methods=['GET','POST'])
-def get_saved_movies(token):
+@app.route('/api/get_saved_movies',methods=['GET','POST'])
+def get_saved_movies():
 
-    # if request.method == 'POST':
+    if request.method == 'POST':
 
-    # token = request.headers.get('Authorization')
-    print(token)
-    
-    if not token:
-
-        return {"Message":"Token is missing"}
-    try:
-        # token = token.split()[1]
+        token = request.headers.get('Authorization')
         print(token)
-        decToken = jwt.decode(token,"SECRET_KEY",'utf-8')
-    except Exception:
-        return {"Message":"Failed to decode token"}
+    
+        if not token:
 
-    username = decToken.get('username')
-    print(username)
+            return {"Message":"Token is missing"}
+        try:
+            token = token.split()[1]
+            print(token)
+            decToken = jwt.decode(token,"SECRET_KEY",'utf-8')
+        except Exception:
+            return {"Message":"Failed to decode token"}
+
+        username = decToken.get('username')
+        print(username)
     # print(request.json)
 
 
 
-    user_obj = collection.find_one({"username":username})
+        user_obj = collection.find_one({"username":username})
 
-    listings = []
-    for imdbID in user_obj.get('saved_movies'):
-        postLink = "http://www.omdbapi.com/?apikey=" + config.omdb_api + "&i="
-        postLink += str(imdbID)
-        temp = requests.get(postLink).json()
-        # print("temp:", temp)
-        if temp["Response"]=="True":
-            listings.append(temp)
-    print("listings:", listings)
-
-
+        listings = []
+        for imdbID in user_obj.get('saved_movies'):
+            postLink = "http://www.omdbapi.com/?apikey=" + config.omdb_api + "&i="
+            postLink += str(imdbID)
+            temp = requests.get(postLink).json()
+            # print("temp:", temp)
+            if temp["Response"]=="True":
+                listings.append(temp)
+        print("listings:", listings)
 
 
-    return {"Message":"Movies fetched successfully", "savedIDs":user_obj.get('saved_movies'),"movieInfo":listings}
 
 
-# return {"Message":"You did not send a post chief"}
+        return {"Message":"Movies fetched successfully", "savedIDs":user_obj.get('saved_movies'),"movieInfo":listings}
+
+
+    return {"Message":"You did not send a post chief"}
 
 
 
