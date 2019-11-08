@@ -64,7 +64,7 @@ class MusicRecommender():
         print(f'https://open.spotify.com/track/{best_id}')
         return {
             'features': {
-                'input': [float(x) for x in x_in],
+                'input': [float(x) for x in x_in.reshape((-1,))],
                 'output': [float(x) for x in feat_df.values[best_idx, :].reshape((-1,))]
             },
             'info': {
