@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 from chatterbot.trainers import ListTrainer
@@ -11,6 +11,8 @@ import paralleldots
 import operator
 import config
 from pymongo import MongoClient
+from music import MusicRecommender
+
 cluster = MongoClient("mongodb+srv://adiach1:1234@cluster0-jgwg7.mongodb.net/geico?retryWrites=true&w=majority")
 db = cluster["geico"]
 collection=db["geico"]
@@ -72,8 +74,19 @@ username = ''
 how_was_your_day = ''
 favorite_movies = []
 emotion = ''
+mrec = MusicRecommender()
+
+@app.route('/api/music', methods=['POST'])
+def rec_song():
+    data = request.get_json()
+    if 'songName' not in data:
+        return jsonify({ 'success': False, 'message': 'Missing song name field' })
+    result = mrec.recommend(data['songName'])
+    result['success'] = True
+    return jsonify(result)
+
 @app.route('/api/chatbot',methods=['GET','POST'])
-def main():
+def chatbot_msg():
     global count
     # global last_question
     # global username
