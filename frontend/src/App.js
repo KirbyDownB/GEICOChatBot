@@ -5,7 +5,7 @@ import MessageList from './components/MessageList/MessageList';
 import Panel from './components/Panel/Panel';
 import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
-import { message, Modal, Button } from 'antd';
+import { message, Modal, Button, Switch } from 'antd';
 import './App.css';
 import { BASE_URL, tokenKeyName, fakeMessages } from './constants';
 
@@ -27,7 +27,8 @@ class App extends Component {
     isModalOpen: true,
     isLoginShowing: true,
     isSignupShowing: false,
-    token: null
+    token: null,
+    toggle: false
   }
 
   componentDidMount = () => {
@@ -174,6 +175,40 @@ class App extends Component {
     window.location.reload();
   }
 
+  onChange = () => {
+    this.setState(prevState =>({
+      toggle: !prevState.toggle
+    }))
+  }
+
+  retLeft1 = () => {
+    return(
+      <div>
+        <Animated animationIn="fadeIn" isVisible={true}>
+        {!this.state.activeMessage && <div className="app__chatGroup--inactive">
+          <img className="app__chatGroup" src={chatGroup} alt=""/>
+          <div className="app_chatGroup--caption">Click on a message with a <span className="bold">red</span> or <span className="bold">gold</span> chatbot icon to show more details about it!</div>
+        </div>}
+        {this.state.activeMessage && <div className="app__chatGroup--active">
+          <Panel handleNextClick={this.handleNextClick} handlePreviousClick={this.handlePreviousClick} activeMessage={this.state.activeMessage} activeIndex={this.state.activeIndex} />
+        </div>}
+        <div className="app__toggle--container">
+        </div>
+        </Animated>
+      </div>
+    )
+  }
+
+  retLeft2 = () => {
+    return(
+      <Animated animationIn="fadeIn" isVisible={true}>
+      <div className="app__favorite--container">
+        hello
+      </div>
+      </Animated>
+    )
+  }
+  
   render() {
     return (
       <div className="App">
@@ -189,15 +224,10 @@ class App extends Component {
               <div className="app__logo--container">
                 <img src={logo} alt=""/>
               </div>
-              <Animated animationIn="fadeIn" isVisible={true}>
-              {!this.state.activeMessage && <div className="app__chatGroup--inactive">
-                <img className="app__chatGroup" src={chatGroup} alt=""/>
-                <div className="app_chatGroup--caption">Click on a message with a <span className="bold">red</span> or <span className="bold">gold</span> chatbot icon to show more details about it!</div>
-              </div>}
-              {this.state.activeMessage && <div className="app__chatGroup--active">
-                <Panel handleNextClick={this.handleNextClick} handlePreviousClick={this.handlePreviousClick} activeMessage={this.state.activeMessage} activeIndex={this.state.activeIndex} />
-              </div>}
-              </Animated>
+              {this.state.toggle ? this.retLeft1(): this.retLeft2()}
+              <div className="app__toggle--container">
+                <Switch defaultChecked onChange={this.onChange} />
+              </div>
             </div>
             <div className="col-8 right">
               <div className="app__top-div">

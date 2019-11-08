@@ -52,7 +52,18 @@
   margin-left: -20px;
 };
 
-
 .app__logo {
   width: 10%;
+}
+
+.app__toggle--container {
+  position: absolute;
+  top: 75%;
+  left: 50%;
+}
+
+.app__favorite--container {
+  height: 100%;
+  width: 100%;
+  background-color: green;
 }
