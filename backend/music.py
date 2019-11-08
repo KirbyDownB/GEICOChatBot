@@ -65,7 +65,7 @@ class MusicRecommender():
         return {
             'features': {
                 'input': [float(x) for x in x_in],
-                'output': [float(x) for x in feat_df.values[best_idx, :]]
+                'output': [float(x) for x in feat_df.values[best_idx, :].reshape((-1,))]
             },
             'info': {
                 'id': best_id,
