@@ -108,12 +108,10 @@ def chatbot_msg():
     print(last_question)
 
     if re.match(r'.*(recommend|suggest).*movie(s?)\.*', text.lower()):
-        last_question = fetch_response('day', username)
-        return last_question
+        return fetch_response('day', username)
 
     if re.match(r'.*(recommend|suggest).*(song(s?)|music)\.*', text.lower()):
-        last_question = fetch_response('TODO')
-        return last_question
+        return fetch_response('music')
 
     if last_question == "day":
         # run emotional analysis on the string.
@@ -148,9 +146,11 @@ def chatbot_msg():
             sentence = random.sample(
                 ["Another day, another dollar I suppose. ", "Back to the old grind. ", "Same tbh. "], 1)
 
-        last_question = {"text": sentence[0] + "What are some of your favorite movies? Separate each one with a \
-            comma.", "type": "bot", "question": "favorite_movies", "topic": "normal"}
-        return last_question
+        return fetch_response('movie_response', sentence[0])
+
+    if last_question == 'music_prompt':
+        results = mrec.recommend(text)
+        return { 'music': [results], 'question': 'general', 'text': 'Here\'s a song recommenation!', 'type': 'bot', 'topic': 'music' }
 
     if last_question == "favorite_movies":
         # first, create the user object
@@ -202,7 +202,7 @@ def chatbot_msg():
         else:
             num = random.randrange(20)
             if num % 5 == 0:
-                return {"text": "Enough with the shananigans. Type in \"recommend movies\" or \"recommend songs\" to get started.", "type": "bot", "topic": "normal", "question": "general"}
+                return fetch_response('bother_user')
             return {"text": bot_output.text, "type": "bot", "topic": "normal", "question": "chatbot"}
 
     bot_output = chatbot.get_response("tell me a joke")
