@@ -1,0 +1,7 @@
+.login__button--wrapper, .login__signupButton--wrapper {
+  text-align: center;
+}
+
+.login__submit, .login__signup {
+  width: 100%;
+}
