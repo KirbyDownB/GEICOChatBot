@@ -5,14 +5,11 @@ import Results from './components/Results/Results';
 import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
 import Saved from './components/Saved/Saved';
-import { message, Modal, Button, Switch, Radio } from 'antd';
+import { Modal, Button, Radio } from 'antd';
 import './App.css';
-import { BASE_URL, tokenKeyName, fakeMessages } from './constants';
+import { BASE_URL, tokenKeyName, showMessage, REQUEST_ERROR } from './constants';
 
 const logo = require('./assets/logo.svg');
-const ERROR_MESSAGE = "Something went wrong!";
-
-const showError = () => message.error(ERROR_MESSAGE);
 
 class App extends Component {
   state = {
@@ -54,10 +51,10 @@ class App extends Component {
         })
         .catch(error => {
           console.log("I got an error in componentDidMount", error);
-          showError()
+          showMessage(REQUEST_ERROR);
         });
     } else {
-      console.log("I don't have a token")
+      console.log("I don't have a token");
     }
   }
 
@@ -89,7 +86,7 @@ class App extends Component {
         });
       })
       .catch(error => {
-        showError();
+        showMessage(REQUEST_ERROR);
         this.setState({ isBotLoading: false });
       });
   }
@@ -126,7 +123,7 @@ class App extends Component {
           });
         })
         .catch(error => {
-          showError();
+          showMessage(REQUEST_ERROR);
           this.setState({ isBotLoading: false, });
         });
     }
@@ -162,7 +159,7 @@ class App extends Component {
       })
       .catch(error => {
         console.error(error);
-        showError();
+        showMessage(REQUEST_ERROR);
         this.setState({ isBotLoading: false });
       });
   }
@@ -195,6 +192,20 @@ class App extends Component {
   handleMenuChange = e => {
     const activeMenuItem = e.target.value;
     this.setState({ activeMenuItem });
+  }
+
+  showSignup = () => {
+    this.setState({
+      isSignupShowing: true,
+      isLoginShowing: false
+    });
+  }
+
+  showLogin = () => {
+    this.setState({
+      isSignupShowing: false,
+      isLoginShowing: true
+    });
   }
   
   render() {
@@ -245,8 +256,8 @@ class App extends Component {
             centered
             footer={null}
           >
-            {this.state.isLoginShowing && <Login setLoginToken={this.setLoginToken}/>}
-            {this.state.isSignupShowing && <Signup />}
+            {this.state.isLoginShowing && <Login showSignup={this.showSignup} setLoginToken={this.setLoginToken}/>}
+            {this.state.isSignupShowing && <Signup showLogin={this.showLogin} />}
           </Modal>}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Music.css';
-import { Modal } from 'antd';
+import { Modal, Tooltip, Icon } from 'antd';
 import { Radar } from 'react-chartjs-2';
 
 const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -28,10 +28,15 @@ class Music extends Component {
     this.setState({ isMusicModalOpen: false });
   }
 
+  handleMusicSave = (e, spotifyID) => {
+    e.preventDefault();
+    this.props.handleMusicSave(spotifyID);
+  }
+
   render() {
-    
     const {
       name: songName,
+      id: spotifyID,
       features,
       url,
       album: {
@@ -81,6 +86,8 @@ class Music extends Component {
       ]
     };
 
+    const isMusicSaved =  this.props.savedMusic.includes(spotifyID);
+
     return (
       <div className="music__container">
         <div className="music__container">
@@ -93,6 +100,18 @@ class Music extends Component {
           <div className="music__caption music__musicArtist"><span className="bold">Artist:</span> {artists[0].name}</div>
           <div className="music__caption music__musicAlbum"><span className="bold">Album:</span> {albumName}</div>
           <div className="music__caption music__musicRecord"><span className="bold">Published:</span> {date}</div>
+          <div className="movie__save--container">
+            <Tooltip title="Save">
+              <Icon
+                className="music__save"
+                type="star"
+                theme={isMusicSaved ? "filled" : "outlined"}
+                onClick={e => this.handleMusicSave(e, spotifyID)}
+                style={{ fontSize: "20px" }}
+                disabled={isMusicSaved}
+              />
+            </Tooltip>
+          </div>
         </div>
         <Modal
           centered

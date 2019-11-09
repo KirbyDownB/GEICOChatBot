@@ -9,6 +9,7 @@
     "chart.js": "^2.9.2",
     "convert-seconds": "^1.0.1",
     "customize-cra": "^0.8.0",
+    "dom-confetti": "^0.1.1",
     "halogen": "^0.2.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
@@ -17,6 +18,7 @@
     "react-app-rewired": "^2.1.4",
     "react-chartjs-2": "^2.8.0",
     "react-dom": "^16.11.0",
+    "react-dom-confetti": "^0.1.1",
     "react-scripts": "3.2.0",
     "react-toastify": "^5.4.0"
   },
