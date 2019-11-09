@@ -148,7 +148,7 @@ class App extends Component {
         "question": this.state.questionTopic
       })
     })
-      .then(response => response.status !== 200 ? Promise.reject() : response.json())
+      .then(response => response.json())
       .then(data => {
         const botMessage = data;
         this.setState({
