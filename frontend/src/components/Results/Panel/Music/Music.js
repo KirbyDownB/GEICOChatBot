@@ -6,6 +6,15 @@ import { Radar } from 'react-chartjs-2';
 const options = { year: 'numeric', month: 'long', day: 'numeric' };
 const convert = require('convert-seconds');
 
+const chartOptions = {
+  legend: {
+    labels: {
+      // This more specific font property overrides the global property
+      fontFamily: 'Asap'
+    }
+  }
+}
+
 class Music extends Component {
   state = {
     isMusicModalOpen: false
@@ -24,10 +33,8 @@ class Music extends Component {
     const {
       name: songName,
       features,
+      url,
       album: {
-        external_urls: {
-          spotify
-        },
         name: albumName,
         release_date: date,
         artists,
@@ -52,24 +59,24 @@ class Music extends Component {
       labels: ["Acousticness", "Danceability", "Energy", "Liveness", "Valence"],
       datasets: [
         {
-          label: songName,
+          label: inputSongName,
           backgroundColor: 'rgba(179,181,198,0.2)',
           borderColor: 'rgba(179,181,198,1)',
           pointBackgroundColor: 'rgba(179,181,198,1)',
           pointBorderColor: '#fff',
           pointHoverBackgroundColor: '#fff',
           pointHoverBorderColor: 'rgba(179,181,198,1)',
-          data: [acousticness, danceability, energy, liveness, valence]
+          data: [inputAcousticness, inputDanceability, inputEnergy, inputLiveness, inputValence]
         },
         {
-          label: inputSongName,
-          backgroundColor: 'rgba(255,99,132,0.2)',
-          borderColor: 'rgba(255,99,132,1)',
-          pointBackgroundColor: 'rgba(255,99,132,1)',
+          label: songName,
+          backgroundColor: 'rgba(117, 151, 252,0.2)',
+          borderColor: '#7597FC',
+          pointBackgroundColor: '#7597FC',
           pointBorderColor: '#fff',
           pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgba(255,99,132,1)',
-          data: [inputAcousticness, inputDanceability, inputEnergy, inputLiveness, inputValence]
+          pointHoverBorderColor: '#7597FC',
+          data: [acousticness, danceability, energy, liveness, valence]
         }
       ]
     };
@@ -78,7 +85,7 @@ class Music extends Component {
       <div className="music__container">
         <div className="music__container">
           <div className="music__albumArt--container">
-            <a href={spotify} target="_blank" rel="noopener noreferrer">
+            <a href={url} target="_blank" rel="noopener noreferrer">
               <img className="music__albumArt" src={images[0].url} alt=""/>
             </a>
           </div>
@@ -99,14 +106,18 @@ class Music extends Component {
             <div className="row justify-content-center">
               <div className="col-4">
                 <div className="music__albumArt--container">
-                  <a href={spotify} target="_blank" rel="noopener noreferrer">
+                  <a href={url} target="_blank" rel="noopener noreferrer">
                     <img className="music__albumArt" src={images[0].url} alt=""/>
                   </a>
                 </div>
                 <div className="music__caption music__musicTitle" onClick={this.openMusicModal}>{songName}</div>
               </div>
               <div className="col-8">
-                <Radar data={data} />
+                <Radar
+                  data={data}
+                  width={200}
+                  options={chartOptions}
+                />
               </div>
             </div>
           </div>

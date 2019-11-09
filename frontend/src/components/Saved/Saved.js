@@ -58,6 +58,18 @@ class Saved extends Component {
                 })}
               </div>
             </div>}
+            {this.state.music.length > 0 && <div className="music--container">
+              <div className="saved__music--header">Saved Movies</div>
+              <div className="row">
+                {this.state.music.map(music => {
+                  return (
+                    <div className="col-4">
+                      <img src={music.Poster} alt="" className="saved__musicAlbum"/>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>}
           </div>
         )}
         </div>

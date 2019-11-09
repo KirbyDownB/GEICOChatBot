@@ -5,7 +5,7 @@ import Results from './components/Results/Results';
 import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
 import Saved from './components/Saved/Saved';
-import { message, Modal, Button, Switch } from 'antd';
+import { message, Modal, Button, Switch, Radio } from 'antd';
 import './App.css';
 import { BASE_URL, tokenKeyName, fakeMessages } from './constants';
 
@@ -27,7 +27,8 @@ class App extends Component {
     isLoginShowing: true,
     isSignupShowing: false,
     token: null,
-    toggle: true
+    toggle: true,
+    activeMenuItem: "results"
   }
 
   componentDidMount = () => {
@@ -190,6 +191,11 @@ class App extends Component {
       toggle: !prevState.toggle
     }))
   }
+
+  handleMenuChange = e => {
+    const activeMenuItem = e.target.value;
+    this.setState({ activeMenuItem });
+  }
   
   render() {
     return (
@@ -206,12 +212,22 @@ class App extends Component {
               <div className="app__logo--container">
                 <img src={logo} alt=""/>
               </div>
-              {this.state.toggle ?
-                <Results activeMessage={this.state.activeMessage} /> : 
-                <Saved />
-              }
+              <div className="app__menu--container">
+                {this.state.activeMenuItem === "results" && <Results activeMessage={this.state.activeMessage} />}
+                {this.state.activeMenuItem === "saved" && <Saved />}
+                {this.state.activeMenuItem === "camera" && <Saved />}
+              </div>
               <div className="app__toggle--container">
-                <Switch defaultChecked onChange={this.onChange} />
+                <Radio.Group
+                  className="app__menu--group"
+                  defaultValue="results"
+                  buttonStyle="solid"
+                  onChange={this.handleMenuChange}
+                >
+                  <Radio.Button value="results">Results</Radio.Button>
+                  <Radio.Button value="saved">Saved</Radio.Button>
+                  <Radio.Button value="camera">Camera</Radio.Button>
+                </Radio.Group>
               </div>
             </div>
             <div className="col-8 right">
