@@ -49,3 +49,25 @@ The recommendation endpoint is also Flask-based. It uses the [MovieLens](https:/
 We used the dataset to perform collaborative filtering on the inputs. We initially chose to use a stream factorization machine provided by the [FluRS](https://github.com/takuti/flurs) library, but we found that it was unable to accurately recommend movies. Because of this, we switched to the [LightFM](https://github.com/lyst/lightfm) library. We chose to structure the problem as an implicit feedback problem, rather than as an explicit one. This means that we considered only positive recommendations and treated each rating as a binary value. We read that this is better for the top-K recommendation problem.
 
 However, we still encountered difficulty with accurately recommending movies due to the heavy imbalance in the dataset. We found that the algorithm tends to recommend older movies with high confidence, even without any ratings that support that choice. However, we were able to mitigate this issue by calculating the recommendation for users without any ratings and using that to offset the results for users with ratings.
+
+## New Features
+### Frontend
+Baut will have a prompt asking the user to login or sign in upon navigating to the website.
+<p align="center">
+  <img width="100%"src="./frontend/src/assets/baut_login.png">
+</p>
+
+Baut lets you save (and delete) all of your recommended songs and movies. To save a movie or song, just click on the star button under each recommendation, and to view what you've saved so far, just navigate to the `Saved` panel.
+<p align="center">
+  <img width="100%"src="./frontend/src/assets/baut_saved.png">
+</p>
+
+Feeling cluttered? We've moved (most of) the details from the recommended songs and movies to a different component. For a both the songs and the movies, just click on their titles to see more!
+<p align="center">
+  <img width="100%"src="./frontend/src/assets/baut_modal.png">
+</p>
+
+Notice the webcam prompt and emoji(s)? Baut can analyze your face to extract the different emotions as you react to the different movies. As you browse through the different movie recommendations, Baut will take into account how you react to each movie and tune your recommendations accordingly.
+<p align="center">
+  <img width="100%"src="./frontend/src/assets/baut_emoji.png">
+</p>
