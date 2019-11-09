@@ -150,7 +150,7 @@ def chatbot_msg():
 
     if last_question == 'music_prompt':
         results = mrec.recommend(text, n=3)
-        return { 'music': [results], 'question': 'general', 'text': 'Here\'s a song recommenation!', 'type': 'bot', 'topic': 'music' }
+        return { 'music': results, 'question': 'general', 'text': 'Here\'s a song recommenation!', 'type': 'bot', 'topic': 'music' }
 
     if last_question == "favorite_movies":
         # first, create the user object
