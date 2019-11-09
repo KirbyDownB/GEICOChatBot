@@ -4,11 +4,12 @@
 }
 
 .movie__emoji--container {
-  text-align: center;
+  position: absolute;
+  bottom: 10%;
+  left: 45%;
 }
 
 .movie__emoji {
-  margin-top: 48%;
   font-size: 300%;
 }
 
@@ -104,4 +105,3 @@
 .movie__dislike {
   margin-left: 16px;
 }
-
