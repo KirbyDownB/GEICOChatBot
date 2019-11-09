@@ -176,8 +176,8 @@ def recommend():
 @app.route('/expression', methods=['POST'])
 def expression():
     data = request.get_json()
-    if 'id' not in data:
-        return jsonify({ 'success': False, 'message': 'Missing "id" field' })
+    if 'imdbID' not in data:
+        return jsonify({ 'success': False, 'message': 'Missing "imdbID" field' })
     if 'expressions' not in data:
         return jsonify({ 'success': False, 'message': 'Missing "expressions field'})
     if 'username' not in data:
@@ -190,7 +190,7 @@ def expression():
     if username not in username2id:
         return jsonify({ 'success': False, 'message': 'Unknown user'})
     user_id = username2id[username]
-    imdb_id = int(data['id'][2:])
+    imdb_id = int(data['imdbID'][2:])
     mov_id = r.imdb2mid[imdb_id]
 
     print('Got expressions for movie: ', movie2name[mov_id] if mov_id in movie2name else '[NOT FOUND]')
