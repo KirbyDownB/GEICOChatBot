@@ -5,6 +5,10 @@ import Results from './components/Results/Results';
 import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
 import Saved from './components/Saved/Saved';
+import Container from './components/ObjectDetection/Container'
+import objectDetectionSketch from './components/ObjectDetection/ObjectDetectionSketch';
+import P5Wrapper from 'react-p5-wrapper';
+
 import { message, Modal, Button, Switch, Radio } from 'antd';
 import './App.css';
 import { BASE_URL, tokenKeyName, fakeMessages } from './constants';
@@ -28,13 +32,14 @@ class App extends Component {
     isSignupShowing: false,
     token: null,
     toggle: true,
-    activeMenuItem: "results"
+    activeMenuItem: "results",
+    movie: "",
+    expressions: null
   }
 
   componentDidMount = () => {
     const token = localStorage.getItem(tokenKeyName);
     if (token) {
-      console.log("I got a token", token);
       this.setState({ token, isModalOpen: false });
 
       fetch(`${BASE_URL}/api/chatbot`, {
@@ -45,7 +50,6 @@ class App extends Component {
       })
         .then(response => response.json())
         .then(data => {
-          console.log(data);
           this.setState({
             messages: [...this.state.messages, data],
             questionTopic: data.question,
@@ -196,8 +200,20 @@ class App extends Component {
     const activeMenuItem = e.target.value;
     this.setState({ activeMenuItem });
   }
-  
+
+  handleMovie = (data) => {
+    if (this.state.expressions.length > 0) {
+      console.log("Got movie data in App", data);
+      console.log("Got expressions in App", this.state.expressions)
+    }
+  }
+
+  setExpressions = expressions => {
+    this.setState({ expressions });
+  }
+
   render() {
+    console.log(this.state.movie)
     return (
       <div className="App">
         <div className="container-fluid">
@@ -212,8 +228,9 @@ class App extends Component {
               <div className="app__logo--container">
                 <img src={logo} alt=""/>
               </div>
+              <Container movie={this.state.movie} setExpressions={this.setExpressions} />
               <div className="app__menu--container">
-                {this.state.activeMenuItem === "results" && <Results activeMessage={this.state.activeMessage} />}
+                {this.state.activeMenuItem === "results" && <Results handleMovie={this.handleMovie} activeMessage={this.state.activeMessage} />}
                 {this.state.activeMenuItem === "saved" && <Saved />}
                 {this.state.activeMenuItem === "camera" && <Saved />}
               </div>
@@ -230,6 +247,7 @@ class App extends Component {
                 </Radio.Group>
               </div>
             </div>
+
             <div className="col-8 right">
               <div className="app__top-div">
                 <MessageList submitRadioAnswer={this.submitRadioAnswer} isBotLoading={this.state.isBotLoading} messages={this.state.messages} setActiveMessage={this.setActiveMessage} name={this.state.name} />
