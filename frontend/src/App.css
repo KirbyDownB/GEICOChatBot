@@ -73,3 +73,8 @@
   font-weight: 700;
   font-family: "Asap", sans-serif;
 }
+
+.app__logout {
+  margin-top: -16px;
+  margin-bottom: 4%;
+}

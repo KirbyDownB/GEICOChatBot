@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Signup.css';
 import { Form, Input, Icon, Button } from 'antd';
-import { showMessage, PASSWORD_MATCH_ERROR } from '../../constants';
+import { showMessage, PASSWORD_MATCH_ERROR, BASE_URL, REQUEST_ERROR } from '../../constants';
 
 const { Item } = Form;
 
@@ -10,7 +10,7 @@ class Signup extends Component {
     isSignupLoading: false
   }
 
-  handleSignup = e => {
+  handleSignupSubmit = e => {
     e.preventDefault();
 
     const username = e.target.username.value;
@@ -19,10 +19,32 @@ class Signup extends Component {
 
     if (password !== passwordConfirm ) {
       showMessage(PASSWORD_MATCH_ERROR);
+      return
     }
 
+    this.setState({ isSignupLoading: true });
 
-    // Fetch request here
+    fetch(`${BASE_URL}/api/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        "username": username,
+        "password": password
+      })
+    })
+      .then(response => response.status !== 200 ? Promise.reject() : response.json())
+      .then(data => {
+        const { token } = data;
+        this.props.setToken(token);
+        this.setState({ isSignupLoading: false });
+      })
+      .catch(error => {
+        console.error(error);
+        this.setState({ isSignupLoading: false });
+        showMessage(REQUEST_ERROR);
+      })
   }
 
   handleShowLogin = () => {
@@ -33,7 +55,7 @@ class Signup extends Component {
     return (
       <div className="signup__container">
         <div className="signup__title">SIGNUP</div>
-        <Form onSubmit={this.handlesignupSubmit}>
+        <Form onSubmit={this.handleSignupSubmit}>
           <Item>
             <div className="signup__caption">Username</div>
             <Input

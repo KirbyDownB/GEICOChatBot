@@ -23,7 +23,7 @@ class Panel extends Component {
           "Authorization": "Bearer " + token
         }
       })
-        .then(response => response.json())
+        .then(response => response.status !== 200 ? Promise.reject() : response.json())
         .then(data => {
           console.log("Got saved items in componentDidMount", data);
           const { movieInfo: savedMovies, savedSongs: savedMusic } = data;
@@ -58,7 +58,7 @@ class Panel extends Component {
           "imdbID": imdbID
         })
       })
-        .then(response => response.json())
+        .then(response => response.status !== 200 ? Promise.reject() : response.json())
         .then(data => {
           console.log("Successfully saved movie with response", data);
           this.setState({ savedMovies: [...this.state.savedMovies, imdbID] });
@@ -82,7 +82,7 @@ class Panel extends Component {
           "songID": spotifyID
         })
       })
-        .then(response => response.json())
+        .then(response => response.status !== 200 ? Promise.reject() : response.json())
         .then(data => {
           console.log("Successfully saved music with response", data);
           this.setState({ savedMusic: [...this.state.savedMusic, spotifyID] });
