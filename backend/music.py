@@ -24,8 +24,12 @@ class MusicRecommender():
     
     def recommend(self, song_name, n = 1):
         # Convert song name to artist ID
-        res = self.sp.search(q=song_name)
-        q_track = res['tracks']['items']
+        try:
+            res = self.sp.search(q=song_name)
+        except Exception:
+            print(f'No song found for name: {song_name}')
+            return None
+        q_track = res['tracks']['items'][0]
         t_id = q_track['id']
         artist_id = q_track['artists'][0]['id']
         print('Got artist name: ' + q_track['artists'][0]['name'])
