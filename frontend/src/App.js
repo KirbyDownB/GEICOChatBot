@@ -34,7 +34,8 @@ class App extends Component {
     toggle: true,
     activeMenuItem: "results",
     movie: "",
-    expressions: null
+    expressions: null,
+    currentIndex: 0
   }
 
   componentDidMount = () => {
@@ -209,7 +210,27 @@ class App extends Component {
   }
 
   setExpressions = expressions => {
-    this.setState({ expressions });
+    if (this.state.activeMessage && this.state.token) {
+      const { imdbID } = this.state.activeMessage.movieInfo[this.state.currentIndex];
+      console.log("I'm looking at this movie now from App", imdbID);
+      console.log("This is my expression in App", expressions);
+
+      fetch(`${BASE_URL}/api/web_cam`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + this.state.token
+        },
+        body: JSON.stringify({
+          "imdbID": imdbID,
+          "expressions": expressions
+        })
+      })
+    }
+  }
+
+  updateCurrentIndex = index => {
+    this.setState({ currentIndex: index });
   }
 
   render() {
@@ -228,9 +249,9 @@ class App extends Component {
               <div className="app__logo--container">
                 <img src={logo} alt=""/>
               </div>
-              <Container movie={this.state.movie} setExpressions={this.setExpressions} />
+              <Container movie={this.state.movie} setExpressions={this.setExpressions}/>
               <div className="app__menu--container">
-                {this.state.activeMenuItem === "results" && <Results handleMovie={this.handleMovie} activeMessage={this.state.activeMessage} />}
+                {this.state.activeMenuItem === "results" && <Results updateCurrentIndex={this.updateCurrentIndex} activeMessage={this.state.activeMessage} />}
                 {this.state.activeMenuItem === "saved" && <Saved />}
                 {this.state.activeMenuItem === "camera" && <Saved />}
               </div>

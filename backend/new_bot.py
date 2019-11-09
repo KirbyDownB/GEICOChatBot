@@ -69,10 +69,16 @@ def sample_sequence(personality, history, tokenizer, model, args, current_output
     special_tokens_ids = tokenizer.convert_tokens_to_ids(SPECIAL_TOKENS)
     if current_output is None:
         current_output = []
-
+    # PPPPP = open('UNsuccessfulOutput.txt', 'w') 
+    #print('\n'.join([f'{i}: {tokenizer.decode(chain(*p))}' for (i, p) in enumerate(personalities)]), file=PPPPP)
     for i in range(args.max_length):
+        
         instance = build_input_from_segments(personality, history, current_output, tokenizer, with_eos=False)
-
+        # print("Args Device", args.device)
+        # print("Type Args Device", type(args.device))
+        # print("Instance input ids ", instance['input_ids'])
+        # print("Type Instance input ids ", type(instance['input_ids']))
+        
         input_ids = torch.tensor(instance["input_ids"], device=args.device).unsqueeze(0)
         token_type_ids = torch.tensor(instance["token_type_ids"], device=args.device).unsqueeze(0)
 
@@ -147,8 +153,8 @@ class Bot():
         #PPPPP = open('personalities.txt', 'w') 
         #print('\n'.join([f'{i}: {tokenizer.decode(chain(*p))}' for (i, p) in enumerate(personalities)]), file=PPPPP)
         # print(f'Personalities: {personalities}')
-        # personality = random.choice(personalities)
-        self.personality = personalities[1655]
+        self.personality = random.choice(personalities)
+        # self.personality = personalities[1655]
     
 
     def run(self,text,username=None):
@@ -158,9 +164,8 @@ class Bot():
         user_obj = collection.find_one({"username":username})
         raw_text = text
         history = user_obj.get('history')
-        if history is None:
-            history = []
-        
+        # if history is None:
+
         history.append(self.tokenizer.encode(raw_text))
         with torch.no_grad():
             out_ids = sample_sequence(self.personality, history, self.tokenizer, self.model, self.args)
@@ -168,7 +173,12 @@ class Bot():
         history = history[-(2*self.args.max_history+1):]
         out_text = self.tokenizer.decode(out_ids, skip_special_tokens=True)
         print(out_text)
-        user_obj = collection.find_one_and_update({"username":username}, {'$set':{"history":history}})
+        for h in history:
+            collection.find_one_and_update({"username":username}, {'$push':{"history":h}})
+        history = collection.find_one({"username":username}).get('history')
+        history = history[-(2*self.args.max_history+1):]
+        collection.find_one_and_update({"username":username}, {'$set':{"history":history}})
+
         
         return out_text
         

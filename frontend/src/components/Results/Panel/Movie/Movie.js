@@ -9,10 +9,6 @@ class Movie extends Component {
     isMovieModalOpen: false
   }
 
-  componentDidMount = () => {
-
-  }
-
   openMovieModal = () => {
     this.setState({ isMovieModalOpen: true });
   }

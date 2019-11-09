@@ -49,7 +49,7 @@
   text-align: center;
   margin-top: -30px;
   margin-left: -20px;
-  margin-bottom: 25%;
+  margin-bottom: 10%;
 };
 
 .app__logo {
@@ -63,13 +63,18 @@
 .app__favorite--container {
   height: 100%;
   width: 100%;
-  background-color: green;
 }
 
 .app__menu--container {
-  height: 60vh;
+  height: 70vh;
 }
 
 .app__menu--group {
+  font-weight: 700;
   font-family: "Asap", sans-serif;
+}
+
+.app__logout {
+  margin-top: -16px;
+  margin-bottom: 4%;
 }

@@ -14,7 +14,7 @@ from library import fetch_response
 from new_bot import Bot
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from music import MusicRecommender
+from music import MusicRecommender, chunk
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 import time
@@ -102,7 +102,7 @@ def chatbot_msg():
 
     if username != '' and last_question is None:
         print("Entry message")
-        last_question = {"text": "Welcome back {}. My name is Baut! I recommend movies, music, and do some other stuff as well. Try statements like \"recommend movies\", \"recommend music\", or \"tell a joke \". ".format(
+        last_question = {"text": "Welcome back {}. My name is Baut! I recommend movies, music, and do some other stuff as well. Try statements like \"recommend movies\", \"recommend music\", or \"tell a joke \". I also am REALLY good at conversations, so you can try that too! ".format(
             username), "type": "bot", "question": "intro", "topic": "normal", "username": username}
         count += 1
         return last_question
@@ -120,7 +120,7 @@ def chatbot_msg():
     if re.match(r'.*(tell|say|give).*joke(s?)\.*', text.lower()):
         jokes=pickle.load(open('jokes.pickle','rb'))
         joke = random.sample(jokes,1)[0].get("joke")
-        return fetch_response('jokes_response', joke)    
+        return fetch_response('joke_response', joke)    
 
     if last_question == "day":
         # run emotional analysis on the string.
@@ -159,6 +159,8 @@ def chatbot_msg():
 
     if last_question == 'music_prompt':
         results = mrec.recommend(text, n=5)
+        if results is None:
+            return fetch_response('music_404', text)
         return { 'music': results, 'question': 'general', 'text': 'Here\'s a song recommendation!', 'type': 'bot', 'topic': 'music' }
 
     if last_question == "favorite_movies":
@@ -275,6 +277,11 @@ def login():
             token = jwt.encode(
                 {'username': user_obj['username']}, "SECRET_KEY")
             token = token.decode('utf-8')
+
+            history = []
+            user_obj = collection.find_one_and_update({"username":username}, {'$set':{"history":history}})
+
+
             return {"message": "Password was correct. Login successful", "token": token}
 
         else:
@@ -313,10 +320,40 @@ def save_movie():
         return {"message": "Movie inserted into user document"}
 
     return {"message": "You did not send a post chief"}
+@app.route('/api/save_song', methods=['GET', 'POST'])
+def save_song():
+
+    if request.method == 'POST':
+
+        token = request.headers.get('Authorization')
+        print(token)
+
+        if not token:
+
+            return {"message": "Token is missing"}
+        try:
+            token = token.split()[1]
+            print(token)
+            decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
+        except Exception:
+            return {"message": "Failed to decode token"}
+
+        username = decToken.get('username')
+        print(username)
+        print(request.json)
+        songID = request.json.get('songID')
+        print(songID)
+
+        collection.find_one_and_update({"username": username, }, {
+                                       '$push': {'saved_songs': songID}})
+
+        return {"message": "Song inserted into user document"}
+
+    return {"message": "You did not send a post chief"}
 
 
-@app.route('/api/get_saved_movies', methods=['GET', 'POST'])
-def get_saved_movies():
+@app.route('/api/get_saved_items', methods=['GET', 'POST'])
+def get_saved_movies_and_songs():
 
     if request.method == 'POST':
 
@@ -349,9 +386,71 @@ def get_saved_movies():
                 listings.append(temp)
         print("listings:", listings)
 
-        return {"message": "Movies fetched successfully", "savedIDs": user_obj.get('saved_movies'), "movieInfo": listings}
+        songs = chunk(user_obj.get('saved_songs'))
+        songsList = []
+        for song in songs:
+            songsList.append(mrec.sp.tracks(song))
+        
+
+        return {"message": "Movies and Songs fetched successfully", "savedIDs": user_obj.get('saved_movies'), "movieInfo": listings, "savedSongIDs":user_obj.get('saved_songs'), "savedSongs":songsList[0].get('tracks')}
 
     return {"message": "You did not send a post chief"}
+
+@app.route('/api/delete_movie', methods=['DELETE'])
+def delete_movie():
+
+
+    token = request.headers.get('Authorization')
+    print(token)
+
+    if not token:
+
+        return {"message": "Token is missing"}
+    try:
+        token = token.split()[1]
+        print(token)
+        decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
+    except Exception:
+        return {"message": "Failed to decode token"}
+
+    username = decToken.get('username')
+    print(username)
+    print(request.json)
+    imdbID = request.json.get('imdbID')
+    print(imdbID)
+
+    collection.find_one_and_update({"username": username, }, {
+                                    '$pull': {'saved_movies': imdbID}})
+
+    return {"message": "Movie deleted from database"}
+
+@app.route('/api/delete_song', methods=['DELETE'])
+def delete_song():
+
+
+    token = request.headers.get('Authorization')
+    print(token)
+
+    if not token:
+
+        return {"message": "Token is missing"}
+    try:
+        token = token.split()[1]
+        print(token)
+        decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
+    except Exception:
+        return {"message": "Failed to decode token"}
+
+    username = decToken.get('username')
+    print(username)
+    print(request.json)
+    songID = request.json.get('songID')
+    print(songID)
+
+    collection.find_one_and_update({"username": username, }, {
+                                    '$pull': {'saved_songs': songID}})
+
+    return {"message": "Song deleted from database"}
 
 
 if __name__ == "__main__":

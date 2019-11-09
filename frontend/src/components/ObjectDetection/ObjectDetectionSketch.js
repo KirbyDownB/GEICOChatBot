@@ -131,7 +131,6 @@ export default function sketch (p) {
             if (data[0] && data[0].expressions){
               //console.log(data[0].expressions)
               newProps.handleExpression(data[0].expressions)
-              console.log(faceapi.tf.getBackend())
             }
 
               //howFaceDetectionData(data);

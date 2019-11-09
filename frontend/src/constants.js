@@ -1,7 +1,11 @@
-export const BASE_URL = "https://baut-api.wls.ai";
+import { message} from 'antd';
 
+export const PASSWORD_MATCH_ERROR = "Your passwords don't match!";
+export const CREDENTIALS_ERROR = "Your credentials are incorrect!";
+export const REQUEST_ERROR = "Something went wrong!";
+export const FORGOT_ERROR = "You forgot to enter something!";
+export const BASE_URL = "http://6251f190.ngrok.io";
 export const tokenKeyName = "token";
-
 export const fakeMessages = [
   {
     id: 1,
@@ -84,3 +88,5 @@ export const fakeMessages = [
     options: ["Athletic", "Sedentary"]
   },
 ];
+
+export const showMessage = (text) => message.error(text);

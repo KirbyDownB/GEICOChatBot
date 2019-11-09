@@ -1,0 +1,43 @@
+.signup__button--wrapper, .signup__signupButton--wrapper {
+  text-align: center;
+}
+
+.signup__submit, .signup__signup {
+  width: 100%;
+}
+
+.signup__caption {
+  margin-bottom: -2%;
+  font-family: "Asap", sans-serif;
+  font-weight: bold;
+}
+
+.signup__submit, .signup__signup {
+  font-weight: bold;
+  letter-spacing: 16px;
+  padding-right: -10px;
+}
+
+.signup__title {
+  font-family: "Asap", sans-serif;
+  font-weight: 700;
+  letter-spacing: 10px;
+  font-size: 150%;
+  text-align: center;
+}
+
+.signup__input {
+  font-family: "Asap", sans-serif;
+  margin-bottom: -8%;
+}
+
+.signup__login {
+  text-align: center;
+  font-weight: 700;
+  font-family: "Asap", sans-serif;
+  color: #7597FC;
+}
+
+.signup__login:hover {
+  cursor: pointer;
+}

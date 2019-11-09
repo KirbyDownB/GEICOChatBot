@@ -12,7 +12,10 @@ export default class AppContainer extends Component {
     }
 
     handleExpression = (value) => {
-      this.props.setExpressions(value);
+      if (value.angry){
+        this.props.setExpressions(value);
+        console.log(value)
+      }
       // fetch("",{
       //   method: "POST",
       //   headers: {
@@ -29,7 +32,6 @@ export default class AppContainer extends Component {
       // // this.setState({
       // //   emotion: value
       // // })
-      console.log(value)
     }
 
     handleToggle = () => {
