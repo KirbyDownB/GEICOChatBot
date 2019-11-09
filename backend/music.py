@@ -25,9 +25,10 @@ class MusicRecommender():
     def recommend(self, song_name, n = 1):
         # Convert song name to artist ID
         res = self.sp.search(q=song_name)
-        t_id = res['tracks']['items'][0]['id']
-        artist_id = res['tracks']['items'][0]['artists'][0]['id']
-        print('Got artist name: ' + res['tracks']['items'][0]['artists'][0]['name'])
+        q_track = res['tracks']['items']
+        t_id = q_track['id']
+        artist_id = q_track['artists'][0]['id']
+        print('Got artist name: ' + q_track['artists'][0]['name'])
 
         related = self.related_artists(artist_id)
 
@@ -58,6 +59,7 @@ class MusicRecommender():
         # Find NNs
         best_idxs = np.argsort(np.sum(np.square(scaled - x_scaled), axis=1))
 
+        q_feat = [float(x) for x in x_in.reshape((-1,))]
         output = []
         # TODO: use tracks() instead of track() each time
         for best_idx in best_idxs[:n]:
@@ -76,7 +78,9 @@ class MusicRecommender():
             })
         return {
             'input': {
-                'features': [float(x) for x in x_in.reshape((-1,))]
+                'features': {AUDIO_FEATURES[i]: q_feat[i] for i in range(len(AUDIO_FEATURES))},
+                'name': q_track['name'],
+                'album': q_track['album']
             },
             'output': output
         }
