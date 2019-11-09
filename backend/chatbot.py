@@ -149,7 +149,7 @@ def chatbot_msg():
         return fetch_response('movie_response', sentence[0])
 
     if last_question == 'music_prompt':
-        results = mrec.recommend(text)
+        results = mrec.recommend(text, n=3)
         return { 'music': [results], 'question': 'general', 'text': 'Here\'s a song recommenation!', 'type': 'bot', 'topic': 'music' }
 
     if last_question == "favorite_movies":

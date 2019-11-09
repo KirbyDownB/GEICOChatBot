@@ -60,7 +60,7 @@ class MusicRecommender():
 
         output = []
         # TODO: use tracks() instead of track() each time
-        for best_idx in best_idxs:
+        for best_idx in best_idxs[:n]:
             best_id = df.loc[best_idx]['id']
             best_info = self.sp.track(best_id)
 
