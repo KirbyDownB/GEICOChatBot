@@ -29,7 +29,6 @@
 
 .app__chatGroup--inactive {
   text-align: center;
-  margin-top: 35%;
 }
 
 .app__chatGroup {
@@ -50,6 +49,7 @@
   text-align: center;
   margin-top: -30px;
   margin-left: -20px;
+  margin-bottom: 30%;
 };
 
 .app__logo {
@@ -57,13 +57,19 @@
 }
 
 .app__toggle--container {
-  position: absolute;
-  top: 75%;
-  left: 50%;
+  text-align: center;
 }
 
 .app__favorite--container {
   height: 100%;
   width: 100%;
   background-color: green;
+}
+
+.app__menu--container {
+  height: 60vh;
+}
+
+.app__menu--group {
+  font-family: "Asap", sans-serif;
 }

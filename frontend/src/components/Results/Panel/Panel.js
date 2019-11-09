@@ -26,14 +26,14 @@ class Panel extends Component {
 
   render() {
     const { topic } = this.props.activeMessage;
-    console.log("Topic of the active message is", topic)
 
     let info = null;
+    let musicInputInfo = null;
     if (topic === "movie") {
       info = this.props.activeMessage.movieInfo;
     } else {
-      info = this.props.activeMessage.music;
-      console.log("assigning info", info)
+      info = this.props.activeMessage.music.output;
+      musicInputInfo = this.props.activeMessage.music.input;
     }
 
     return (
@@ -44,9 +44,9 @@ class Panel extends Component {
           </Button>}
         </div>
         {topic === "movie" && <Movie movieInfo={info[this.props.activeIndex]} savedMovies={this.state.savedMovies} handleMovieSave={this.handleMovieSave} />}
-        {topic === "music" && <Music musicInfo={info.output[this.props.activeIndex]} inputInfo={info.input} />}
+        {topic === "music" && <Music musicInfo={info[this.props.activeIndex]} inputInfo={musicInputInfo} />}
         <div className="panel__rightButton--container">
-          {this.props.activeIndex < info.output.length - 1 && <Button shape="circle" type="primary" onClick={this.handleNextClick}>
+          {this.props.activeIndex < info.length - 1 && <Button shape="circle" type="primary" onClick={this.handleNextClick}>
             <Icon type="caret-right" />
           </Button>}
         </div>
