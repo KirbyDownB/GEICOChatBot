@@ -63,7 +63,9 @@ Feeling cluttered? We've moved (most of) the details from the recommended songs 
   <img width="100%"src="./frontend/src/assets/baut_modal.png">
 </p>
 
-Notice the webcam prompt and emoji(s)? Baut can analyze your face to extract the different emotions as you react to the different movies. As you browse through the different movie recommendations, Baut will take into account how you react to each movie and tune your recommendations accordingly.
+Notice the webcam prompt and emoji(s)? Baut can analyze your face to extract the different emotions as you react to the different movies. As you browse through the different movie recommendations, Baut will take into account how you react to each movie and tune your recommendations accordingly. 
+Using the face-api, we used the tiny face model which returned the detected faces with the highest scores. From there we used the face recognition model which has already been pre-trained making it both lightweight and reasonably accurate. 
+
 <p align="center">
   <img width="70%"src="./frontend/src/assets/baut_emoji.png">
 </p>
