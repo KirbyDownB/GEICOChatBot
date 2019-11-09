@@ -9,7 +9,7 @@ import Container from './components/ObjectDetection/Container'
 import objectDetectionSketch from './components/ObjectDetection/ObjectDetectionSketch';
 import P5Wrapper from 'react-p5-wrapper';
 
-import { message, Modal, Button, Switch, Radio } from 'antd';
+import { Tooltip, Icon, message, Modal, Button, Switch, Radio } from 'antd';
 import './App.css';
 import { BASE_URL, tokenKeyName, showMessage, REQUEST_ERROR } from './constants';
 
@@ -31,7 +31,8 @@ class App extends Component {
     toggle: true,
     activeMenuItem: "results",
     movie: "",
-    expressions: null
+    expressions: null,
+    currentIndex: 0
   }
 
   componentDidMount = () => {
@@ -213,16 +214,36 @@ class App extends Component {
       isLoginShowing: true
     });
   }
-  
-  handleMovie = (data) => {
-    if (this.state.expressions.length > 0) {
-      console.log("Got movie data in App", data);
-      console.log("Got expressions in App", this.state.expressions)
+
+  // handleMovie = (data) => {
+  //   if (this.state.expressions.length > 0) {
+  //     console.log("Got movie data in App", data);
+  //     console.log("Got expressions in App", this.state.expressions)
+  //   }
+  // }
+
+  setExpressions = expressions => {
+    if (this.state.activeMessage && this.state.activeMessage.topic === "movie" && this.state.token) {
+      const { imdbID } = this.state.activeMessage.movieInfo[this.state.currentIndex];
+      console.log("I'm looking at this movie now from App", imdbID);
+      console.log("This is my expression in App", expressions);
+
+      fetch(`${BASE_URL}/api/web_cam`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + this.state.token
+        },
+        body: JSON.stringify({
+          "imdbID": imdbID,
+          "expressions": expressions
+        })
+      })
     }
   }
 
-  setExpressions = expressions => {
-    this.setState({ expressions });
+  setCurrentIndex = index => {
+    this.setState({ currentIndex: index });
   }
 
   render() {
@@ -245,7 +266,7 @@ class App extends Component {
               </div>
               <Container movie={this.state.movie} setExpressions={this.setExpressions} />
               <div className="app__menu--container">
-                {this.state.activeMenuItem === "results" && <Results handleMovie={this.handleMovie} activeMessage={this.state.activeMessage} />}
+                {this.state.activeMenuItem === "results" && <Results setCurrentIndex={this.setCurrentIndex} activeMessage={this.state.activeMessage} />}
                 {this.state.activeMenuItem === "saved" && <Saved />}
                 {this.state.activeMenuItem === "camera" && <Saved />}
               </div>

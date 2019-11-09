@@ -6,14 +6,11 @@ import './Container.css'
 
 export default class AppContainer extends Component {
 
-    state = {
-      toggle: true,
-      movie: ""
-    }
-
     handleExpression = (value) => {
-      this.props.setExpressions(value);
-      // fetch("",{
+      if (value.angry){
+        this.props.setExpressions(value);
+        console.log(value)
+      }      // fetch("",{
       //   method: "POST",
       //   headers: {
       //     "Content-Type": "application/json"
@@ -32,26 +29,12 @@ export default class AppContainer extends Component {
       console.log(value)
     }
 
-    handleToggle = () => {
-      this.setState(prevState => ({
-        toggle: !prevState.toggle
-      }))
-    }
-
-
     render() {
-      console.log(this.state.toggle)
         return (
           <div>
-          {this.state.toggle?
             <div style={{display: 'none'}}>
               <P5Wrapper sketch={objectDetectionSketch} handleExpression={this.handleExpression}/>
-            </div>:
-            <div>
-              <P5Wrapper sketch={objectDetectionSketch} handleExpression={this.handleExpression}/>
             </div>
-          }
-            <div><Switch onChange={this.handleToggle}/></div>
           </div>
         )
     }

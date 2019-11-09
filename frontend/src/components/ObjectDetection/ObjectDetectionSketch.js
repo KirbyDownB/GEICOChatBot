@@ -35,7 +35,7 @@ export default function sketch (p) {
 
 
 
-        p.createCanvas(200, 200);
+        p.createCanvas(1, 1);
         const constraints = {
             video: {
               optional: [{ maxFrameRate: 5 }]

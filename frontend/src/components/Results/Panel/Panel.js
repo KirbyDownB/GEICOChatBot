@@ -101,7 +101,7 @@ class Panel extends Component {
     if (topic === "movie") {
       info = this.props.activeMessage.movieInfo;
       // console.log("Got the movie info in activeMessage", info)
-      this.props.handleMovie(info[this.props.activeIndex]);
+      // this.props.handleMovie(info[this.props.activeIndex]);
     } else {
       info = this.props.activeMessage.music.output;
       musicInputInfo = this.props.activeMessage.music.input;
