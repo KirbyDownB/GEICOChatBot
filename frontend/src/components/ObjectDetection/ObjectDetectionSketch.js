@@ -130,7 +130,9 @@ export default function sketch (p) {
           faceapi.detectAllFaces(capture.id(), new faceapi.TinyFaceDetectorOptions()).withFaceExpressions().then((data) => {
             if (data[0] && data[0].expressions){
               //console.log(data[0].expressions)
-              newProps.handleExpression(data[0].expressions)
+              setTimeout(() => {
+                newProps.handleExpression(data[0].expressions)
+              }, 1500);
             }
 
               //howFaceDetectionData(data);

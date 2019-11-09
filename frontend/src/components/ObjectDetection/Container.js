@@ -26,7 +26,6 @@ export default class AppContainer extends Component {
       // // this.setState({
       // //   emotion: value
       // // })
-      console.log(value)
     }
 
     render() {
