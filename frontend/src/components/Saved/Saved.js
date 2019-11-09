@@ -126,7 +126,7 @@ class Saved extends Component {
                         </Tooltip>
                       </a>
                       <div className="remove" onClick={e => this.handleDeleteSavedMovie(e, imdbID)}>
-                        <Icon type="close-circle" theme="filled" style={{ fontSize: "20px", color: "#FFFFFF" }} />
+                        <Icon type="close-circle" theme="filled" style={{ fontSize: "20px", color: "#000" }} />
                       </div>
                     </div>
                   )
@@ -145,7 +145,7 @@ class Saved extends Component {
                         </Tooltip>
                       </a>
                       <div className="remove" onClick={e => this.handleDeleteSavedMusic(e, spotifyID)}>
-                        <Icon type="close-circle" theme="filled" style={{ fontSize: "20px", color: "#FFFFFF" }} />
+                        <Icon type="close-circle" theme="filled" style={{ fontSize: "20px", color: "#000" }} />
                       </div>
                     </div>
                   )
