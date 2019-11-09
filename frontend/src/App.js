@@ -268,7 +268,6 @@ class App extends Component {
               <div className="app__menu--container">
                 {this.state.activeMenuItem === "results" && <Results setCurrentIndex={this.setCurrentIndex} activeMessage={this.state.activeMessage} />}
                 {this.state.activeMenuItem === "saved" && <Saved />}
-                {this.state.activeMenuItem === "camera" && <Saved />}
               </div>
               <div className="app__toggle--container">
                 <Radio.Group
@@ -279,7 +278,6 @@ class App extends Component {
                 >
                   <Radio.Button value="results">Results</Radio.Button>
                   <Radio.Button value="saved">Saved</Radio.Button>
-                  <Radio.Button value="camera">Camera</Radio.Button>
                 </Radio.Group>
               </div>
             </div>

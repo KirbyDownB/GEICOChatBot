@@ -10,6 +10,7 @@
   width: 25vw;
   padding: 4%;
   left: 0;
+  overflow: scroll;
 }
 
 .right {
@@ -58,6 +59,8 @@
 
 .app__toggle--container {
   text-align: center;
+  position: fixed;
+  width: 25vw;
 }
 
 .app__favorite--container {
