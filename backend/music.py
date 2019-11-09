@@ -24,10 +24,15 @@ class MusicRecommender():
     
     def recommend(self, song_name, n = 1):
         # Convert song name to artist ID
-        res = self.sp.search(q=song_name)
-        t_id = res['tracks']['items'][0]['id']
-        artist_id = res['tracks']['items'][0]['artists'][0]['id']
-        print('Got artist name: ' + res['tracks']['items'][0]['artists'][0]['name'])
+        try:
+            res = self.sp.search(q=song_name)
+        except Exception:
+            print(f'No song found for name: {song_name}')
+            return None
+        q_track = res['tracks']['items'][0]
+        t_id = q_track['id']
+        artist_id = q_track['artists'][0]['id']
+        print('Got artist name: ' + q_track['artists'][0]['name'])
 
         related = self.related_artists(artist_id)
 
@@ -58,16 +63,18 @@ class MusicRecommender():
         # Find NNs
         best_idxs = np.argsort(np.sum(np.square(scaled - x_scaled), axis=1))
 
+        q_feat = [float(x) for x in x_in.reshape((-1,))]
         output = []
         # TODO: use tracks() instead of track() each time
         for best_idx in best_idxs[:n]:
             best_id = df.loc[best_idx]['id']
             best_info = self.sp.track(best_id)
+            best_feats = [float(x) for x in feat_df.values[best_idx, :].reshape((-1,))]
 
             print(f'Found best result at {best_idx} ({best_id})')
             print(f'https://open.spotify.com/track/{best_id}')
             output.append({
-                'features': {AUDIO_FEATURES[i]: [float(x) for x in feat_df.values[i, :].reshape((-1,))] for i in range(len(AUDIO_FEATURES))},
+                'features': {AUDIO_FEATURES[i]: best_feats[i] for i in range(len(AUDIO_FEATURES))},
                 'id': best_id,
                 'name': best_info['name'],
                 'album': best_info['album'],
@@ -75,7 +82,9 @@ class MusicRecommender():
             })
         return {
             'input': {
-                'features': [float(x) for x in x_in.reshape((-1,))]
+                'features': {AUDIO_FEATURES[i]: q_feat[i] for i in range(len(AUDIO_FEATURES))},
+                'name': q_track['name'],
+                'album': q_track['album']
             },
             'output': output
         }
