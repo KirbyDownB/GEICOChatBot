@@ -14,7 +14,7 @@ from library import fetch_response
 from new_bot import Bot
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from music import MusicRecommender
+from music import MusicRecommender, chunk
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
 import time
@@ -318,10 +318,40 @@ def save_movie():
         return {"message": "Movie inserted into user document"}
 
     return {"message": "You did not send a post chief"}
+@app.route('/api/save_song', methods=['GET', 'POST'])
+def save_song():
+
+    if request.method == 'POST':
+
+        token = request.headers.get('Authorization')
+        print(token)
+
+        if not token:
+
+            return {"message": "Token is missing"}
+        try:
+            token = token.split()[1]
+            print(token)
+            decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
+        except Exception:
+            return {"message": "Failed to decode token"}
+
+        username = decToken.get('username')
+        print(username)
+        print(request.json)
+        songID = request.json.get('songID')
+        print(songID)
+
+        collection.find_one_and_update({"username": username, }, {
+                                       '$push': {'saved_songs': songID}})
+
+        return {"message": "Song inserted into user document"}
+
+    return {"message": "You did not send a post chief"}
 
 
-@app.route('/api/get_saved_movies', methods=['GET', 'POST'])
-def get_saved_movies():
+@app.route('/api/get_saved_items', methods=['GET', 'POST'])
+def get_saved_movies_and_songs():
 
     if request.method == 'POST':
 
@@ -354,7 +384,13 @@ def get_saved_movies():
                 listings.append(temp)
         print("listings:", listings)
 
-        return {"message": "Movies fetched successfully", "savedIDs": user_obj.get('saved_movies'), "movieInfo": listings}
+        songs = chunk(user_obj.get('saved_songs'))
+        songsList = []
+        for song in songs:
+            songsList.append(mrec.sp.tracks(song))
+        
+
+        return {"message": "Movies and Songs fetched successfully", "savedIDs": user_obj.get('saved_movies'), "movieInfo": listings, "savedSongIDs":user_obj.get('saved_songs'), "savedSongs":songsList[0].get('tracks')}
 
     return {"message": "You did not send a post chief"}
 
