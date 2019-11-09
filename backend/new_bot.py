@@ -175,6 +175,10 @@ class Bot():
         print(out_text)
         for h in history:
             collection.find_one_and_update({"username":username}, {'$push':{"history":h}})
+        history = collection.find_one({"username":username}).get('history')
+        history = history[-(2*self.args.max_history+1):]
+        collection.find_one_and_update({"username":username}, {'$set':{"history":history}})
+
         
         return out_text
         
