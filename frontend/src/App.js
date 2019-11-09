@@ -5,7 +5,7 @@ import Results from './components/Results/Results';
 import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
 import Saved from './components/Saved/Saved';
-import { Modal, Button, Radio } from 'antd';
+import { Modal, Button, Radio, Icon, Tooltip } from 'antd';
 import './App.css';
 import { BASE_URL, tokenKeyName, showMessage, REQUEST_ERROR } from './constants';
 
@@ -40,7 +40,7 @@ class App extends Component {
           "Authorization": "Bearer " + token
         }
       })
-        .then(response => response.json())
+        .then(response => response.status !== 200 ? Promise.reject() : response.json())
         .then(data => {
           console.log(data);
           this.setState({
@@ -75,7 +75,7 @@ class App extends Component {
         "question": this.state.questionTopic
       })
     })
-      .then(response => response.json())
+      .then(response => response.status !== 200 ? Promise.reject() : response.json())
       .then(data => {
         const botMessage = data;
         this.setState({
@@ -112,7 +112,7 @@ class App extends Component {
           "question": this.state.questionTopic
         })
       })
-        .then(response => response.json())
+        .then(response => response.status !== 200 ? Promise.reject() : response.json())
         .then(data => {
           console.log("Got data after sending message", data)
           const botMessage = data;
@@ -148,7 +148,7 @@ class App extends Component {
         "question": this.state.questionTopic
       })
     })
-      .then(response => response.json())
+      .then(response => response.status !== 200 ? Promise.reject() : response.json())
       .then(data => {
         const botMessage = data;
         this.setState({
@@ -172,9 +172,11 @@ class App extends Component {
     this.setState({ activeIndex: this.state.activeIndex - 1 });
   }
 
-  setLoginToken = token => {
+  setToken = token => {
+    console.log("Got token", token);
     localStorage.setItem(tokenKeyName, token);
     this.setState({ token, isModalOpen: false });
+    window.location.reload();
   }
 
   handleLogout = () => {
@@ -214,12 +216,14 @@ class App extends Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col-4 left">
-              <Button
-                onClick={this.handleLogout}
-                className="app__logout"
-              >
-                LOGOUT
-              </Button>
+              <Tooltip title="Logout">
+                <Button
+                  onClick={this.handleLogout}
+                  className="app__logout"
+                >
+                  <Icon type="logout" style={{ transform: "rotate(180deg)" }} />
+                </Button>
+              </Tooltip>
               <div className="app__logo--container">
                 <img src={logo} alt=""/>
               </div>
@@ -256,8 +260,8 @@ class App extends Component {
             centered
             footer={null}
           >
-            {this.state.isLoginShowing && <Login showSignup={this.showSignup} setLoginToken={this.setLoginToken}/>}
-            {this.state.isSignupShowing && <Signup showLogin={this.showLogin} />}
+            {this.state.isLoginShowing && <Login showSignup={this.showSignup} setToken={this.setToken}/>}
+            {this.state.isSignupShowing && <Signup showLogin={this.showLogin} setToken={this.setToken} />}
           </Modal>}
         </div>
       </div>

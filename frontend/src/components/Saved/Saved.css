@@ -4,11 +4,12 @@
   border-radius: 10px;
 }
 
-/* .saved__moviePoster:hover {
-  z-index: 1000;
-  width: 200%;
-  position: absolute
-} */
+.saved__empty {
+  text-align: center;
+  font-family: "Asap", sans-serif;
+  font-weight: 700;
+  padding-top: 30%;
+}
 
 .saved__movies--header, .saved__music--header {
   font-family: "Asap", sans-serif;
