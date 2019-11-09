@@ -37,8 +37,6 @@ The backend url is stored in a variable called `const BASE_URL` located in `fron
 ## Backend
 The backend is written in Flask, a Python microframework that makes creating endpoints quick and easy. Within this Flask app we have an endpoint call `api/chatbot`. This endpoint handles all of the dialog flow from the user to the bot. 
 
-The old version of this bot used the chatterbot library to respond to any conversational flow. For this iteration however, the bot uses the Open AI GPT pretrained model in order to handle the conversational aspect of the bot. The bot has already been pretrained using a large scale language model. We chose to use a pretrained model because it would have taken more time and compuiting power than we had at our disposal to train our own model. The download of the cache file itself takes around fifteen minutes on first start up.
-
 To run the chatbot, run `pip install -r requirements.txt` and then run `python3 chatbot.py`. The first it runs, it will take some time as the script will downlod the `dataset_cache_OpenAIGPTTokenizer` file. 
 
 ## Recommendation Endpoint
@@ -69,3 +67,5 @@ Notice the webcam prompt and emoji(s)? Baut can analyze your face to extract the
 <p align="center">
   <img width="100%"src="./frontend/src/assets/baut_emoji.png">
 </p>
+### Backend
+The old version of this bot used the chatterbot library to respond to any conversational flow. For this iteration however, the bot uses the Open AI GPT pretrained model in order to handle the conversational aspect of the bot. The bot has already been pretrained using a large scale language model. We chose to use a pretrained model because it would have taken more time and compuiting power than we had at our disposal to train our own model. The download of the cache file itself takes around fifteen minutes on first start up.
