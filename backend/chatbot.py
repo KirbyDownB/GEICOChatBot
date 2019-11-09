@@ -510,6 +510,41 @@ def web_cam():
     print('Response:', resp)
     return resp
 
+@app.route('/api/reacted', methods=['POST'])
+def reacted():
+
+    token = request.headers.get('Authorization')
+    
+    if not token:
+        return {"message": "Token is missing"}, 400
+    try:
+        token = token.split()[1]
+        print(token)
+        decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
+    except Exception:
+        return {"message": "Failed to decode token"}, 400
+
+
+    username = decToken.get('username')
+
+    data = request.get_json()
+    ret = data
+    # data = dict(data)
+    
+    ret['username'] = username
+    # movie = request.json.get('movie')
+    # expressions = request.json.get('expressions')
+
+    #send stuff to will
+    # data = jsonify(data)
+    print(ret)
+    # print(type(data))
+    # data['expressions'] = dict(data['expressions'])
+    # print(type(data['expressions']))
+    resp = requests.post("https://baut-ml.wls.ai/reacted", json=ret).json()
+    print('Response:', resp)
+    return resp
+    
 
 
 
