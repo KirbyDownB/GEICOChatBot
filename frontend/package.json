@@ -6,6 +6,7 @@
     "antd": "^3.24.3",
     "babel-plugin-import": "^1.12.2",
     "bootstrap": "^4.3.1",
+    "chart.js": "^2.9.2",
     "convert-seconds": "^1.0.1",
     "customize-cra": "^0.8.0",
     "halogen": "^0.2.0",
@@ -14,6 +15,7 @@
     "react": "^16.11.0",
     "react-animated-css": "^1.2.1",
     "react-app-rewired": "^2.1.4",
+    "react-chartjs-2": "^2.8.0",
     "react-dom": "^16.11.0",
     "react-scripts": "3.2.0",
     "react-toastify": "^5.4.0"

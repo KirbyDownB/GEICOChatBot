@@ -1,4 +1,4 @@
-export const BASE_URL = "http://68dc4d56.ngrok.io";
+export const BASE_URL = "https://baut-api.wls.ai";
 
 export const tokenKeyName = "token";
 

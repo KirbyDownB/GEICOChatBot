@@ -34,3 +34,7 @@
   text-align: center;
   margin-bottom: 16%;
 }
+
+.music__musicTitle:hover {
+  cursor: pointer;
+}

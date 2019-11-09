@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import MessageForm from './components/MessageForm/MessageForm';
-import { Animated } from "react-animated-css";
 import MessageList from './components/MessageList/MessageList';
-import Panel from './components/Panel/Panel';
+import Results from './components/Results/Results';
 import Login from './components/Login/Login';
 import Signup from './components/Signup/Signup';
+import Saved from './components/Saved/Saved';
 import { message, Modal, Button, Switch } from 'antd';
 import './App.css';
 import { BASE_URL, tokenKeyName, fakeMessages } from './constants';
 
 const logo = require('./assets/logo.svg');
-const chatGroup = require('./assets/chatGroup.svg');
 const ERROR_MESSAGE = "Something went wrong!";
 
 const showError = () => message.error(ERROR_MESSAGE);
@@ -28,22 +27,29 @@ class App extends Component {
     isLoginShowing: true,
     isSignupShowing: false,
     token: null,
-    toggle: false
+    toggle: true
   }
 
   componentDidMount = () => {
     const token = localStorage.getItem(tokenKeyName);
     if (token) {
       console.log("I got a token", token);
-      this.setState({ token });
-      this.setState({ isModalOpen: false });
+      this.setState({ token, isModalOpen: false });
 
       fetch(`${BASE_URL}/api/chatbot`, {
-        method: "POST"
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + token
+        }
       })
         .then(response => response.json())
         .then(data => {
-          this.setState({ messages: [...this.state.messages, data], questionTopic: data.question });
+          console.log(data);
+          this.setState({
+            messages: [...this.state.messages, data],
+            questionTopic: data.question,
+            name: data.username
+          });
         })
         .catch(error => {
           console.log("I got an error in componentDidMount", error);
@@ -93,11 +99,14 @@ class App extends Component {
       isBotLoading: true
     });
 
-    if (this.state.name) {
+    if (this.state.token) {
+      console.log("Sending message with last question", this.state.questionTopic)
+
       fetch(`${BASE_URL}/api/chatbot`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + this.state.token
         },
         body: JSON.stringify({
           "text": message.text,
@@ -107,6 +116,7 @@ class App extends Component {
       })
         .then(response => response.json())
         .then(data => {
+          console.log("Got data after sending message", data)
           const botMessage = data;
           this.setState({
             isBotLoading: false,
@@ -180,34 +190,6 @@ class App extends Component {
       toggle: !prevState.toggle
     }))
   }
-
-  retLeft1 = () => {
-    return(
-      <div>
-        <Animated animationIn="fadeIn" isVisible={true}>
-        {!this.state.activeMessage && <div className="app__chatGroup--inactive">
-          <img className="app__chatGroup" src={chatGroup} alt=""/>
-          <div className="app_chatGroup--caption">Click on a message with a <span className="bold">red</span> or <span className="bold">gold</span> chatbot icon to show more details about it!</div>
-        </div>}
-        {this.state.activeMessage && <div className="app__chatGroup--active">
-          <Panel handleNextClick={this.handleNextClick} handlePreviousClick={this.handlePreviousClick} activeMessage={this.state.activeMessage} activeIndex={this.state.activeIndex} />
-        </div>}
-        <div className="app__toggle--container">
-        </div>
-        </Animated>
-      </div>
-    )
-  }
-
-  retLeft2 = () => {
-    return(
-      <Animated animationIn="fadeIn" isVisible={true}>
-      <div className="app__favorite--container">
-        hello
-      </div>
-      </Animated>
-    )
-  }
   
   render() {
     return (
@@ -224,7 +206,10 @@ class App extends Component {
               <div className="app__logo--container">
                 <img src={logo} alt=""/>
               </div>
-              {this.state.toggle ? this.retLeft1(): this.retLeft2()}
+              {this.state.toggle ?
+                <Results activeMessage={this.state.activeMessage} /> : 
+                <Saved />
+              }
               <div className="app__toggle--container">
                 <Switch defaultChecked onChange={this.onChange} />
               </div>
