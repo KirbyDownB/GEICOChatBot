@@ -63,11 +63,12 @@ class MusicRecommender():
         for best_idx in best_idxs[:n]:
             best_id = df.loc[best_idx]['id']
             best_info = self.sp.track(best_id)
+            best_feats = [float(x) for x in feat_df.values[best_id, :].reshape((-1,))]
 
             print(f'Found best result at {best_idx} ({best_id})')
             print(f'https://open.spotify.com/track/{best_id}')
             output.append({
-                'features': {AUDIO_FEATURES[i]: [float(x) for x in feat_df.values[i, :].reshape((-1,))] for i in range(len(AUDIO_FEATURES))},
+                'features': {AUDIO_FEATURES[i]: best_feats[i] for i in range(len(AUDIO_FEATURES))},
                 'id': best_id,
                 'name': best_info['name'],
                 'album': best_info['album'],
