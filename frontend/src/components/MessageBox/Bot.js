@@ -13,6 +13,19 @@ const radioStyle = {
   lineHeight: '30px',
 };
 
+const config = {
+  angle: 90,
+  spread: 45,
+  startVelocity: 45,
+  elementCount: 50,
+  dragFriction: 0.1,
+  duration: 3000,
+  stagger: 0,
+  width: "10px",
+  height: "10px",
+  colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
+};
+
 class Bot extends Component {
   state = {
     timeStamp: "",
@@ -46,6 +59,8 @@ class Bot extends Component {
   }
 
   render(){
+    const botText = document.querySelector(".bot__text");
+
     let logo = botLogo;
     let cursorType = "default";
     let messageMarginTop = "auto";
@@ -66,17 +81,13 @@ class Bot extends Component {
       messageMarginBottom = "35px";
     }
 
+
     return(
       <div className="bot__container" style={{ cursor: cursorType, marginBottom: messageMarginBottom }}>
         <img className="bot__img" src={logo} alt="bot" style={{ marginTop: messageMarginTop }}></img>
         <div className="bot__text-wrapper">
-        <div className="bot__name">Baut {this.state.timeStamp}</div>
+          <div className="bot__name">Baut {this.state.timeStamp}</div>
           <div className="bot__text">{this.props.text}</div>
-          {this.props.options && <Group onChange={this.handleChooseAnswer} disabled={this.state.isAnswerSelected}>
-            {this.props.options.map(option => {
-              return <Radio className="bot__option" style={radioStyle} value={option}>{option}</Radio>
-            })}
-          </Group>}
         </div>
       </div>
     )

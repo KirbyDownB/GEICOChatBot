@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Login.css';
 import { Input, Form, Icon, Button } from 'antd';
-import { BASE_URL } from '../../constants';
+import { BASE_URL, showMessage, CREDENTIALS_ERROR } from '../../constants';
 
 const { Item } = Form;
 
@@ -42,23 +42,32 @@ class Login extends Component {
       .catch(error => {
         console.error(error);
         this.setState({ isLoginLoading: false });
+        showMessage(CREDENTIALS_ERROR);
       })
+  }
+
+  handleShowSignup = () => {
+    this.props.showSignup();
   }
 
   render() {
     return (
       <div className="login__container">
-        <div className="login__title">Login</div>
+        <div className="login__title">LOGIN</div>
         <Form onSubmit={this.handleLoginSubmit}>
           <Item>
+            <div className="login__caption">Username</div>
             <Input
+              className="login__input"
               placeholder="Username"
               name="username"
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
             />
           </Item>
           <Item>
+            <div className="login__caption">Password</div>
             <Input
+              className="login__input"
               placeholder="Password"
               name="password"
               type="password"
@@ -71,6 +80,7 @@ class Login extends Component {
                 className="login__submit"
                 type="primary"
                 htmlType="submit"
+                loading={this.state.isLoginLoading}
               >
                 LOGIN
               </Button>
@@ -81,8 +91,7 @@ class Login extends Component {
               <Button
                 className="login__signup"
                 type="primary"
-                htmlType="submit"
-                loading={this.state.isLoginLoading}
+                onClick={this.handleShowSignup}
                 ghost
               >
                 SIGNUP

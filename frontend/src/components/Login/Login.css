@@ -5,3 +5,27 @@
 .login__submit, .login__signup {
   width: 100%;
 }
+
+.login__caption {
+  margin-bottom: -2%;
+  font-family: "Asap", sans-serif;
+  font-weight: bold;
+}
+
+.login__submit, .login__signup {
+  font-weight: bold;
+  letter-spacing: 16px;
+  padding-right: -10px;
+}
+
+.login__title {
+  font-family: "Asap", sans-serif;
+  font-weight: 700;
+  letter-spacing: 10px;
+  font-size: 150%;
+  text-align: center;
+}
+
+.login__input {
+  font-family: "Asap", sans-serif;
+}
