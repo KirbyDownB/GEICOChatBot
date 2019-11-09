@@ -22,7 +22,7 @@ class MusicRecommender():
         res = self.sp.artist_related_artists(artist_id)
         return [a['id'] for a in res['artists']]
     
-    def recommend(self, song_name):
+    def recommend(self, song_name, n = 1):
         # Convert song name to artist ID
         res = self.sp.search(q=song_name)
         t_id = res['tracks']['items'][0]['id']
@@ -55,22 +55,28 @@ class MusicRecommender():
         x_in = np.array([base_feat_dict[feat] for feat in AUDIO_FEATURES]).reshape((1, -1))
         x_scaled = scaler.transform(x_in)
 
-        # Find NN
-        best_idx = np.argmin(np.sum(np.square(scaled - x_scaled), axis=1))
-        best_id = df.loc[best_idx]['id']
-        best_info = self.sp.track(best_id)
+        # Find NNs
+        best_idxs = np.argsort(np.sum(np.square(scaled - x_scaled), axis=1))
 
-        print(f'Found best result at {best_idx} ({best_id})')
-        print(f'https://open.spotify.com/track/{best_id}')
-        return {
-            'features': {
-                'input': [float(x) for x in x_in.reshape((-1,))],
-                'output': [float(x) for x in feat_df.values[best_idx, :].reshape((-1,))]
-            },
-            'info': {
+        output = []
+        # TODO: use tracks() instead of track() each time
+        for best_idx in best_idxs:
+            best_id = df.loc[best_idx]['id']
+            best_info = self.sp.track(best_id)
+
+            print(f'Found best result at {best_idx} ({best_id})')
+            print(f'https://open.spotify.com/track/{best_id}')
+            output.append({
+                'features': {AUDIO_FEATURES[i]: [float(x) for x in feat_df.values[i, :].reshape((-1,))] for i in range(len(AUDIO_FEATURES))},
                 'id': best_id,
                 'name': best_info['name'],
-                'album': best_info['album']
-            }
+                'album': best_info['album'],
+                'url': f'https://open.spotify.com/track/{best_id}'
+            })
+        return {
+            'input': {
+                'features': [float(x) for x in x_in.reshape((-1,))]
+            },
+            'output': output
         }
 
