@@ -275,6 +275,10 @@ def login():
             token = jwt.encode(
                 {'username': user_obj['username']}, "SECRET_KEY")
             token = token.decode('utf-8')
+
+            user_obj = collection.find_one_and_update({"username":username},{'$set':{'history':[]}})
+
+
             return {"message": "Password was correct. Login successful", "token": token}
 
         else:
