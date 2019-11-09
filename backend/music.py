@@ -7,7 +7,7 @@ import os
 from spotipy.oauth2 import SpotifyClientCredentials
 from sklearn.preprocessing import StandardScaler
 
-AUDIO_FEATURES = ['danceability', 'duration_ms', 'energy', 'acousticness', 'instrumentalness', 'key', 'liveness', 'loudness', 'speechiness', 'tempo', 'time_signature', 'valence']
+AUDIO_FEATURES = ['danceability', 'energy', 'acousticness', 'instrumentalness', 'key', 'liveness', 'loudness', 'speechiness', 'tempo', 'time_signature', 'valence']
 
 def chunk(l, chunk_sz=50): 
     for i in range(0, len(l), chunk_sz):  
