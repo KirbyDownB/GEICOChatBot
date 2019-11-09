@@ -1,12 +1,8 @@
-.saved__info {
-
-}
-
-
 .saved__moviePoster, .saved__musicAlbum {
   width: 100%;
   box-shadow: 0px 4px 25px rgba(92, 102, 131, 0.4);
   border-radius: 10px;
+  margin-bottom: 16px;
 }
 
 .saved__empty {
@@ -49,4 +45,8 @@
 
 .saved__music:hover .remove {
   display: block;
+}
+
+.saved__container {
+  padding-bottom: 32px;
 }
