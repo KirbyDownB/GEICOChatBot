@@ -87,7 +87,7 @@ class App extends Component {
           isBotLoading: false,
           name,
           messages: [...this.state.messages, botMessage],
-          questionTopic: data.question
+          questionTopic: data.question,
         });
       })
       .catch(error => {
@@ -124,8 +124,12 @@ class App extends Component {
           this.setState({
             isBotLoading: false,
             messages: [...this.state.messages, botMessage],
-            questionTopic: data.question
+            questionTopic: data.question,
           });
+
+          if (botMessage.topic === "music" || botMessage.topic === "movie") {
+            this.setState({ activeMessage: botMessage });
+          }
         })
         .catch(error => {
           showMessage(REQUEST_ERROR);
