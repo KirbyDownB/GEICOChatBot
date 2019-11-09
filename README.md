@@ -71,5 +71,7 @@ Notice the webcam prompt and emoji(s)? Baut can analyze your face to extract the
 ### Backend
 The old version of this bot used the chatterbot library to respond to any conversational flow. For this iteration however, the bot uses the Open AI GPT pretrained model in order to handle the conversational aspect of the bot. The bot has already been pretrained using a large scale language model. We chose to use a pretrained model because it would have taken more time and compuiting power than we had at our disposal to train our own model. The download of the cache file itself takes around fifteen minutes on first start up of the app. 
 
+The code for the pretrained model we used can be found [here](https://github.com/huggingface/transfer-learning-conv-ai)
+
 ### Music Recommendations
 Previously, Baut recommended the user different songs depending on his/her lifestyle. This time, we're using Spotify (via SpotiPy) to calculate and fetch similar songs. When the user types in a song name, Baut looks at songs of the similar artists of the entered song. Then, using K-Nearest Neighbors against the song's features, it returns a list of the songs similar to what the user entered! 
