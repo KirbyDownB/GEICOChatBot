@@ -6,7 +6,8 @@ import Music from './Music/Music';
 
 class Panel extends Component {
   state = {
-    index: 0
+    index: 0,
+    savedMovies: []
   }
 
   handlePreviousClick = e => {
@@ -19,17 +20,21 @@ class Panel extends Component {
     this.props.handleNextClick();
   }
 
+  handleMovieSave = imdbID => {
+    this.setState({ savedMovies: [...this.state.savedMovies, imdbID] });
+  }
+
   render() {
     const { topic } = this.props.activeMessage;
+    console.log("Topic of the active message is", topic)
 
     let info = null;
     if (topic === "movie") {
       info = this.props.activeMessage.movieInfo;
     } else {
-      info = this.props.activeMessage.musicInfo;
+      info = this.props.activeMessage.music.output;
+      console.log("assigning info", info)
     }
-
-    console.log("state's index", this.props.activeIndex);
 
     return (
       <div className="panel__container">
@@ -38,7 +43,7 @@ class Panel extends Component {
             <Icon type="caret-left" />
           </Button>}
         </div>
-        {topic === "movie" && <Movie movieInfo={info[this.props.activeIndex]} />}
+        {topic === "movie" && <Movie movieInfo={info[this.props.activeIndex]} savedMovies={this.state.savedMovies} handleMovieSave={this.handleMovieSave} />}
         {topic === "music" && <Music musicInfo={info[this.props.activeIndex]} />}
         <div className="panel__rightButton--container">
           {this.props.activeIndex < info.length - 1 && <Button shape="circle" type="primary" onClick={this.handleNextClick}>
