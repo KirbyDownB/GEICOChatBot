@@ -24,3 +24,23 @@
 .saved__loading--container {
   text-align: center;
 }
+
+.saved__movie:hover .remove {
+  display: block;
+}
+
+.remove {
+	padding-right: 18px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	display: none;
+}
+
+.remove:hover {
+  cursor: pointer;
+}
+
+.saved__music:hover .remove {
+  display: block;
+}
