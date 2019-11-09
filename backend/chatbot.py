@@ -71,13 +71,13 @@ def chatbot_msg():
     print(token)
 
     if not token:
-        return {"message": "Token is missing"}
+        return {"message": "Token is missing"}, 400
     try:
         token = token.split()[1]
         print(token)
         decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
     except Exception:
-        return {"message": "Failed to decode token"}
+        return {"message": "Failed to decode token"}, 400
 
     username = decToken.get('username')
     print(username)
@@ -102,7 +102,7 @@ def chatbot_msg():
 
     if username != '' and last_question is None:
         print("Entry message")
-        last_question = {"text": "Welcome back {}. My name is Baut! I recommend movies, music, and do some other stuff as well. Try statements like \"recommend movies\", \"recommend music\", or \"tell a joke \". I also am REALLY good at conversations, so you can try that too! ".format(
+        last_question = {"text": "Hey there {}! My name is Baut! I recommend movies, music, and do some other stuff as well. Try statements like \"recommend movies\", \"recommend music\", or \"tell a joke \". I also am REALLY good at conversations, so you can try that too! ".format(
             username), "type": "bot", "question": "intro", "topic": "normal", "username": username}
         count += 1
         return last_question
@@ -161,7 +161,7 @@ def chatbot_msg():
         results = mrec.recommend(text, n=5)
         if results is None:
             return fetch_response('music_404', text)
-        return { 'music': results, 'question': 'general', 'text': 'Here\'s a song recommendation!', 'type': 'bot', 'topic': 'music' }
+        return { 'music': results, 'question': 'general', 'text': 'Here\'s a song recommendation! Click me!', 'type': 'bot', 'topic': 'music' }
 
     if last_question == "favorite_movies":
         # first, create the user object
@@ -246,14 +246,22 @@ def signup():
         password = request.json.get('password')
         password = generate_password_hash(password)
 
-        if collection.find({"username": username}).count() > 0:
-            return {"message": "User already exists!"}
+
+        print(username)
+        print(password)
+        print(collection.find({"username": username}).count())
+        numUsers = (collection.find({"username": username}).count())
+        if numUsers > 0:
+            print("HELLO THERE")
+            return {"message": "User already exists!", "success":False}, 400
 
         post = {"username": username, "password": password}
         token = jwt.encode({'username': username}, "SECRET_KEY")
         token = token.decode('utf-8')
 
         collection.insert_one(post)
+        print(username)
+        print(token)
 
         return {"message": "User inserted successfully", "token": token}
 
@@ -270,8 +278,9 @@ def login():
 
         user_obj = collection.find_one({"username": username})
 
-        if user_obj is None:
-            return {"message": "User was not found"}
+        if user_obj is None or collection.find({"username": username}).count() == 0:
+            print("The user does not exist")
+            return {"message": "User was not found"}, 400
 
         if check_password_hash(user_obj['password'], password):
             token = jwt.encode(
@@ -285,7 +294,7 @@ def login():
             return {"message": "Password was correct. Login successful", "token": token}
 
         else:
-            return {"message": "Password Incorrect. Login unsuccessful"}
+            return {"message": "Password Incorrect. Login unsuccessful"}, 400
 
     return {"message": "You did not send a post chief"}
 
@@ -300,13 +309,13 @@ def save_movie():
 
         if not token:
 
-            return {"message": "Token is missing"}
+            return {"message": "Token is missing"}, 400
         try:
             token = token.split()[1]
             print(token)
             decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
         except Exception:
-            return {"message": "Failed to decode token"}
+            return {"message": "Failed to decode token"}, 400
 
         username = decToken.get('username')
         print(username)
@@ -330,13 +339,13 @@ def save_song():
 
         if not token:
 
-            return {"message": "Token is missing"}
+            return {"message": "Token is missing"}, 400
         try:
             token = token.split()[1]
             print(token)
             decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
         except Exception:
-            return {"message": "Failed to decode token"}
+            return {"message": "Failed to decode token"}, 400
 
         username = decToken.get('username')
         print(username)
@@ -362,13 +371,13 @@ def get_saved_movies_and_songs():
 
         if not token:
 
-            return {"message": "Token is missing"}
+            return {"message": "Token is missing"}, 400
         try:
             token = token.split()[1]
             print(token)
             decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
         except Exception:
-            return {"message": "Failed to decode token"}
+            return {"message": "Failed to decode token"}, 400
 
         username = decToken.get('username')
         print(username)
@@ -377,22 +386,33 @@ def get_saved_movies_and_songs():
         user_obj = collection.find_one({"username": username})
 
         listings = []
-        for imdbID in user_obj.get('saved_movies'):
-            postLink = "http://www.omdbapi.com/?apikey=" + config.omdb_api + "&i="
-            postLink += str(imdbID)
-            temp = requests.get(postLink).json()
-            # print("temp:", temp)
-            if temp["Response"] == "True":
-                listings.append(temp)
-        print("listings:", listings)
+
+        if user_obj.get('saved_movies') is not None and len(user_obj.get('saved_movies')) > 0 and user_obj.get('saved_movies') is not []:
+            for imdbID in user_obj.get('saved_movies'):
+                postLink = "http://www.omdbapi.com/?apikey=" + config.omdb_api + "&i="
+                postLink += str(imdbID)
+                temp = requests.get(postLink).json()
+                # print("temp:", temp)
+                if temp["Response"] == "True":
+                    listings.append(temp)
+            print("listings:", listings)
 
         songs = chunk(user_obj.get('saved_songs'))
         songsList = []
         for song in songs:
             songsList.append(mrec.sp.tracks(song))
         
+        if listings is None or len(listings) == 0:
+            listings = []
 
-        return {"message": "Movies and Songs fetched successfully", "savedIDs": user_obj.get('saved_movies'), "movieInfo": listings, "savedSongIDs":user_obj.get('saved_songs'), "savedSongs":songsList[0].get('tracks')}
+        SSS = []
+        print(songsList)
+        if songsList is not None and len(songsList) > 0 and songsList is not []:
+            print('IU')
+            SSS = songsList[0].get('tracks')
+        
+
+        return {"message": "Movies and Songs fetched successfully", "savedIDs": user_obj.get('saved_movies'), "movieInfo": listings, "savedSongIDs":user_obj.get('saved_songs'), "savedSongs":SSS}
 
     return {"message": "You did not send a post chief"}
 
@@ -405,13 +425,13 @@ def delete_movie():
 
     if not token:
 
-        return {"message": "Token is missing"}
+        return {"message": "Token is missing"}, 400
     try:
         token = token.split()[1]
         print(token)
         decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
     except Exception:
-        return {"message": "Failed to decode token"}
+        return {"message": "Failed to decode token"}, 400
 
     username = decToken.get('username')
     print(username)
@@ -433,13 +453,13 @@ def delete_song():
 
     if not token:
 
-        return {"message": "Token is missing"}
+        return {"message": "Token is missing"}, 400
     try:
         token = token.split()[1]
         print(token)
         decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
     except Exception:
-        return {"message": "Failed to decode token"}
+        return {"message": "Failed to decode token"}, 400
 
     username = decToken.get('username')
     print(username)
@@ -451,6 +471,47 @@ def delete_song():
                                     '$pull': {'saved_songs': songID}})
 
     return {"message": "Song deleted from database"}
+
+
+
+@app.route('/api/web_cam', methods=['POST'])
+def web_cam():
+
+    token = request.headers.get('Authorization')
+    
+    if not token:
+        return {"message": "Token is missing"}, 400
+    try:
+        token = token.split()[1]
+        print(token)
+        decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
+    except Exception:
+        return {"message": "Failed to decode token"}, 400
+    
+    
+    
+    username = decToken.get('username')
+
+    data = request.get_json()
+    ret = data
+    # data = dict(data)
+    
+    ret['username'] = username
+    # movie = request.json.get('movie')
+    # expressions = request.json.get('expressions')
+
+    #send stuff to will
+    # data = jsonify(data)
+    print(ret)
+    # print(type(data))
+    # data['expressions'] = dict(data['expressions'])
+    # print(type(data['expressions']))
+    resp = requests.post("https://baut-ml.wls.ai/expression", json=ret).json()
+    print('Response:', resp)
+    return resp
+
+
+
 
 
 if __name__ == "__main__":
