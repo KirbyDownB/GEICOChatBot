@@ -30,12 +30,8 @@ class MessageForm extends Component {
       id: 2
     };
 
-    if (this.props.name) {
-      this.props.sendMessage(message);
-    } else {
-      this.props.sendName(message);
-    }
-
+    this.props.sendMessage(message);
+    
     this.setState({ text: "" });
   }
 

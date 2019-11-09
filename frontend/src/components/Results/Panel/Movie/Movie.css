@@ -1,0 +1,98 @@
+.movie__container {
+  margin: 0 auto;
+  text-align: left;
+}
+
+.movie__poster--container, .movie__modalPoster--container {
+  text-align: center;
+}
+
+.movie__poster, .movie__modal--poster {
+  width: 90%;
+  box-shadow: 0px 4px 25px rgba(92, 102, 131, 0.4);
+  border-radius: 10px;
+}
+
+.movie__movieTitle:hover {
+  cursor: pointer;
+}
+
+.movie__movieTitle, .movie__modal--movieTitle {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 6%;
+  font-size: 150%;
+  margin-bottom: 2%;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.movie__movieRating {
+  text-align: center;
+  margin-bottom: 6%;
+}
+
+.movie__caption {
+  font-family: "Asap", sans-serif;
+  margin-bottom: 4%;
+}
+
+.movie__imdb--container, .movie__modalImdb--container {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.movie__modal--imdb {
+  width: 15%;
+}
+
+.movie__imdb {
+  width: 25%;
+}
+
+.movie__modalImdb--container {
+  margin-top: -12px;
+}
+
+.movie__imdb--rating, .movie__modalImdb--rating {
+  display: inline;
+  margin-left: 8px;
+  font-family: "Asap", sans-serif;
+  font-weight: bold;
+}
+
+.movie__imdb--rating {
+  font-size: 120%;
+  margin-top: 8px;
+}
+
+.movie__modal--poster {
+  width: 50%;
+}
+
+.movie__modal--container {
+  margin-top: 4%;
+}
+
+.movie__modal {
+  border-radius: 30px;
+}
+
+.movie__modalImdb--container {
+  text-align: center;
+}
+
+.movie__save--container {
+  text-align: center;
+}
+
+.movie__like {
+  margin-right: 16px
+}
+
+.movie__dislike {
+  margin-left: 16px;
+}
+
