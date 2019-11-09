@@ -217,3 +217,20 @@ def expression():
 
     return success_res
 
+@app.route('/reacted', methods=['POST'])
+def reacted():
+    data = request.get_json()
+    if 'username' not in data:
+        return jsonify({ 'success': False, 'message': 'Missing "username field'})
+    username = data['username']
+
+    if username not in username2id:
+        return jsonify({ 'success': False, 'message': 'Unknown user'})
+    user_id = username2id[username]
+    adj_user_id = user_mapping[user_id]
+
+    tmp = interactions.tolil()
+    usr_row = tmp[adj_user_id, :].reshape((-1,))
+    idxs = np.where(usr_row > 0)
+    print(idxs)
+    
