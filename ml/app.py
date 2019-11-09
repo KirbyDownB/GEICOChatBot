@@ -172,3 +172,48 @@ def recommend():
     #--- End timing block
     # print(output)
     return jsonify({ 'success': True, 'ids': list(output) })
+
+@app.route('/expression', methods=['POST'])
+def expression():
+    data = request.get_json()
+    if 'imdbID' not in data:
+        return jsonify({ 'success': False, 'message': 'Missing "imdbID" field' })
+    if 'expressions' not in data:
+        return jsonify({ 'success': False, 'message': 'Missing "expressions field'})
+    if 'username' not in data:
+        return jsonify({ 'success': False, 'message': 'Missing "username field'})
+
+    success_res = jsonify({ 'success': True })
+    username = data['username']
+    expr = data['expressions']
+
+    if username not in username2id:
+        return jsonify({ 'success': False, 'message': 'Unknown user'})
+    user_id = username2id[username]
+    imdb_id = int(data['imdbID'][2:])
+    mov_id = r.imdb2mid[imdb_id]
+
+    print('Got expressions for movie: ', movie2name[mov_id] if mov_id in movie2name else '[NOT FOUND]')
+    print(f'Expressions: {expr}')
+
+    expr_sorted = sorted(expr.items(), key=lambda x: x[1], reverse=True)
+    if mov_id not in item_mapping:
+        print(f'Warning: {mov_id} not in item_mapping')
+        return success_res
+        
+    adj_id = item_mapping[mov_id]
+    adj_user_id = user_mapping[user_id]
+
+    if adj_id in seen_dict[username]:
+        print(f'Movie ({mov_id}) already added')
+        return success_res
+
+    if expr_sorted[0][0] == 'happy':
+        print(f'Happy expression found for {mov_id}, updating rating...')
+        np.append(interactions.row, adj_user_id)
+        np.append(interactions.col, adj_id)
+        np.append(interactions.data, 1)
+        seen_dict[username].add(adj_id)
+
+    return success_res
+
