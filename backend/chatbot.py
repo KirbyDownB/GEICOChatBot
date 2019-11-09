@@ -102,7 +102,7 @@ def chatbot_msg():
 
     if username != '' and last_question is None:
         print("Entry message")
-        last_question = {"text": "Welcome back {}. My name is Baut! I recommend movies, music, and do some other stuff as well. Try statements like \"recommend movies\", \"recommend music\", or \"tell a joke \". ".format(
+        last_question = {"text": "Welcome back {}. My name is Baut! I recommend movies, music, and do some other stuff as well. Try statements like \"recommend movies\", \"recommend music\", or \"tell a joke \". I also am REALLY good at conversations, so you can try that too! ".format(
             username), "type": "bot", "question": "intro", "topic": "normal", "username": username}
         count += 1
         return last_question
@@ -395,6 +395,62 @@ def get_saved_movies_and_songs():
         return {"message": "Movies and Songs fetched successfully", "savedIDs": user_obj.get('saved_movies'), "movieInfo": listings, "savedSongIDs":user_obj.get('saved_songs'), "savedSongs":songsList[0].get('tracks')}
 
     return {"message": "You did not send a post chief"}
+
+@app.route('/api/delete_movie', methods=['DELETE'])
+def delete_movie():
+
+
+    token = request.headers.get('Authorization')
+    print(token)
+
+    if not token:
+
+        return {"message": "Token is missing"}
+    try:
+        token = token.split()[1]
+        print(token)
+        decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
+    except Exception:
+        return {"message": "Failed to decode token"}
+
+    username = decToken.get('username')
+    print(username)
+    print(request.json)
+    imdbID = request.json.get('imdbID')
+    print(imdbID)
+
+    collection.find_one_and_update({"username": username, }, {
+                                    '$pull': {'saved_movies': imdbID}})
+
+    return {"message": "Movie deleted from database"}
+
+@app.route('/api/delete_song', methods=['DELETE'])
+def delete_song():
+
+
+    token = request.headers.get('Authorization')
+    print(token)
+
+    if not token:
+
+        return {"message": "Token is missing"}
+    try:
+        token = token.split()[1]
+        print(token)
+        decToken = jwt.decode(token, "SECRET_KEY", 'utf-8')
+    except Exception:
+        return {"message": "Failed to decode token"}
+
+    username = decToken.get('username')
+    print(username)
+    print(request.json)
+    songID = request.json.get('songID')
+    print(songID)
+
+    collection.find_one_and_update({"username": username, }, {
+                                    '$pull': {'saved_songs': songID}})
+
+    return {"message": "Song deleted from database"}
 
 
 if __name__ == "__main__":
