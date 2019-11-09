@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Movie.css';
 import { Modal, Icon, Tooltip } from 'antd';
+import { chooseEmoji } from '../../../../constants';
 
 const imdbLogo = require('../../../../assets/imdb.svg');
 
@@ -56,6 +57,11 @@ class Movie extends Component {
                 style={{ fontSize: "20px" }}
               />
             </Tooltip>
+          </div>
+          <div className="movie__emoji--container">
+            {this.props.emotion && <div className="movie__emoji">
+              {chooseEmoji(this.props.emotion)}
+            </div> }
           </div>
         </div>
         <Modal

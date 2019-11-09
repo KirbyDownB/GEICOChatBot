@@ -90,3 +90,21 @@ export const fakeMessages = [
 ];
 
 export const showMessage = (text) => message.error(text);
+
+export const chooseEmoji = emotion => {
+  if (emotion === "neutral") {
+    return "😐";
+  } else if (emotion === "happy") {
+    return "😊";
+  } else if (emotion === "sad") {
+    return "😔";
+  } else if (emotion === "angry") {
+    return "😡";
+  } else if (emotion === "disgusted") {
+    return "🤢";
+  } else if (emotion === "surprised") {
+    return "😮";
+  }
+
+  return "😱";
+}

@@ -32,7 +32,8 @@ class App extends Component {
     activeMenuItem: "results",
     movie: "",
     expressions: null,
-    currentIndex: 0
+    currentIndex: 0,
+    emotion: null
   }
 
   componentDidMount = () => {
@@ -219,18 +220,14 @@ class App extends Component {
     });
   }
 
-  // handleMovie = (data) => {
-  //   if (this.state.expressions.length > 0) {
-  //     console.log("Got movie data in App", data);
-  //     console.log("Got expressions in App", this.state.expressions)
-  //   }
-  // }
-
   setExpressions = expressions => {
     if (this.state.activeMessage && this.state.activeMessage.topic === "movie" && this.state.token) {
       const { imdbID } = this.state.activeMessage.movieInfo[this.state.currentIndex];
       console.log("I'm looking at this movie now from App", imdbID);
       console.log("This is my expression in App", expressions);
+
+      const emotion = Object.entries(expressions).reduce((item1, item2) => item1[1] > item2[1] ? item1 : item2)[0];
+      this.setState({ emotion });
 
       fetch(`${BASE_URL}/api/web_cam`, {
         method: "POST",
@@ -270,7 +267,7 @@ class App extends Component {
               </div>
               <Container movie={this.state.movie} setExpressions={this.setExpressions} />
               <div className="app__menu--container">
-                {this.state.activeMenuItem === "results" && <Results setCurrentIndex={this.setCurrentIndex} activeMessage={this.state.activeMessage} />}
+                {this.state.activeMenuItem === "results" && <Results setCurrentIndex={this.setCurrentIndex} activeMessage={this.state.activeMessage} emotion={this.state.emotion} />}
                 {this.state.activeMenuItem === "saved" && <Saved />}
               </div>
               <div className="app__toggle--container">

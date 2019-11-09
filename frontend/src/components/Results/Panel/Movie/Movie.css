@@ -3,6 +3,15 @@
   text-align: left;
 }
 
+.movie__emoji--container {
+  text-align: center;
+}
+
+.movie__emoji {
+  margin-top: 48%;
+  font-size: 300%;
+}
+
 .movie__poster--container, .movie__modalPoster--container {
   text-align: center;
 }
