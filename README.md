@@ -50,12 +50,12 @@ However, we still encountered difficulty with accurately recommending movies due
 ### Frontend
 Baut will have a prompt asking the user to login or sign in upon navigating to the website.
 <p align="center">
-  <img width="100%"src="./frontend/src/assets/baut_login.png">
+  <img width="80%"src="./frontend/src/assets/baut_login.png">
 </p>
 
 Baut lets you save (and delete) all of your recommended songs and movies. To save a movie or song, just click on the star button under each recommendation, and to view what you've saved so far, just navigate to the `Saved` panel.
 <p align="center">
-  <img width="100%"src="./frontend/src/assets/baut_saved.png">
+  <img width="80%"src="./frontend/src/assets/baut_saved.png">
 </p>
 
 Feeling cluttered? We've moved (most of) the details from the recommended songs and movies to a different component. For a both the songs and the movies, just click on their titles to see more!
@@ -65,7 +65,7 @@ Feeling cluttered? We've moved (most of) the details from the recommended songs 
 
 Notice the webcam prompt and emoji(s)? Baut can analyze your face to extract the different emotions as you react to the different movies. As you browse through the different movie recommendations, Baut will take into account how you react to each movie and tune your recommendations accordingly.
 <p align="center">
-  <img width="100%"src="./frontend/src/assets/baut_emoji.png">
+  <img width="70%"src="./frontend/src/assets/baut_emoji.png">
 </p>
 
 ### Backend
@@ -74,4 +74,4 @@ The old version of this bot used the chatterbot library to respond to any conver
 The code for the pretrained model we used can be found [here](https://github.com/huggingface/transfer-learning-conv-ai)
 
 ### Music Recommendations
-Previously, Baut recommended the user different songs depending on his/her lifestyle. This time, we're using Spotify (via SpotiPy) to calculate and fetch similar songs. When the user types in a song name, Baut looks at songs of the similar artists of the entered song. Then, using K-Nearest Neighbors against the song's features, it returns a list of the songs similar to what the user entered! 
+Previously, Baut recommended the user different songs depending on his/her lifestyle. This time, we're using Spotify (via SpotiPy) to calculate and fetch similar songs. When the user types in a song name, Baut looks at songs of the similar artists of the entered song. Then, using K-Nearest Neighbors (K-NN) against the song's features, it returns a list of the songs similar to what the user entered! Since K-NN is deterministic, the user will see the same songs recommendations depending on the inputted song.
