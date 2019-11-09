@@ -184,7 +184,7 @@ def expression():
         return jsonify({ 'success': False, 'message': 'Missing "username field'})
 
     success_res = jsonify({ 'success': True })
-    username = data['user']
+    username = data['username']
     expr = data['expressions']
 
     if username not in username2id:
