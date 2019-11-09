@@ -120,7 +120,7 @@ def chatbot_msg():
     if re.match(r'.*(tell|say|give).*joke(s?)\.*', text.lower()):
         jokes=pickle.load(open('jokes.pickle','rb'))
         joke = random.sample(jokes,1)[0].get("joke")
-        return fetch_response('jokes_response', joke)    
+        return fetch_response('joke_response', joke)    
 
     if last_question == "day":
         # run emotional analysis on the string.
