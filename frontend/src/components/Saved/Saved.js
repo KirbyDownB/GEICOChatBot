@@ -25,7 +25,7 @@ class Saved extends Component {
           "Authorization": "Bearer " + token
         },
       })
-        .then(response => response.json())
+        .then(response => response.status !== 200 ? Promise.reject() : response.json())
         .then(data => {
           const { movieInfo, savedSongs } = data;
           console.log("Got saved songs", savedSongs)
@@ -57,9 +57,10 @@ class Saved extends Component {
           "imdbID": imdbID
         })
       })
-        .then(response => response.json())
+        .then(response => response.status !== 200 ? Promise.reject() : response.json())
         .then(data => {
-          console.log("Got data after deleting movie", data);
+          const updatedMovies = this.state.movies.filter(movie => movie.imdbID !== imdbID);
+          this.setState({ movies: updatedMovies });
         })
         .catch(error => {
           console.error(error);
@@ -84,9 +85,10 @@ class Saved extends Component {
           "songID": spotifyID
         })
       })
-        .then(response => response.json())
+        .then(response => response.status !== 200 ? Promise.reject() : response.json())
         .then(data => {
-          console.log("Got data after deleting movie", data);
+          const updatedMusic = this.state.music.filter(song => song.id !== spotifyID);
+          this.setState({ music: updatedMusic });
         })
         .catch(error => {
           console.error(error);
@@ -96,6 +98,9 @@ class Saved extends Component {
   }
 
   render() {
+    console.log("Currently saved movies", this.state.movies);
+    console.log("Currently saved music", this.state.music);
+
     return (
       <div className="saved__container">
         {this.state.isSavedLoading ? (
@@ -104,6 +109,9 @@ class Saved extends Component {
           </div>
         ) : (
           <div className="saved__info">
+            {this.state.movies.length === 0 && this.state.music.length === 0 && <div className="saved__empty">
+              You don't have any saved movies and/or songs yet!
+            </div> }
             {this.state.movies.length > 0 && <div className="saved__movies--container">
               <div className="saved__movies--header">Saved Movies</div>
               <div className="row">
@@ -118,7 +126,7 @@ class Saved extends Component {
                         </Tooltip>
                       </a>
                       <div className="remove" onClick={e => this.handleDeleteSavedMovie(e, imdbID)}>
-                        <Icon type="close-circle" theme="filled" style={{ fontSize: "20px" }} />
+                        <Icon type="close-circle" theme="filled" style={{ fontSize: "20px", color: "#FFFFFF" }} />
                       </div>
                     </div>
                   )
@@ -137,7 +145,7 @@ class Saved extends Component {
                         </Tooltip>
                       </a>
                       <div className="remove" onClick={e => this.handleDeleteSavedMusic(e, spotifyID)}>
-                        <Icon type="close-circle" theme="filled" style={{ fontSize: "20px" }} />
+                        <Icon type="close-circle" theme="filled" style={{ fontSize: "20px", color: "#FFFFFF" }} />
                       </div>
                     </div>
                   )

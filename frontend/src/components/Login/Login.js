@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Login.css';
 import { Input, Form, Icon, Button } from 'antd';
-import { BASE_URL, showMessage, CREDENTIALS_ERROR } from '../../constants';
+import { BASE_URL, showMessage, CREDENTIALS_ERROR, FORGOT_ERROR } from '../../constants';
 
 const { Item } = Form;
 
@@ -17,7 +17,7 @@ class Login extends Component {
     const password = e.target.password.value;
 
     if (!username || !password) {
-      alert("You forgot to enter something!");
+      showMessage(FORGOT_ERROR);
       return;
     }
 
@@ -33,13 +33,15 @@ class Login extends Component {
         "password": password
       })
     })
-      .then(response => response.json())
+      .then(response => response.status !== 200 ? Promise.reject() : response.json())
       .then(data => {
-        const { token, Message } = data;
-        this.props.setLoginToken(token);
+        console.log("Successfully logged in with data", data)
+        const { token } = data;
+        this.props.setToken(token);
         this.setState({ isLoginLoading: false });
       })
       .catch(error => {
+        console.log("I got an error in Login", error);
         console.error(error);
         this.setState({ isLoginLoading: false });
         showMessage(CREDENTIALS_ERROR);

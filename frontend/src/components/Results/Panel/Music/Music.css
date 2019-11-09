@@ -38,3 +38,8 @@
 .music__musicTitle:hover {
   cursor: pointer;
 }
+
+.music__save--container {
+  text-align: center;
+  margin-top: 16%;
+}

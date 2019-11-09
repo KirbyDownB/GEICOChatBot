@@ -3,13 +3,9 @@ import './Music.css';
 import { Modal, Tooltip, Icon } from 'antd';
 import { Radar } from 'react-chartjs-2';
 
-const options = { year: 'numeric', month: 'long', day: 'numeric' };
-const convert = require('convert-seconds');
-
 const chartOptions = {
   legend: {
     labels: {
-      // This more specific font property overrides the global property
       fontFamily: 'Asap'
     }
   }
@@ -100,7 +96,7 @@ class Music extends Component {
           <div className="music__caption music__musicArtist"><span className="bold">Artist:</span> {artists[0].name}</div>
           <div className="music__caption music__musicAlbum"><span className="bold">Album:</span> {albumName}</div>
           <div className="music__caption music__musicRecord"><span className="bold">Published:</span> {date}</div>
-          <div className="movie__save--container">
+          <div className="music__save--container">
             <Tooltip title="Save">
               <Icon
                 className="music__save"
