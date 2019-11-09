@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './Movie.css';
 import { Modal, Icon, Tooltip } from 'antd';
 import { chooseEmoji } from '../../../../constants';
-import Particles from 'react-particles-js';
 
 
 const imdbLogo = require('../../../../assets/imdb.svg');
