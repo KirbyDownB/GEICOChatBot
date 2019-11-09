@@ -11,11 +11,13 @@ from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer
 from chatterbot.trainers import ListTrainer
 from library import fetch_response
+from new_bot import Bot
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from music import MusicRecommender
 from pymongo import MongoClient
 from werkzeug.security import generate_password_hash, check_password_hash
+import time
 
 cluster = MongoClient(
     "mongodb+srv://adiach1:1234@cluster0-jgwg7.mongodb.net/geico?retryWrites=true&w=majority")
@@ -28,6 +30,7 @@ app = Flask(__name__)
 CORS(app)
 
 
+
 chatbot = ChatBot(
     "GEICOChatBot",
     storage_adapter="chatterbot.storage.MongoDatabaseAdapter",
@@ -36,6 +39,7 @@ chatbot = ChatBot(
     database_uri='mongodb+srv://adiach1:1234@cluster0-jgwg7.mongodb.net/test?retryWrites=true&w=majority',
     read_only=True
 )
+bot = Bot()
 
 count = 0
 last_question = None
@@ -112,6 +116,11 @@ def chatbot_msg():
 
     if re.match(r'.*(recommend|suggest).*(song(s?)|music)\.*', text.lower()):
         return fetch_response('music_prompt')
+
+    if re.match(r'.*(tell|say|give).*joke(s?)\.*', text.lower()):
+        jokes=pickle.load(open('jokes.pickle','rb'))
+        joke = random.sample(jokes,1)[0].get("joke")
+        return fetch_response('jokes_response', joke)    
 
     if last_question == "day":
         # run emotional analysis on the string.
@@ -192,20 +201,37 @@ def chatbot_msg():
         print("listings:", listings)
         return {"type": "bot", "topic": "movie", "text": "Here are some movies I found: " + listings[0]["Title"] + ", " + listings[1]["Title"] + ", " + listings[2]["Title"] + ", and more if you click on me", "movieInfo": listings, "question": "chatbot"}
     else:
-        bot_output = chatbot.get_response(text)
-        if bot_output.text == "Movie? Movie? I heard Movie! Tell me your favorite movies! Separate each one with a comma.":
-            return {"text": bot_output.text, "type": "bot", "question": "favorite_movies", "topic": "normal"}
-        elif bot_output.text == "I heard something about songs!":
-            last_question = {"text": "Did you say somethings about music or songs? Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?",
-                             "question": "music_lifestyle", "topic": "questions", "type": "bot", "options": ['Athletic', 'Sedentary', 'Moderate']}
-            return last_question
-        else:
-            num = random.randrange(20)
-            if num % 5 == 0:
-                return fetch_response('bother_user')
-            return {"text": bot_output.text, "type": "bot", "topic": "normal", "question": "chatbot"}
+        #--- Timing block
 
-    bot_output = chatbot.get_response("tell me a joke")
+        start_time = time.time()
+
+        output_text = bot.run(text,username=username)
+        elapsed = time.time() - start_time
+        print(f'Took {elapsed}s to fetch response from bot')
+        start_time = time.time()
+        #--- End timing block
+    
+
+
+
+
+        return {"text":output_text, "type":"bot", "question":"general","topic":"normal"}
+        
+
+        #bot_output = chatbot.get_response(text)
+        #if bot_output.text == "Movie? Movie? I heard Movie! Tell me your favorite movies! Separate each one with a comma.":
+        #    return {"text": bot_output.text, "type": "bot", "question": "favorite_movies", "topic": "normal"}
+        #elif bot_output.text == "I heard something about songs!":
+        #    last_question = {"text": "Did you say somethings about music or songs? Tell us about yourself. Would you say that you have an Athletic, Sedentary, or Moderate lifestyle?",
+        #                    "question": "music_lifestyle", "topic": "questions", "type": "bot", "options": ['Athletic', 'Sedentary', 'Moderate']}
+        #    return last_question
+        #else:
+        #    num = random.randrange(20)
+        #    if num % 5 == 0:
+        #        return fetch_response('bother_user')
+        #    return {"text": bot_output.text, "type": "bot", "topic": "normal", "question": "chatbot"}
+
+    # bot_output = chatbot.get_response("tell me a joke")
     return {"text": "Movie? Movie? Did someone say movie? Tell me your favorite movies! Separate each one with a comma.", "type": "bot", "topic": "normal", "question": "favorite_movies"}
 
 
