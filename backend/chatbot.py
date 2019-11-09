@@ -159,6 +159,8 @@ def chatbot_msg():
 
     if last_question == 'music_prompt':
         results = mrec.recommend(text, n=5)
+        if results is None:
+            return fetch_response('music_404', text)
         return { 'music': results, 'question': 'general', 'text': 'Here\'s a song recommendation!', 'type': 'bot', 'topic': 'music' }
 
     if last_question == "favorite_movies":
