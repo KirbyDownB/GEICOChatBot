@@ -208,7 +208,7 @@ def expression():
         print(f'Movie ({mov_id}) already added')
         return success_res
 
-    if expr_sorted[0] == 'happy':
+    if expr_sorted[0][0] == 'happy':
         print(f'Happy expression found for {mov_id}, updating rating...')
         np.append(interactions.row, adj_user_id)
         np.append(interactions.col, adj_id)
