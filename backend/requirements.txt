@@ -73,7 +73,7 @@ spotipy==2.4.4
 SQLAlchemy==1.2.19
 srsly==0.2.0
 tensorboard==2.0.1
-tensorflow==2.0.0
+tensorflow==2.0.3
 tensorflow-estimator==2.0.1
 termcolor==1.1.0
 thinc==7.0.8
