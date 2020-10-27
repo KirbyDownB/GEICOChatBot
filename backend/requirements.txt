@@ -10,7 +10,7 @@ chardet==3.0.4
 ChatterBot==1.0.5
 chatterbot-corpus==1.2.0
 Click==7.0
-cryptography==2.8
+cryptography==3.2
 cymem==2.0.2
 dnspython==1.16.0
 docutils==0.15.2
