@@ -16,7 +16,7 @@ dnspython==1.16.0
 docutils==0.15.2
 estimator==0.0.10
 Flask==1.1.1
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 gast==0.2.2
 google-auth==1.7.0
 google-auth-oauthlib==0.4.1
